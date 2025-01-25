@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+    
+    <androidx.cardview.widget.CardView
+        android:layout_width="160dp"
+        android:layout_height="200dp"
+        app:cardCornerRadius="12dp"
+        app:cardElevation="4dp"
+        app:cardBackgroundColor="@color/white">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8.5dp"
+            android:layout_marginHorizontal="8dp"
+            android:orientation="vertical">
+
+            <androidx.cardview.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:cardCornerRadius="12dp">
+
+                <ImageView
+                    android:id="@+id/iv_profile"
+                    android:layout_width="144dp"
+                    android:layout_height="144dp"
+                    android:scaleType="centerCrop"
+                    android:src="@color/gray25" />
+            </androidx.cardview.widget.CardView>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginTop="10dp">
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:layout_weight="1">
+
+                    <TextView
+                        android:id="@+id/user_nick"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:text="밥만잘먹더라"
+                        android:fontFamily="@font/wavve"
+                        android:textSize="12sp"/>
+
+                    <TextView
+                        android:id="@+id/user_major"
+                        android:paddingTop="4dp"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:text="디지털미디어학과"
+                        android:textSize="9sp"/>
+                </LinearLayout>
+
+                <ImageView
+                    android:id="@+id/cheer_button"
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
+                    android:src="@drawable/up" />
+            </LinearLayout>
+        </LinearLayout>
+    </androidx.cardview.widget.CardView>
+</LinearLayout>
