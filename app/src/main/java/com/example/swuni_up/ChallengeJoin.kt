@@ -9,7 +9,7 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 
-class MainActivity : AppCompatActivity() {
+class ChallengeJoin : AppCompatActivity() {
 
     private lateinit var horizontalScrollView: HorizontalScrollView
     private lateinit var circleContainer: LinearLayout
