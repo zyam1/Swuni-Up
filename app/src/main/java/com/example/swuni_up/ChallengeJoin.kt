@@ -34,6 +34,8 @@ class ChallengeJoin : AppCompatActivity() {
     private lateinit var scrollButton: Button
     private val scrollStep = 100 // 한 번에 이동하는 거리 (픽셀 단위)
 
+    private var currentChallengeId: Long? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_challenge_join)
@@ -79,7 +81,51 @@ class ChallengeJoin : AppCompatActivity() {
         }
 
         loadRandomChallenge()
+
+        val joinButton = findViewById<Button>(R.id.joinButton)
+        joinButton.setOnClickListener {
+            joinChallenge()
+        }
     }
+
+    private fun joinChallenge() {
+        val dbHelper = ChallengerDBHelper(this)
+
+        // 예시 데이터 (실제 사용자와 챌린지 ID는 적절히 설정해야 함)
+        val userId: Long = 1 // 로그인된 사용자 ID
+
+        val challengeId = currentChallengeId // 현재 불러온 챌린지 ID 사용
+        if (challengeId == null) {
+            Toast.makeText(this, "참여할 챌린지가 선택되지 않았습니다.", Toast.LENGTH_SHORT).show()
+            return
+        }
+
+        val challengeRole = "participant" // 역할: 참가자
+        val joinedAt = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault()).format(Date()) // 현재 시간
+        val percentage = 0 // 초기 참여율
+        val isCompleted = false // 초기 완료 상태
+
+        // Challenger 객체 생성
+        val challenger = ChallengerDBHelper.Challenger(
+            userId = userId,
+            challengeId = challengeId,
+            challengeRole = challengeRole,
+            joinedAt = joinedAt,
+            percentage = percentage,
+            isCompleted = isCompleted
+        )
+
+        // 데이터베이스에 삽입
+        val result = dbHelper.insertChallenger(challenger)
+        if (result != -1L) {
+            Toast.makeText(this, "참여가 완료되었습니다!", Toast.LENGTH_SHORT).show()
+            Log.d("ChallengeJoin", "참여 완료: ID = $result")
+        } else {
+            Toast.makeText(this, "참여 중 오류가 발생했습니다.", Toast.LENGTH_SHORT).show()
+            Log.e("ChallengeJoin", "참여 실패")
+        }
+    }
+
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
@@ -103,6 +149,7 @@ class ChallengeJoin : AppCompatActivity() {
         val cursor = db.rawQuery(query, null)
 
         if (cursor.moveToFirst()) {
+            val challengeId = cursor.getLong(cursor.getColumnIndexOrThrow(ChallengeDBHelper.COLUMN_ID)) // ID 가져오기
             val title = cursor.getString(cursor.getColumnIndexOrThrow(ChallengeDBHelper.COLUMN_TITLE))
             val description = cursor.getString(cursor.getColumnIndexOrThrow(ChallengeDBHelper.COLUMN_DESCRIPTION))
             val photoBlob = cursor.getBlob(cursor.getColumnIndexOrThrow(ChallengeDBHelper.COLUMN_PHOTO)) // BLOB 데이터 가져오기
@@ -110,6 +157,7 @@ class ChallengeJoin : AppCompatActivity() {
             val endDay = cursor.getString(cursor.getColumnIndexOrThrow(ChallengeDBHelper.COLUMN_END_DAY))
             val maxParticipants = cursor.getInt(cursor.getColumnIndexOrThrow(ChallengeDBHelper.COLUMN_MAX_PARTICIPANT))
 
+            currentChallengeId = challengeId
 
             // 텍스트 설정
             titleTextView.text = title

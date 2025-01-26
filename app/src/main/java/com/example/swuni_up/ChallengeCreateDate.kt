@@ -5,6 +5,7 @@ import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.os.Bundle
 import android.text.style.ForegroundColorSpan
+import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
@@ -18,6 +19,9 @@ import com.prolificinteractive.materialcalendarview.format.ArrayWeekDayFormatter
 import org.threeten.bp.LocalDate
 import org.threeten.bp.format.DateTimeFormatter
 import java.io.ByteArrayOutputStream
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
 
 
 class ChallengeCreateDate : AppCompatActivity() {
@@ -83,10 +87,42 @@ class ChallengeCreateDate : AppCompatActivity() {
 
             // 데이터베이스 저장
             val dbHelper = ChallengeDBHelper(this)
-            val result = dbHelper.insertChallenge(challenge)
+            val challengeId = dbHelper.insertChallenge(challenge)
 
             // 삽입 결과에 따라 처리
-            if (result != -1L) {
+            if (challengeId != -1L) {
+                val dbHelper = ChallengerDBHelper(this)
+
+                // 예시 데이터 (실제 사용자와 챌린지 ID는 적절히 설정해야 함)
+                val userId: Long = 1 // 로그인된 사용자 ID
+
+                val challengeRole = "admin" // 역할: 참가자
+                val joinedAt = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault()).format(
+                    Date()
+                ) // 현재 시간
+                val percentage = 0 // 초기 참여율
+                val isCompleted = false // 초기 완료 상태
+
+                // Challenger 객체 생성
+                val challenger = ChallengerDBHelper.Challenger(
+                    userId = userId,
+                    challengeId = challengeId,
+                    challengeRole = challengeRole,
+                    joinedAt = joinedAt,
+                    percentage = percentage,
+                    isCompleted = isCompleted
+                )
+
+                // 데이터베이스에 삽입
+                val result = dbHelper.insertChallenger(challenger)
+                if (result != -1L) {
+                    Toast.makeText(this, "참여가 완료되었습니다!", Toast.LENGTH_SHORT).show()
+                    Log.d("ChallengeJoin", "참여 완료: ID = $result")
+                } else {
+                    Toast.makeText(this, "참여 중 오류가 발생했습니다.", Toast.LENGTH_SHORT).show()
+                    Log.e("ChallengeJoin", "참여 실패")
+                }
+
                 Toast.makeText(this, "챌린지가 성공적으로 생성되었습니다.", Toast.LENGTH_SHORT).show()
                 finish()  // 예시: 현재 액티비티 종료
             } else {

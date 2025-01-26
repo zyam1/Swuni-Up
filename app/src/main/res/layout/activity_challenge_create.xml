@@ -162,7 +162,7 @@
                     android:layout_marginLeft="5dp"
                     android:fontFamily="@font/scdream3"
                     android:paddingStart="5dp"
-                    android:text="운동" />
+                    android:text="건강" />
 
                 <CheckBox
                     android:id="@+id/checkBox2"
@@ -189,7 +189,7 @@
                     android:layout_marginLeft="5dp"
                     android:fontFamily="@font/scdream3"
                     android:paddingStart="5dp"
-                    android:text="자기계발" />
+                    android:text="취미" />
 
                 <CheckBox
                     android:id="@+id/checkBox5"
@@ -198,7 +198,7 @@
                     android:layout_marginLeft="10dp"
                     android:fontFamily="@font/scdream3"
                     android:paddingStart="5dp"
-                    android:text="취미" />
+                    android:text="자산 관리" />
 
                 <CheckBox
                     android:id="@+id/checkBox6"
@@ -207,7 +207,7 @@
                     android:layout_marginLeft="10dp"
                     android:fontFamily="@font/scdream3"
                     android:paddingStart="5dp"
-                    android:text="자산 관리" />
+                    android:text="기타" />
 
             </GridLayout>
 
