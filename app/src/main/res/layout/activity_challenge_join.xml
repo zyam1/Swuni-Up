@@ -36,13 +36,12 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:padding="16dp">
+                android:padding="20dp">
 
                 <ImageView
                     android:id="@+id/imageView"
                     android:layout_width="350dp"
                     android:layout_height="216dp"
-                    android:layout_marginTop="10dp"
                     android:contentDescription="@string/image_view"
                     android:src="@drawable/ic_default_image"
                     android:scaleType="centerCrop"
@@ -96,9 +95,10 @@
 
             <TextView
                 android:id="@+id/descriptionTextView1"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="33dp"
+                android:layout_marginRight="33dp"
                 android:fontFamily="@font/scdream3"
                 android:layout_marginTop="10dp"
                 android:lineHeight="24dp"

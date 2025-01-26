@@ -1,10 +1,10 @@
 package com.example.swuni_up
 
 import android.content.Context
-import android.graphics.Color
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.os.Bundle
 import android.text.style.ForegroundColorSpan
-import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
@@ -17,6 +17,7 @@ import com.prolificinteractive.materialcalendarview.MaterialCalendarView
 import com.prolificinteractive.materialcalendarview.format.ArrayWeekDayFormatter
 import org.threeten.bp.LocalDate
 import org.threeten.bp.format.DateTimeFormatter
+import java.io.ByteArrayOutputStream
 
 
 class ChallengeCreateDate : AppCompatActivity() {
@@ -60,39 +61,28 @@ class ChallengeCreateDate : AppCompatActivity() {
                 else -> 5 // 시작됨
             }
 
-            val challengePhotoByteArray = challengePhoto?.toByteArray() ?: ByteArray(0)
+            val photoByteArray = uriToByteArray(this, challengePhoto)
+
+            if (photoByteArray == null) {
+                Toast.makeText(this, "이미지 변환에 실패했습니다.", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
 
             // Challenge 객체 생성 (필요시, 서버에 보낼 데이터 포맷에 맞추어 구성)
-            val challengeData = mapOf(
-                "challenge_title" to title,
-                "description" to description,
-                "challenge_photo" to challengePhotoByteArray,
-                "created_at" to createdAt,
-                "start_day" to startDay,
-                "end_day" to endDay,
-                "status" to status,
-                "max_participant" to maxParticipant,
-                "category" to category
-            )
-
-            // challengeData에서 필요한 값을 추출하여 Challenge 객체 생성
             val challenge = ChallengeDBHelper.Challenge(
-                title = challengeData["challenge_title"] as String,
-                description = challengeData["description"] as String?,
-                photo = challengeData["challenge_photo"] as ByteArray,
-                createdAt = challengeData["created_at"] as String,
-                startDay = challengeData["start_day"] as String,
-                endDay = challengeData["end_day"] as String,
-                status = challengeData["status"] as Int,
-                maxParticipant = challengeData["max_participant"] as Int,
-                category = challengeData["category"] as Int
+                title = title ?: "Untitled",
+                description = description,
+                photo = photoByteArray,
+                createdAt = createdAt,
+                startDay = startDay,
+                endDay = endDay,
+                status = status,
+                maxParticipant = maxParticipant,
+                category = category
             )
 
-            // Challenge 객체를 insertChallenge 메서드에 전달
+            // 데이터베이스 저장
             val dbHelper = ChallengeDBHelper(this)
-            Log.d("ChallengeDBHelper", "DBHelper created")
-            val db = dbHelper.writableDatabase // 여기를 확인
-
             val result = dbHelper.insertChallenge(challenge)
 
             // 삽입 결과에 따라 처리
@@ -183,6 +173,20 @@ class ChallengeCreateDate : AppCompatActivity() {
         }
     }
 
+    fun uriToByteArray(context: Context, uri: String?): ByteArray? {
+        return try {
+            // URI에서 InputStream 가져오기
+            val inputStream = context.contentResolver.openInputStream(android.net.Uri.parse(uri))
+            val bitmap = BitmapFactory.decodeStream(inputStream) // Bitmap 변환
+            val outputStream = ByteArrayOutputStream()
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, outputStream) // 압축 (JPEG 형식)
+            outputStream.toByteArray() // ByteArray로 변환
+        } catch (e: Exception) {
+            e.printStackTrace()
+            null
+        }
+    }
+
     private inner class DayDecorator(context: Context) : DayViewDecorator {
         private val drawable = ContextCompat.getDrawable(context,R.drawable.calendar_selector)
         // true를 리턴 시 모든 요일에 내가 설정한 드로어블이 적용된다
@@ -261,6 +265,7 @@ class ChallengeCreateDate : AppCompatActivity() {
         val dayDifference = org.threeten.bp.temporal.ChronoUnit.DAYS.between(startDate, endDate) + 1
         binding.dayTextViewLeft.text = dayDifference.toString()
     }
+
 
 
 }

@@ -10,9 +10,8 @@ import android.widget.Button
 import android.widget.CheckBox
 import android.widget.EditText
 import android.widget.ImageView
-import android.widget.TextView
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.Toolbar
 
 class ChallengeCreate : AppCompatActivity() {
     private lateinit var imageView: ImageView
@@ -23,6 +22,17 @@ class ChallengeCreate : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_challenge_create)
+
+        val toolbar = findViewById<Toolbar>(R.id.toolbar)
+        setSupportActionBar(toolbar)
+        supportActionBar?.setDisplayShowTitleEnabled(false)
+
+        // 뒤로가기 버튼 동작 설정
+        toolbar.setNavigationOnClickListener {
+            val intent = Intent(this, ChallengeJoin::class.java) // ChallengeCreateActivity로 이동
+            startActivity(intent)
+            finish() // 현재 액티비티 종료
+        }
 
         imageView = findViewById(R.id.imageView)
 
