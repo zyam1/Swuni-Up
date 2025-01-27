@@ -20,7 +20,6 @@ class ChallengerDBHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_
         const val COLUMN_CHALLENGE_ROLE = "challenge_role"
         const val COLUMN_JOINED_AT = "joined_at"
         const val COLUMN_PERCENTAGE = "percentage"
-        const val COLUMN_IS_COMPLETED = "is_completed"
     }
 
     override fun onCreate(db: SQLiteDatabase) {
@@ -33,7 +32,6 @@ class ChallengerDBHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_
                 "$COLUMN_CHALLENGE_ROLE TEXT NOT NULL CHECK($COLUMN_CHALLENGE_ROLE IN ('admin', 'participant')), " + // ENUM 역할 설정
                 "$COLUMN_JOINED_AT DATETIME NOT NULL, " +
                 "$COLUMN_PERCENTAGE INTEGER NOT NULL DEFAULT 0, " +
-                "$COLUMN_IS_COMPLETED BOOLEAN NOT NULL DEFAULT 0" + // 기본값 FALSE로 설정
                 ")"
         db.execSQL(createTable)
     }
@@ -54,7 +52,6 @@ class ChallengerDBHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_
         contentValues.put(COLUMN_CHALLENGE_ROLE, challenger.challengeRole)
         contentValues.put(COLUMN_JOINED_AT, challenger.joinedAt)
         contentValues.put(COLUMN_PERCENTAGE, challenger.percentage)
-        contentValues.put(COLUMN_IS_COMPLETED, if (challenger.isCompleted) 1 else 0)  // BOOLEAN 처리
 
         Log.d("ChallengerDBHelper", "Inserting Challenger: $contentValues")
 
@@ -69,6 +66,5 @@ class ChallengerDBHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_
         val challengeRole: String, // 'admin' 또는 'participant'
         val joinedAt: String, // "yyyy-MM-dd HH:mm:ss"
         val percentage: Int,  // 참가율
-        val isCompleted: Boolean // 완료 여부
     )
 }

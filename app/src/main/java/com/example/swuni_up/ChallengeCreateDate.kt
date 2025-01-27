@@ -101,7 +101,6 @@ class ChallengeCreateDate : AppCompatActivity() {
                     Date()
                 ) // 현재 시간
                 val percentage = 0 // 초기 참여율
-                val isCompleted = false // 초기 완료 상태
 
                 // Challenger 객체 생성
                 val challenger = ChallengerDBHelper.Challenger(
@@ -109,8 +108,7 @@ class ChallengeCreateDate : AppCompatActivity() {
                     challengeId = challengeId,
                     challengeRole = challengeRole,
                     joinedAt = joinedAt,
-                    percentage = percentage,
-                    isCompleted = isCompleted
+                    percentage = percentage
                 )
 
                 // 데이터베이스에 삽입

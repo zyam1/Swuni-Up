@@ -102,8 +102,7 @@ class ChallengeJoin : AppCompatActivity() {
 
         val challengeRole = "participant" // 역할: 참가자
         val joinedAt = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault()).format(Date()) // 현재 시간
-        val percentage = 0 // 초기 참여율
-        val isCompleted = false // 초기 완료 상태
+        val percentage = 0 // 초기 참여율\
 
         // Challenger 객체 생성
         val challenger = ChallengerDBHelper.Challenger(
@@ -111,8 +110,7 @@ class ChallengeJoin : AppCompatActivity() {
             challengeId = challengeId,
             challengeRole = challengeRole,
             joinedAt = joinedAt,
-            percentage = percentage,
-            isCompleted = isCompleted
+            percentage = percentage
         )
 
         // 데이터베이스에 삽입
@@ -175,7 +173,8 @@ class ChallengeJoin : AppCompatActivity() {
             dateTextView.text = "$daysDifference" + "일 챌린지"
 
             val countTextView = findViewById<TextView>(R.id.countTextView)
-            countTextView.text = "5 / $maxParticipants 명"
+            val joinedParticipants = countParticipants(challengeId)
+            countTextView.text = "$joinedParticipants / $maxParticipants 명"
 
             val dDayTextView = findViewById<TextView>(R.id.dDayTextView)
             val daysRemaining = calculateDaysRemaining(startDay)
@@ -193,12 +192,44 @@ class ChallengeJoin : AppCompatActivity() {
             } else {
                 Toast.makeText(this, "이미지를 찾을 수 없습니다.", Toast.LENGTH_SHORT).show()
             }
+
+            val joinButton = findViewById<Button>(R.id.joinButton)
+
+            if (joinedParticipants >= maxParticipants) {
+                joinButton.isEnabled = false // 버튼 비활성화
+                joinButton.setOnClickListener {
+                    Toast.makeText(this, "참여 가능 인원이 모두 모집되었습니다!", Toast.LENGTH_SHORT).show()
+                }
+            } else {
+                joinButton.isEnabled = true // 버튼 활성화
+                joinButton.setOnClickListener {
+                    // 참여 로직 추가
+                    Toast.makeText(this, "참여 완료!", Toast.LENGTH_SHORT).show()
+                }
+            }
         } else {
             Toast.makeText(this, "데이터가 없습니다!", Toast.LENGTH_SHORT).show()
         }
 
         cursor.close()
         db.close()
+    }
+
+    private fun countParticipants(challengeId: Long): Int {
+        val dbHelper = ChallengerDBHelper(this)
+        val db = dbHelper.readableDatabase
+
+        val query = "SELECT COUNT(*) FROM ${ChallengerDBHelper.TABLE_CHALLENGER} WHERE ${ChallengerDBHelper.COLUMN_CHALLENGE_ID} = ?"
+        val cursor = db.rawQuery(query, arrayOf(challengeId.toString()))
+
+        var count = 0
+        if (cursor.moveToFirst()) {
+            count = cursor.getInt(0) // 첫 번째 컬럼 값이 참여자 수
+        }
+
+        cursor.close()
+        db.close()
+        return count
     }
 
     private fun formatDate(dateString: String): String {
