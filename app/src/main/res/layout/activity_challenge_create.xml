@@ -10,18 +10,34 @@
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar"
-        android:layout_width="0dp"
-        android:layout_height="63dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:background="?attr/colorPrimary"
         app:navigationIcon="@drawable/ic_back_arrow"
+        android:contentInsetStart="0dp"
+        android:contentInsetEnd="0dp"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <!-- 제목을 위한 TextView 추가 -->
+        <TextView
+            android:id="@+id/toolbar_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="생성하기"
+            android:textColor="@color/white"
+            android:fontFamily="@font/wavve_pado"
+            android:textSize="24sp"
+            android:gravity="center"
+            android:layout_gravity="center_vertical|center_horizontal"/>
+    </androidx.appcompat.widget.Toolbar>
+
+
 
     <android.widget.ScrollView
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_marginTop="8dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -37,7 +53,7 @@
                 android:id="@+id/imageView"
                 android:layout_width="350dp"
                 android:layout_height="216dp"
-                android:layout_marginTop="10dp"
+                android:layout_marginTop="20dp"
                 android:contentDescription="@string/image_view"
                 android:src="@drawable/ic_default_image"
                 android:scaleType="centerCrop"
