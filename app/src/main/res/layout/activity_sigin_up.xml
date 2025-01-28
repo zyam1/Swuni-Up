@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:background="#FFFFFF"
-    tools:context=".KakaoSigninActivity">
+    tools:context=".SiginUpActivity">
 
     <!-- 상단 파란색 배경 -->
     <RelativeLayout
@@ -23,14 +23,14 @@
             android:layout_alignParentStart="true"
             android:layout_centerVertical="true"
             android:src="@drawable/ic_back"
-            android:contentDescription="뒤로가기 버튼" />
+            android:contentDescription="@null" />
 
         <!-- 타이틀 -->
         <TextView
             android:fontFamily="@font/padore"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="회원가입"
+            android:text="@string/signin_button"
             android:textSize="18sp"
             android:textStyle="bold"
             android:textColor="#FFFFFF"
@@ -51,7 +51,7 @@
             android:layout_height="90dp"
             android:src="@drawable/icprofile"
 
-            android:contentDescription="프로필 이미지"
+            android:contentDescription="@null"
             android:scaleType="centerCrop"/>
 
         <!-- 이미지 업로드 버튼 -->
@@ -62,7 +62,7 @@
             android:layout_gravity="bottom|end"
             android:src="@drawable/ic_cameral"
 
-            android:contentDescription="이미지 업로드 버튼"/>
+            android:contentDescription="@null"/>
     </FrameLayout>
 
     <!-- 입력 폼 컨테이너 -->
@@ -78,7 +78,7 @@
             android:id="@+id/et_id"
             android:layout_width="match_parent"
             android:layout_height="50dp"
-            android:hint="아이디"
+            android:hint="@string/signin_id"
             android:background="@drawable/rounded_background"
             android:padding="10dp"
             android:textSize="16sp"/>
@@ -99,7 +99,7 @@
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:hint="비밀번호"
+                android:hint="@string/signin_password"
                 android:inputType="textPassword"
                 android:padding="10dp"
                 android:textSize="16sp"
@@ -111,7 +111,7 @@
                 android:layout_height="40dp"
                 android:padding="10dp"
                 android:src="@drawable/ic_eye"
-                android:contentDescription="비밀번호 보기 버튼"/>
+                android:contentDescription="@null"/>
         </LinearLayout>
 
         <!-- 닉네임 입력 -->
@@ -120,7 +120,7 @@
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:fontFamily="@font/scdreamre"
-            android:hint="닉네임"
+            android:hint="@string/signin_nickname"
             android:background="@drawable/rounded_background"
             android:padding="10dp"
             android:textSize="16sp"
@@ -128,11 +128,14 @@
 
         <!-- 학과 선택 (스피너) -->
         <Spinner
+
             android:id="@+id/spinner_department"
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:background="@drawable/rounded_background"
-            android:layout_marginTop="10dp"/>
+            android:layout_marginTop="10dp"
+            android:entries="@array/departments"
+            />
 
         <!-- 가입하기 버튼 -->
         <android.widget.Button
@@ -140,7 +143,7 @@
             android:id="@+id/btn_register"
             android:layout_width="match_parent"
             android:layout_height="50dp"
-            android:text="가입하기"
+            android:text="@string/signin_do_signup"
             android:textSize="16sp"
             android:textColor="#FFFFFF"
             android:background="@drawable/rounded_background"

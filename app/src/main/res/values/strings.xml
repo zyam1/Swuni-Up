@@ -26,4 +26,22 @@
     </string-array>
 
 
+        <string-array name="departments">
+            <item>디지털미디어학과</item>
+            <item>소프트웨어융합학과</item>
+            <item>정보보호학과</item>
+            <item>데이터사이언스학과</item>
+        </string-array>
+
+<string name="signin_button">회원가입</string>
+<string name="signin_id">아이다</string>
+<string name="signin_password">비밀번호</string>
+<string name="signin_nickname">닉네임</string>
+<string name="signin_do_signup">가입하기</string>
+<string name="signin_trytext">아직 계정이 없나요?</string>
+<string name="signin_kakao">카카오로 시작하기</string>
+<string name="signin_simple">로그인</string>
+<string name="signin_lost_password">비밀번호를 잊어버렸어요</string>
+
+
 </resources>
