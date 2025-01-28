@@ -21,7 +21,6 @@
     <android.widget.ScrollView
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_marginTop="8dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -36,13 +35,13 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:padding="16dp">
+                android:padding="20dp">
 
                 <ImageView
                     android:id="@+id/imageView"
                     android:layout_width="350dp"
                     android:layout_height="216dp"
-                    android:layout_marginTop="10dp"
+                    android:layout_marginTop="8dp"
                     android:contentDescription="@string/image_view"
                     android:src="@drawable/ic_default_image"
                     android:scaleType="centerCrop"
@@ -96,9 +95,10 @@
 
             <TextView
                 android:id="@+id/descriptionTextView1"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="33dp"
+                android:layout_marginRight="33dp"
                 android:fontFamily="@font/scdream3"
                 android:layout_marginTop="10dp"
                 android:lineHeight="24dp"
@@ -198,69 +198,12 @@
                     android:paddingTop="5dp"
                     android:paddingLeft="16dp">
 
-                    <!-- 동그라미들 -->
-                    <ImageView
-                        android:id="@+id/circle1"
-                        android:layout_width="100dp"
-                        android:layout_height="100dp"
-                        android:layout_marginEnd="16dp"
-                        android:layout_margin="10dp"
-                        android:background="@drawable/profile_img_background"
-                        android:contentDescription="profile1" />
-
-                    <ImageView
-                        android:id="@+id/circle2"
-                        android:layout_width="100dp"
-                        android:layout_height="100dp"
-                        android:layout_marginEnd="16dp"
-                        android:layout_margin="10dp"
-                        android:background="@drawable/profile_img_background" />
-
-                    <ImageView
-                        android:id="@+id/circle3"
-                        android:layout_width="100dp"
-                        android:layout_height="100dp"
-                        android:layout_marginEnd="16dp"
-                        android:layout_margin="10dp"
-                        android:background="@drawable/profile_img_background" />
-
-                    <ImageView
-                        android:id="@+id/circle4"
-                        android:layout_width="100dp"
-                        android:layout_height="100dp"
-                        android:layout_marginEnd="16dp"
-                        android:layout_margin="10dp"
-                        android:background="@drawable/profile_img_background" />
-
-                    <ImageView
-                        android:id="@+id/circle5"
-                        android:layout_width="100dp"
-                        android:layout_height="100dp"
-                        android:layout_marginEnd="16dp"
-                        android:layout_margin="10dp"
-                        android:background="@drawable/profile_img_background" />
-
-                    <ImageView
-                        android:id="@+id/circle6"
-                        android:layout_width="100dp"
-                        android:layout_height="100dp"
-                        android:layout_marginEnd="16dp"
-                        android:layout_margin="10dp"
-                        android:background="@drawable/profile_img_background" />
-
-                    <ImageView
-                        android:id="@+id/circle7"
-                        android:layout_width="100dp"
-                        android:layout_height="100dp"
-                        android:layout_marginEnd="16dp"
-                        android:layout_margin="10dp"
-                        android:background="@drawable/profile_img_background" />
 
                 </LinearLayout>
             </HorizontalScrollView>
 
             <Button
-                android:id="@+id/makeButton"
+                android:id="@+id/joinButton"
                 android:layout_width="350dp"
                 android:layout_height="wrap_content"
                 android:background="@drawable/button_background"
