@@ -1,0 +1,247 @@
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ChallengeCreate"
+    android:background="@color/white">
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="?attr/colorPrimary"
+        app:navigationIcon="@drawable/ic_back_arrow"
+        android:contentInsetStart="0dp"
+        android:contentInsetEnd="0dp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <!-- 제목을 위한 TextView 추가 -->
+        <TextView
+            android:id="@+id/toolbar_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="생성하기"
+            android:textColor="@color/white"
+            android:fontFamily="@font/wavve_pado"
+            android:textSize="24sp"
+            android:gravity="center"
+            android:layout_gravity="center_vertical|center_horizontal"/>
+    </androidx.appcompat.widget.Toolbar>
+
+
+
+    <android.widget.ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/toolbar">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="16dp" >
+
+            <ImageView
+                android:id="@+id/imageView"
+                android:layout_width="350dp"
+                android:layout_height="216dp"
+                android:layout_marginTop="20dp"
+                android:contentDescription="@string/image_view"
+                android:src="@drawable/ic_default_image"
+                android:scaleType="centerCrop"
+                android:background="@drawable/edit_text_background"
+                android:layout_gravity="center"
+                android:clipToOutline="true" />
+
+            <TextView
+                android:id="@+id/titleTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:layout_marginLeft="13dp"
+                android:fontFamily="@font/wavve_pado"
+                android:text="@string/create_title"
+                android:textSize="16sp" />
+
+            <EditText
+                android:id="@+id/titleEditText"
+                android:layout_width="350dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:layout_gravity="center"
+                android:background="@drawable/edit_text_background"
+                android:fontFamily="@font/scdream4"
+                android:hint="텍스트를 입력하세요"
+                android:padding="16dp"
+                android:textSize="16sp" />
+
+            <TextView
+                android:id="@+id/descriptionTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:layout_marginLeft="13dp"
+                android:fontFamily="@font/wavve_pado"
+                android:text="@string/create_description"
+                android:textSize="16sp" />
+
+            <EditText
+                android:id="@+id/descriptionEditText"
+                android:layout_width="350dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:background="@drawable/edit_text_background"
+                android:layout_gravity="center"
+                android:gravity="top"
+                android:fontFamily="@font/scdream4"
+                android:hint="챌린지에 대한 자세한 설명을 작성해 주세요."
+                android:padding="16dp"
+                android:textSize="16sp"
+                android:inputType="textMultiLine"
+                android:lines="3"
+                android:maxLines="5"
+                android:scrollbars="vertical" />
+
+            <TextView
+                android:id="@+id/maxTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:layout_marginLeft="13dp"
+                android:fontFamily="@font/wavve_pado"
+                android:text="@string/create_max"
+                android:textSize="16sp" />
+
+            <FrameLayout
+                android:layout_width="350dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center" >
+
+                <EditText
+                    android:id="@+id/maxEditText"
+                    android:layout_width="350dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:layout_gravity="start|top"
+                    android:background="@drawable/edit_text_background"
+                    android:fontFamily="@font/scdream4"
+                    android:hint="0"
+                    android:inputType="number"
+                    android:padding="16dp"
+                    android:textSize="16sp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="명"
+                    android:fontFamily="@font/scdream4"
+                    android:textSize="16sp"
+                    android:layout_gravity="end|top"
+                    android:layout_marginTop="25dp"
+                    android:layout_marginEnd="15dp" />
+
+            </FrameLayout>
+
+            <TextView
+                android:id="@+id/categoryTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="13dp"
+                android:layout_marginTop="20dp"
+                android:fontFamily="@font/wavve_pado"
+                android:text="@string/create_category"
+                android:textSize="16sp" />
+
+            <GridLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:columnCount="3"
+                android:paddingTop="5dp"
+                android:paddingStart="10dp"
+                android:paddingEnd="10dp"
+                android:paddingBottom="10dp"
+                android:rowCount="2">
+
+                <CheckBox
+                    android:id="@+id/checkBox1"
+                    android:layout_width="110dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="5dp"
+                    android:fontFamily="@font/scdream3"
+                    android:paddingStart="5dp"
+                    android:text="건강" />
+
+                <CheckBox
+                    android:id="@+id/checkBox2"
+                    android:layout_width="110dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:fontFamily="@font/scdream3"
+                    android:paddingStart="5dp"
+                    android:text="학습" />
+
+                <CheckBox
+                    android:id="@+id/checkBox3"
+                    android:layout_width="110dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:fontFamily="@font/scdream3"
+                    android:paddingStart="5dp"
+                    android:text="습관" />
+
+                <CheckBox
+                    android:id="@+id/checkBox4"
+                    android:layout_width="110dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="5dp"
+                    android:fontFamily="@font/scdream3"
+                    android:paddingStart="5dp"
+                    android:text="취미" />
+
+                <CheckBox
+                    android:id="@+id/checkBox5"
+                    android:layout_width="110dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:fontFamily="@font/scdream3"
+                    android:paddingStart="5dp"
+                    android:text="자산 관리" />
+
+                <CheckBox
+                    android:id="@+id/checkBox6"
+                    android:layout_width="110dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:fontFamily="@font/scdream3"
+                    android:paddingStart="5dp"
+                    android:text="기타" />
+
+            </GridLayout>
+
+            <Button
+                android:id="@+id/button"
+                android:layout_width="350dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:background="@drawable/button_background"
+                android:layout_gravity="center"
+                android:paddingTop="14dp"
+                android:paddingBottom="14dp"
+                android:fontFamily="@font/wavve_pado"
+                android:text="다음으로" />
+
+
+        </LinearLayout>
+
+    </android.widget.ScrollView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

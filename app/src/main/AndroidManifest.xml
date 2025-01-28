@@ -2,6 +2,10 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_MEDIA_IMAGES" />
+
     <application
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
@@ -13,6 +17,7 @@
         android:theme="@style/Theme.SWUniUp"
         tools:targetApi="31">
         <activity
+
             android:name=".SiginUpActivity"
             android:exported="false" />
         <activity
@@ -20,6 +25,20 @@
             android:exported="false" />
         <activity
             android:name=".KakaoSigninActivity"
+            android:exported="false" />
+
+        <activity
+            android:name=".ChallengeFinish"
+            android:exported="false" />
+        <activity
+            android:name=".ChallengeJoin"
+            android:exported="false" />
+        <activity
+            android:name=".ChallengeCreateDate"
+            android:exported="false" />
+        <activity
+            android:name=".ChallengeCreate"
+
             android:exported="false" />
         <activity
             android:name=".MainActivity"
