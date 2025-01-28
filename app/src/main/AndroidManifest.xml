@@ -17,6 +17,17 @@
         android:theme="@style/Theme.SWUniUp"
         tools:targetApi="31">
         <activity
+
+            android:name=".SiginUpActivity"
+            android:exported="false" />
+        <activity
+            android:name=".HomeActivity"
+            android:exported="false" />
+        <activity
+            android:name=".KakaoSigninActivity"
+            android:exported="false" />
+
+        <activity
             android:name=".ChallengeFinish"
             android:exported="false" />
         <activity
@@ -27,6 +38,7 @@
             android:exported="false" />
         <activity
             android:name=".ChallengeCreate"
+
             android:exported="false" />
         <activity
             android:name=".MainActivity"
