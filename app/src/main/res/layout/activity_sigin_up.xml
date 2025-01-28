@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="#FFFFFF"
+    tools:context=".KakaoSigninActivity">
+
+    <!-- 상단 파란색 배경 -->
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:background="#25408F"
+        android:padding="10dp">
+
+        <!-- 뒤로가기 버튼 -->
+        <ImageView
+            android:id="@+id/btn_back"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_alignParentStart="true"
+            android:layout_centerVertical="true"
+            android:src="@drawable/ic_back"
+            android:contentDescription="뒤로가기 버튼" />
+
+        <!-- 타이틀 -->
+        <TextView
+            android:fontFamily="@font/padore"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="회원가입"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:textColor="#FFFFFF"
+            android:layout_centerInParent="true"/>
+    </RelativeLayout>
+
+    <!-- 프로필 이미지 선택 -->
+    <FrameLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="20dp">
+
+        <!-- 프로필 이미지 -->
+        <ImageView
+            android:id="@+id/img_profile"
+            android:layout_width="90dp"
+            android:layout_height="90dp"
+            android:src="@drawable/icprofile"
+
+            android:contentDescription="프로필 이미지"
+            android:scaleType="centerCrop"/>
+
+        <!-- 이미지 업로드 버튼 -->
+        <ImageView
+            android:id="@+id/btn_upload_image"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:layout_gravity="bottom|end"
+            android:src="@drawable/ic_cameral"
+
+            android:contentDescription="이미지 업로드 버튼"/>
+    </FrameLayout>
+
+    <!-- 입력 폼 컨테이너 -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="24dp">
+
+        <!-- 아이디 입력 -->
+        <EditText
+            android:fontFamily="@font/scdreamre"
+            android:id="@+id/et_id"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:hint="아이디"
+            android:background="@drawable/rounded_background"
+            android:padding="10dp"
+            android:textSize="16sp"/>
+
+        <!-- 비밀번호 입력 -->
+        <LinearLayout
+
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:orientation="horizontal"
+            android:background="@drawable/rounded_background"
+            android:gravity="center_vertical"
+            android:layout_marginTop="10dp">
+
+            <EditText
+                android:fontFamily="@font/scdreamre"
+                android:id="@+id/et_password"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:hint="비밀번호"
+                android:inputType="textPassword"
+                android:padding="10dp"
+                android:textSize="16sp"
+                android:background="@android:color/transparent"/>
+
+            <ImageView
+                android:id="@+id/btn_password_toggle"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:padding="10dp"
+                android:src="@drawable/ic_eye"
+                android:contentDescription="비밀번호 보기 버튼"/>
+        </LinearLayout>
+
+        <!-- 닉네임 입력 -->
+        <EditText
+            android:id="@+id/et_nickname"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:fontFamily="@font/scdreamre"
+            android:hint="닉네임"
+            android:background="@drawable/rounded_background"
+            android:padding="10dp"
+            android:textSize="16sp"
+            android:layout_marginTop="10dp"/>
+
+        <!-- 학과 선택 (스피너) -->
+        <Spinner
+            android:id="@+id/spinner_department"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:background="@drawable/rounded_background"
+            android:layout_marginTop="10dp"/>
+
+        <!-- 가입하기 버튼 -->
+        <android.widget.Button
+            android:fontFamily="@font/padore"
+            android:id="@+id/btn_register"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:text="가입하기"
+            android:textSize="16sp"
+            android:textColor="#FFFFFF"
+            android:background="@drawable/rounded_background"
+            android:backgroundTint="@color/blue"
+            android:layout_marginTop="16dp"/>
+    </LinearLayout>
+
+</LinearLayout>
