@@ -15,7 +15,7 @@
         android:layout_gravity="center"
         android:layout_marginTop="40dp"
         android:contentDescription="@null"
-        android:src="@drawable/loginlogobox" />
+         />
 
     <!-- 둥근 모서리 흰색 배경 -->
     <androidx.cardview.widget.CardView
@@ -38,7 +38,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 android:background="@drawable/rounded_background"
-                android:hint="아이디"
+                android:hint="@string/signin_id"
                 android:padding="10dp"
                 android:textSize="16sp" />
 
@@ -56,7 +56,7 @@
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
-                    android:hint="비밀번호"
+                    android:hint="@string/signin_password"
                     android:inputType="textPassword"
 
                     android:padding="10dp"
@@ -66,7 +66,7 @@
                     android:id="@+id/btn_password_toggle"
                     android:layout_width="40dp"
                     android:layout_height="40dp"
-                    android:contentDescription="비밀번호 보기 버튼"
+                    android:contentDescription="@null"
                     android:padding="10dp"
                     android:src="@drawable/ic_eye" />
             </LinearLayout>
@@ -77,7 +77,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_marginTop="8dp"
-                android:text="비밀번호를 잊어버렸어요"
+                android:text="@string/signin_lost_password"
                 android:textColor="#BDBDBD"
                 android:textSize="14sp" />
 
@@ -89,7 +89,7 @@
                 android:layout_marginTop="16dp"
                 android:background="@color/blue"
                 android:backgroundTint="#25408F"
-                android:text="로그인"
+                android:text="@string/signin_simple"
                 android:textColor="#FFFFFF"
                 android:textSize="16sp" />
 
@@ -102,7 +102,7 @@
 
                 android:backgroundTint="#FEE500"
 
-                android:text="카카오로 시작하기"
+                android:text="@string/signin_kakao"
                 android:background="@color/yellow"
                 android:textColor="#000000"
                 android:textSize="16sp" />
@@ -117,7 +117,7 @@
                 android:orientation="horizontal">
 
                 <TextView
-                    android:text="아직 계정이 없나요?"
+                    android:text="@string/signin_trytext"
                     android:layout_height="match_parent"
                     android:layout_width="match_parent"
                     android:textColor="#757575"
@@ -127,7 +127,7 @@
                     android:id="@+id/tv_register"
                     android:layout_height="match_parent"
                     android:layout_width="match_parent"
-                    android:text=" 가입하기"
+                    android:text="@string/signin_do_signup"
                     android:textColor="#25408F"
                     android:textSize="14sp"
                     android:textStyle="bold" />
