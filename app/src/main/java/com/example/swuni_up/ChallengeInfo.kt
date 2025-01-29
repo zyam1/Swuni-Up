@@ -24,12 +24,15 @@ class ChallengeInfo : AppCompatActivity() {
 
         toolbar.setNavigationOnClickListener {
             onBackPressed()
+            //이전 페이지로 이동
         }
 
         // 챌린지 정보
         val title = intent.getStringExtra("title")
         val description = intent.getStringExtra("description")
         val photo = intent.getStringExtra("photo")
+        val max_participant = intent.getStringExtra("max_participant")
+        val date = intent.getStringExtra("date")
 
         findViewById<TextView>(R.id.challenge_title).text = title
         findViewById<TextView>(R.id.description).text = description
@@ -38,7 +41,7 @@ class ChallengeInfo : AppCompatActivity() {
         findViewById<TextView>(R.id.date).text = title
 
 
-        // 임시 데이터 리스트(유저 정보 받으면 추가 예정)
+        // 임시 데이터 리스트(유저 정보 받으면 변경)
         val userList = listOf(
             UserData(R.drawable.arrow_left, "80%", "밥만잘먹더라"),
             UserData(R.drawable.arrow_right, "90%", "식사왕"),

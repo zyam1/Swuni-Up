@@ -4,6 +4,10 @@
 
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_MEDIA_IMAGES"/>
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
 
     <application
         android:allowBackup="true"
@@ -15,6 +19,8 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.SWUniUp"
         tools:targetApi="31">
+
+        <!-- Main Activity -->
         <activity
             android:name=".MainActivity"
             android:exported="true">
@@ -24,21 +30,32 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".AddLog"
-            android:exported="true">
+        <!-- NotificationReceiver 등록 -->
+        <receiver android:name=".NotificationReceiver"
+            android:exported="false"
+            android:enabled="true">
+        </receiver>
+
+        <!-- 다른 액티비티들 -->
+        <activity android:name=".ChallengeJoin" android:exported="false" />
+        <activity android:name=".ChallengeCreateDate" android:exported="false" />
+        <activity android:name=".ChallengeCreate" android:exported="false" />
+        <activity android:name=".AddLog" android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+        <activity android:name=".ChallengeInfo" android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
 
-        <activity android:name=".ChallengeInfo"
-            android:exported="true">
-            <intent-filter>
-                <action android:name="android.intent.action.VIEW" />
-                <category android:name="android.intent.category.DEFAULT" />
-            </intent-filter>
-        </activity>
     </application>
+
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
 </manifest>
