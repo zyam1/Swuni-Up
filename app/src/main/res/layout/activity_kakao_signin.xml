@@ -4,92 +4,90 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/blue"
+    android:background="@color/navy"
     android:orientation="vertical"
     tools:context=".KakaoSigninActivity">
 
     <!-- 로고 이미지 -->
     <ImageView
-        android:layout_width="155dp"
-        android:layout_height="150dp"
+        android:layout_width="84dp"
+        android:layout_height="102dp"
         android:layout_gravity="center"
-        android:layout_marginTop="40dp"
+        android:layout_marginTop="66dp"
+        android:layout_marginBottom="66dp"
         android:contentDescription="@null"
+        android:src="@drawable/ic_login_logo"
          />
 
     <!-- 둥근 모서리 흰색 배경 -->
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="-20dp"
-        android:radius="30dp"
-        app:cardBackgroundColor="#FFFFFF">
+        android:layout_height="match_parent"
+        app:cardBackgroundColor="@android:color/transparent" >
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="552dp"
+            android:layout_height="match_parent"
+            android:background="@drawable/top_rounded_card"
             android:gravity="center"
             android:orientation="vertical"
             android:padding="25dp">
 
             <!-- 아이디 입력 -->
             <EditText
-                android:id="@+id/et_id"
+                android:id="@+id/et_email"
                 android:layout_width="match_parent"
-                android:layout_height="50dp"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="25dp"
                 android:background="@drawable/rounded_background"
-                android:hint="@string/signin_id"
-                android:padding="10dp"
+                android:fontFamily="@font/scdream5"
+                android:hint="@string/signin_email"
+                android:padding="16dp"
                 android:textSize="16sp" />
 
             <!-- 비밀번호 입력 -->
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="50dp"
-
-                android:gravity="center_vertical"
+                android:layout_height="wrap_content"
                 android:background="@drawable/rounded_background"
+                android:gravity="center_vertical"
                 android:orientation="horizontal">
 
                 <EditText
                     android:id="@+id/et_password"
                     android:layout_width="0dp"
-                    android:layout_height="match_parent"
+                    android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:hint="@string/signin_password"
                     android:inputType="textPassword"
-
-                    android:padding="10dp"
+                    android:background="@drawable/rounded_background"
+                    android:fontFamily="@font/scdream5"
+                    android:padding="16dp"
                     android:textSize="16sp" />
 
                 <ImageView
                     android:id="@+id/btn_password_toggle"
                     android:layout_width="40dp"
                     android:layout_height="40dp"
+                    android:layout_marginRight="5dp"
                     android:contentDescription="@null"
                     android:padding="10dp"
                     android:src="@drawable/ic_eye" />
             </LinearLayout>
 
-            <!-- 비밀번호 찾기 -->
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_marginTop="8dp"
-                android:text="@string/signin_lost_password"
-                android:textColor="#BDBDBD"
-                android:textSize="14sp" />
-
             <!-- 로그인 버튼 -->
             <android.widget.Button
                 android:id="@+id/btn_login"
                 android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:layout_marginTop="16dp"
-                android:background="@color/blue"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="50dp"
+                android:layout_marginBottom="16dp"
+                android:background="@drawable/button_background"
                 android:backgroundTint="#25408F"
+                android:paddingTop="14dp"
+                android:paddingBottom="14dp"
                 android:text="@string/signin_simple"
+                android:fontFamily="@font/wavve_pado"
                 android:textColor="#FFFFFF"
                 android:textSize="16sp" />
 
@@ -97,14 +95,16 @@
             <android.widget.Button
                 android:id="@+id/btn_kakao_login"
                 android:layout_width="match_parent"
-                android:layout_height="50dp"
+                android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
-
+                android:layout_marginBottom="10dp"
+                android:background="@drawable/text_view_background"
+                android:fontFamily="@font/wavve_pado"
                 android:backgroundTint="#FEE500"
-
+                android:paddingTop="14dp"
+                android:paddingBottom="14dp"
                 android:text="@string/signin_kakao"
-                android:background="@color/yellow"
-                android:textColor="#000000"
+                android:textColor="#191919"
                 android:textSize="16sp" />
 
             <!-- 가입하기 -->
@@ -117,19 +117,22 @@
                 android:orientation="horizontal">
 
                 <TextView
-                    android:text="@string/signin_trytext"
-                    android:layout_height="match_parent"
                     android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:text="@string/signin_trytext"
+                    android:fontFamily="@font/scdream5"
                     android:textColor="#757575"
-                    android:textSize="14sp" />
+                    android:layout_marginRight="10dp"
+                    android:textSize="16sp" />
 
                 <TextView
                     android:id="@+id/tv_register"
-                    android:layout_height="match_parent"
                     android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:fontFamily="@font/scdream5"
                     android:text="@string/signin_do_signup"
                     android:textColor="#25408F"
-                    android:textSize="14sp"
+                    android:textSize="16sp"
                     android:textStyle="bold" />
             </LinearLayout>
 
