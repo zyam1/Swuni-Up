@@ -12,13 +12,13 @@ import androidx.appcompat.app.AppCompatActivity
 
 class KakaoSigninActivity : AppCompatActivity() {
 
-    private lateinit var dbHelper: UserDBHelper
+    private lateinit var dbHelper: DBHelper
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_kakao_signin)
 
-        dbHelper = UserDBHelper(this)
+        dbHelper = DBHelper(this)
 
         val etEmail = findViewById<EditText>(R.id.et_email)
         val etPassword = findViewById<EditText>(R.id.et_password)

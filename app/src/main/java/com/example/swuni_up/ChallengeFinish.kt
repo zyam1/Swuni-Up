@@ -10,13 +10,13 @@ class ChallengeFinish : AppCompatActivity() {
 
     private lateinit var recyclerView: RecyclerView
     private lateinit var challengerAdapter: ChallengerAdapter
-    private lateinit var dbHelper: ChallengerDBHelper
+    private lateinit var dbHelper: DBHelper
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_challenge_finish)
 
-        dbHelper = ChallengerDBHelper(this)
+        dbHelper = DBHelper(this)
 
         recyclerView = findViewById(R.id.recyclerViewChallengers)
         recyclerView.layoutManager = LinearLayoutManager(this)
@@ -28,20 +28,20 @@ class ChallengeFinish : AppCompatActivity() {
     private fun loadChallengers() {
         val db = dbHelper.readableDatabase
         val cursor = db.rawQuery(
-            "SELECT * FROM ${ChallengerDBHelper.TABLE_CHALLENGER} ORDER BY ${ChallengerDBHelper.COLUMN_PERCENTAGE} DESC LIMIT -1 OFFSET 3",
+            "SELECT * FROM ${DBHelper.TABLE_CHALLENGER} ORDER BY ${DBHelper.COLUMN_PERCENTAGE} DESC LIMIT -1 OFFSET 3",
             null
         )
 
-        val challengers = mutableListOf<ChallengerDBHelper.Challenger>()
+        val challengers = mutableListOf<DBHelper.Challenger>()
 
         while (cursor.moveToNext()) {
-            val userId = cursor.getLong(cursor.getColumnIndexOrThrow(ChallengerDBHelper.COLUMN_USER_ID))
-            val challengeId = cursor.getLong(cursor.getColumnIndexOrThrow(ChallengerDBHelper.COLUMN_CHALLENGE_ID))
-            val challengeRole = cursor.getString(cursor.getColumnIndexOrThrow(ChallengerDBHelper.COLUMN_CHALLENGE_ROLE))
-            val joinedAt = cursor.getString(cursor.getColumnIndexOrThrow(ChallengerDBHelper.COLUMN_JOINED_AT))
-            val percentage = cursor.getInt(cursor.getColumnIndexOrThrow(ChallengerDBHelper.COLUMN_PERCENTAGE))
+            val userId = cursor.getLong(cursor.getColumnIndexOrThrow(DBHelper.COLUMN_USER_ID))
+            val challengeId = cursor.getLong(cursor.getColumnIndexOrThrow(DBHelper.COLUMN_CHALLENGE_ID))
+            val challengeRole = cursor.getString(cursor.getColumnIndexOrThrow(DBHelper.COLUMN_CHALLENGE_ROLE))
+            val joinedAt = cursor.getString(cursor.getColumnIndexOrThrow(DBHelper.COLUMN_JOINED_AT))
+            val percentage = cursor.getInt(cursor.getColumnIndexOrThrow(DBHelper.COLUMN_PERCENTAGE))
 
-            challengers.add(ChallengerDBHelper.Challenger(userId, challengeId, challengeRole, joinedAt, percentage))
+            challengers.add(DBHelper.Challenger(userId, challengeId, challengeRole, joinedAt, percentage))
         }
         cursor.close()
 
@@ -52,20 +52,20 @@ class ChallengeFinish : AppCompatActivity() {
     private fun loadTopChallengers() {
         val db = dbHelper.readableDatabase
         val cursor = db.rawQuery(
-            "SELECT * FROM ${ChallengerDBHelper.TABLE_CHALLENGER} ORDER BY ${ChallengerDBHelper.COLUMN_PERCENTAGE} DESC LIMIT 3",
+            "SELECT * FROM ${DBHelper.TABLE_CHALLENGER} ORDER BY ${DBHelper.COLUMN_PERCENTAGE} DESC LIMIT 3",
             null
         )
 
-        val topChallengers = mutableListOf<ChallengerDBHelper.Challenger>()
+        val topChallengers = mutableListOf<DBHelper.Challenger>()
 
         while (cursor.moveToNext()) {
-            val userId = cursor.getLong(cursor.getColumnIndexOrThrow(ChallengerDBHelper.COLUMN_USER_ID))
-            val challengeId = cursor.getLong(cursor.getColumnIndexOrThrow(ChallengerDBHelper.COLUMN_CHALLENGE_ID))
-            val challengeRole = cursor.getString(cursor.getColumnIndexOrThrow(ChallengerDBHelper.COLUMN_CHALLENGE_ROLE))
-            val joinedAt = cursor.getString(cursor.getColumnIndexOrThrow(ChallengerDBHelper.COLUMN_JOINED_AT))
-            val percentage = cursor.getInt(cursor.getColumnIndexOrThrow(ChallengerDBHelper.COLUMN_PERCENTAGE))
+            val userId = cursor.getLong(cursor.getColumnIndexOrThrow(DBHelper.COLUMN_USER_ID))
+            val challengeId = cursor.getLong(cursor.getColumnIndexOrThrow(DBHelper.COLUMN_CHALLENGE_ID))
+            val challengeRole = cursor.getString(cursor.getColumnIndexOrThrow(DBHelper.COLUMN_CHALLENGE_ROLE))
+            val joinedAt = cursor.getString(cursor.getColumnIndexOrThrow(DBHelper.COLUMN_JOINED_AT))
+            val percentage = cursor.getInt(cursor.getColumnIndexOrThrow(DBHelper.COLUMN_PERCENTAGE))
 
-            topChallengers.add(ChallengerDBHelper.Challenger(userId, challengeId, challengeRole, joinedAt, percentage))
+            topChallengers.add(DBHelper.Challenger(userId, challengeId, challengeRole, joinedAt, percentage))
         }
         cursor.close()
 
