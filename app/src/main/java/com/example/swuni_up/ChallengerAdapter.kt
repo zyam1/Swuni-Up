@@ -7,7 +7,7 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 
-class ChallengerAdapter(private val context: Context, private val challengers: List<ChallengerDBHelper.Challenger>) :
+class ChallengerAdapter(private val context: Context, private val challengers: List<DBHelper.Challenger>) :
     RecyclerView.Adapter<ChallengerAdapter.ViewHolder>() {
 
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
@@ -26,7 +26,7 @@ class ChallengerAdapter(private val context: Context, private val challengers: L
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val challenger = challengers[position]
 
-        val dbHelper = UserDBHelper(holder.itemView.context)
+        val dbHelper = DBHelper(holder.itemView.context)
         val nickname = dbHelper.getNicknameById(challenger.userId)
 
         holder.rankNumber.text = String.format("%02d", position + 4) // 랭킹 번호

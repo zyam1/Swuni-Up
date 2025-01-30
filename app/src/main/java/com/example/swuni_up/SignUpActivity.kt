@@ -14,7 +14,7 @@ import java.io.ByteArrayOutputStream
 
 class SignUpActivity : AppCompatActivity() {
 
-    private lateinit var dbHelper: UserDBHelper
+    private lateinit var dbHelper: DBHelper
     private lateinit var imgProfile: ImageView
     private val PICK_IMAGE_REQUEST = 1
     private var selectedImageUri: Uri? = null
@@ -23,7 +23,7 @@ class SignUpActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_sigin_up)
 
-        dbHelper = UserDBHelper(this)
+        dbHelper = DBHelper(this)
 
         val etName = findViewById<EditText>(R.id.et_name)
         val etEmail = findViewById<EditText>(R.id.et_email)
@@ -69,7 +69,7 @@ class SignUpActivity : AppCompatActivity() {
             }
 
             // 사용자의 정보를 User 객체로 생성
-            val user = UserDBHelper.User(
+            val user = DBHelper.User(
                 name = name,
                 email = email,
                 password = password,
