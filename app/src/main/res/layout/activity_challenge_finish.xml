@@ -35,7 +35,7 @@
 
 
 
-    <android.widget.ScrollView
+    <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -51,198 +51,23 @@
 
             <LinearLayout
                 android:gravity="center"
-                android:layout_marginTop="10dp"
                 android:layout_width="360dp"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="20dp"
                 android:orientation="horizontal"
                 android:layout_gravity="center" >
 
-                <LinearLayout
-                    android:layout_width="100dp"
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/recyclerViewTopChallengers"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:layout_gravity="bottom" >
+                    android:layout_marginTop="10dp"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginEnd="10dp"
+                    android:orientation="horizontal"/>
 
-                    <ImageView
-                        android:layout_width="70dp"
-                        android:layout_height="70dp"
-                        android:background="@drawable/profile_img_background"
-                        android:layout_gravity="center" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:text="햄부기햄북"
-                        android:textSize="12sp"
-                        android:fontFamily="@font/scdream5"
-                        android:layout_marginTop="5dp" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:text="디지털미디어학과"
-                        android:textSize="10sp"
-                        android:fontFamily="@font/scdream3"
-                        android:layout_marginTop="5dp" />
-
-                    <LinearLayout
-                        android:layout_width="100dp"
-                        android:layout_height="160dp"
-                        android:layout_marginTop="10dp"
-                        android:background="@drawable/graph_background"
-                        android:backgroundTint="@color/gray40"
-                        android:gravity="center"
-                        android:orientation="vertical" >
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="3"
-                            android:fontFamily="@font/scdream5"
-                            android:textSize="25sp"
-                            android:layout_gravity="center" />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="80%"
-                            android:layout_marginTop="15dp"
-                            android:fontFamily="@font/scdream3"
-                            android:textSize="18sp"
-                            android:layout_gravity="center" />
-
-                    </LinearLayout>
-
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_marginLeft="20dp"
-                    android:layout_marginRight="20dp"
-                    android:layout_width="100dp"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:layout_gravity="bottom" >
-
-                    <ImageView
-                        android:layout_width="70dp"
-                        android:layout_height="70dp"
-                        android:background="@drawable/profile_img_background"
-                        android:layout_gravity="center" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:text="햄부기햄북"
-                        android:textSize="12sp"
-                        android:fontFamily="@font/scdream5"
-                        android:layout_marginTop="5dp" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:text="디지털미디어학과"
-                        android:textSize="10sp"
-                        android:fontFamily="@font/scdream3"
-                        android:layout_marginTop="5dp" />
-
-                    <LinearLayout
-                        android:layout_width="100dp"
-                        android:layout_height="176dp"
-                        android:layout_marginTop="10dp"
-                        android:background="@drawable/graph_background"
-                        android:backgroundTint="@color/gray40"
-                        android:gravity="center"
-                        android:orientation="vertical" >
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="2"
-                            android:fontFamily="@font/scdream5"
-                            android:textSize="25sp"
-                            android:layout_gravity="center" />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="88%"
-                            android:layout_marginTop="15dp"
-                            android:fontFamily="@font/scdream3"
-                            android:textSize="18sp"
-                            android:layout_gravity="center" />
-
-                    </LinearLayout>
-
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="100dp"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:layout_gravity="bottom" >
-
-                    <ImageView
-                        android:layout_width="70dp"
-                        android:layout_height="70dp"
-                        android:background="@drawable/profile_img_background"
-                        android:layout_gravity="center" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:text="햄부기햄북"
-                        android:textSize="12sp"
-                        android:fontFamily="@font/scdream5"
-                        android:layout_marginTop="5dp" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:text="디지털미디어학과"
-                        android:textSize="10sp"
-                        android:fontFamily="@font/scdream3"
-                        android:layout_marginTop="5dp" />
-
-                    <LinearLayout
-                        android:layout_width="100dp"
-                        android:layout_height="192dp"
-                        android:layout_marginTop="10dp"
-                        android:background="@drawable/graph_background"
-                        android:backgroundTint="@color/gray40"
-                        android:gravity="center"
-                        android:orientation="vertical" >
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="1"
-                            android:fontFamily="@font/scdream5"
-                            android:textSize="25sp"
-                            android:layout_gravity="center" />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="96%"
-                            android:layout_marginTop="15dp"
-                            android:fontFamily="@font/scdream3"
-                            android:textSize="18sp"
-                            android:layout_gravity="center" />
-
-                    </LinearLayout>
-
-                </LinearLayout>
 
             </LinearLayout>
-
-
 
             <LinearLayout
                 android:layout_width="360dp"
@@ -345,205 +170,16 @@
 
             </LinearLayout>
 
-            <LinearLayout
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recyclerViewChallengers"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:layout_marginBottom="10dp"
-                android:orientation="horizontal">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="04"
-                    android:fontFamily="@font/scdream5"
-                    android:layout_gravity="center"
-                    android:textSize="25sp"
-                    android:layout_marginLeft="35dp" />
-
-                <LinearLayout
-                    android:layout_marginLeft="30dp"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical" >
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textSize="17sp"
-                        android:text="밥만잘먹더라"
-                        android:fontFamily="@font/scdream5" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textSize="14sp"
-                        android:layout_marginTop="5dp"
-                        android:text="76%"
-                        android:fontFamily="@font/scdream3" />
-                </LinearLayout>
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:layout_marginBottom="10dp"
-                android:orientation="horizontal">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="04"
-                    android:fontFamily="@font/scdream5"
-                    android:layout_gravity="center"
-                    android:textSize="25sp"
-                    android:layout_marginLeft="35dp" />
-
-                <LinearLayout
-                    android:layout_marginLeft="30dp"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical" >
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textSize="17sp"
-                        android:text="밥만잘먹더라"
-                        android:fontFamily="@font/scdream5" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textSize="14sp"
-                        android:layout_marginTop="5dp"
-                        android:text="76%"
-                        android:fontFamily="@font/scdream3" />
-                </LinearLayout>
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:layout_marginBottom="10dp"
-                android:orientation="horizontal">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="04"
-                    android:fontFamily="@font/scdream5"
-                    android:layout_gravity="center"
-                    android:textSize="25sp"
-                    android:layout_marginLeft="35dp" />
-
-                <LinearLayout
-                    android:layout_marginLeft="30dp"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical" >
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textSize="17sp"
-                        android:text="밥만잘먹더라"
-                        android:fontFamily="@font/scdream5" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textSize="14sp"
-                        android:layout_marginTop="5dp"
-                        android:text="76%"
-                        android:fontFamily="@font/scdream3" />
-                </LinearLayout>
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:layout_marginBottom="10dp"
-                android:orientation="horizontal">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="04"
-                    android:fontFamily="@font/scdream5"
-                    android:layout_gravity="center"
-                    android:textSize="25sp"
-                    android:layout_marginLeft="35dp" />
-
-                <LinearLayout
-                    android:layout_marginLeft="30dp"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical" >
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textSize="17sp"
-                        android:text="밥만잘먹더라"
-                        android:fontFamily="@font/scdream5" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textSize="14sp"
-                        android:layout_marginTop="5dp"
-                        android:text="76%"
-                        android:fontFamily="@font/scdream3" />
-                </LinearLayout>
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:layout_marginBottom="10dp"
-                android:orientation="horizontal">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="04"
-                    android:fontFamily="@font/scdream5"
-                    android:layout_gravity="center"
-                    android:textSize="25sp"
-                    android:layout_marginLeft="35dp" />
-
-                <LinearLayout
-                    android:layout_marginLeft="30dp"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical" >
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textSize="17sp"
-                        android:text="밥만잘먹더라"
-                        android:fontFamily="@font/scdream5" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textSize="14sp"
-                        android:layout_marginTop="5dp"
-                        android:text="76%"
-                        android:fontFamily="@font/scdream3" />
-                </LinearLayout>
-            </LinearLayout>
-
+                android:layout_margin="16dp"
+                android:nestedScrollingEnabled="false"
+                android:scrollbars="vertical"/>
 
         </LinearLayout>
 
-    </android.widget.ScrollView>
+    </androidx.core.widget.NestedScrollView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

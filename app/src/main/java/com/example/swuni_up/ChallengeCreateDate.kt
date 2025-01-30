@@ -1,6 +1,7 @@
 package com.example.swuni_up
 
 import android.content.Context
+import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.os.Bundle
@@ -93,8 +94,16 @@ class ChallengeCreateDate : AppCompatActivity() {
             if (challengeId != -1L) {
                 val dbHelper = ChallengerDBHelper(this)
 
-                // 예시 데이터 (실제 사용자와 챌린지 ID는 적절히 설정해야 함)
-                val userId: Long = 1 // 로그인된 사용자 ID
+                // SharedPreferences에서 로그인된 사용자의 ID 가져오기
+                val sharedPreferences = getSharedPreferences("user_prefs", Context.MODE_PRIVATE)
+                val userId: Long = sharedPreferences.getLong("user_id", -1L)
+
+                // userId가 -1L이면 로그인되지 않은 상태이므로 에러 처리
+                if (userId == -1L) {
+                    Toast.makeText(this, "로그인된 사용자 정보가 없습니다.", Toast.LENGTH_SHORT).show()
+                    Log.e("ChallengeJoin", "로그인된 사용자 정보가 없습니다.")
+                    return@setOnClickListener
+                }
 
                 val challengeRole = "admin" // 역할: 참가자
                 val joinedAt = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault()).format(

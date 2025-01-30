@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!-- 그림자 레이어 (아래쪽 그림자) -->
+    <item>
+        <shape android:shape="rectangle">
+            <corners android:radius="25dp"/> <!-- 모서리 둥글게 -->
+            <solid android:color="#26000000"/> <!-- 검은색 투명도 15% (그림자) -->
+        </shape>
+    </item>
+
+    <!-- 실제 배경 (위로 올려서 아래쪽 그림자 보이게) -->
+    <item android:bottom="4dp" android:right="4dp">
+        <shape android:shape="rectangle">
+            <corners android:radius="25dp"/>
+            <solid android:color="#FFFFFF"/> <!-- 기존 배경색 유지 -->
+        </shape>
+    </item>
+
+</layer-list>
