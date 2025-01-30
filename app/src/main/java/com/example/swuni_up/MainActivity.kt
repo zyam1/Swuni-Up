@@ -6,6 +6,7 @@ import android.widget.Toast
 
 class MainActivity : AppCompatActivity() {
 
+
     private lateinit var notificationHelper: NotificationHelper
 
     override fun onCreate(savedInstanceState: Bundle?) {

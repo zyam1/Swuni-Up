@@ -2,9 +2,11 @@ package com.example.swuni_up
 
 import android.app.Activity
 import android.content.ContentValues
+import android.content.Context
 import android.content.Intent
 import android.database.sqlite.SQLiteDatabase
 import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
@@ -13,6 +15,7 @@ import android.widget.ImageView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import java.io.ByteArrayOutputStream
+import java.io.InputStream
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -33,10 +36,16 @@ class AddLog : AppCompatActivity() {
             openGallery()
         }
 
-        // 인증하기 버튼
         val saveButton: Button = findViewById(R.id.saveBtn)
         saveButton.setOnClickListener {
-            saveLog()
+            val userId = getCurrentLoggedInUserId()
+            val challengerId = getChallengerIdByUserId(userId)
+
+            if (challengerId != null) {
+                saveLog(challengerId)
+            } else {
+                Toast.makeText(this, "챌린저 ID를 찾을 수 없습니다.", Toast.LENGTH_SHORT).show()
+            }
         }
     }
 
@@ -49,48 +58,79 @@ class AddLog : AppCompatActivity() {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == PICK_IMAGE_REQUEST && resultCode == Activity.RESULT_OK && data != null) {
-            val selectedImageUri: Uri? = data.data
+            selectedImageUri = data.data
             if (selectedImageUri != null) {
                 logImage.setImageURI(selectedImageUri)
             }
         }
     }
 
-    // 로그 저장
-    private fun saveLog() {
+    private fun getCurrentLoggedInUserId(): Long {
+        val sharedPreferences = getSharedPreferences("user_prefs", Context.MODE_PRIVATE)
+        return sharedPreferences.getLong("user_id", -1L)
+    }
+
+    private fun getChallengerIdByUserId(userId: Long): Long? {
+        val dbHelper = ChallengerDBHelper(this)
+        val db = dbHelper.readableDatabase
+        var challengerId: Long? = null
+
+        val cursor = db.query(
+            ChallengerDBHelper.TABLE_CHALLENGER,
+            arrayOf(ChallengerDBHelper.COLUMN_ID),
+            "${ChallengerDBHelper.COLUMN_USER_ID} = ?",
+            arrayOf(userId.toString()),
+            null, null, null
+        )
+
+        if (cursor.moveToFirst()) {
+            val columnIndex = cursor.getColumnIndex(ChallengerDBHelper.COLUMN_ID)
+            challengerId = cursor.getLong(columnIndex)
+        }
+
+        cursor.close()
+        db.close()  // 🛠 개선점 1: db.close() 추가
+
+        return challengerId
+    }
+
+    private fun saveLog(challengerId: Long) {
         if (selectedImageUri == null) {
-            Toast.makeText(this, "이미지를 선택해주세요.", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, "이미지를 선택해야 합니다.", Toast.LENGTH_SHORT).show()
             return
         }
 
-        val bitmap = MediaStore.Images.Media.getBitmap(contentResolver, selectedImageUri)
+        val bitmap = uriToBitmap(selectedImageUri!!)
         val byteArray = bitmapToByteArray(bitmap)
 
-        var logId = 1L  // 초기값
-        logId++  // 로그가 생성될 때마다 증가
-
-        val challengerId = 123L // 예시용 챌린저 ID
-        val certifiedAt = getCurrentDateTime() // 인증 날짜
+        val certifiedAt = getCurrentDateTime()
 
         val db = dbHelper.writableDatabase
         val values = ContentValues().apply {
-            put("log_id", logId)
             put("challenger_id", challengerId)
-            put("certified_at", certifiedAt)
+            put("log_date", certifiedAt)
             put("log_image", byteArray)
         }
 
         val newRowId = db.insert("Log", null, values)
+        db.close()
+
         if (newRowId != -1L) {
             Toast.makeText(this, "로그가 저장되었습니다.", Toast.LENGTH_SHORT).show()
+            selectedImageUri = null // 🛠 개선점 2: 저장 후 selectedImageUri 초기화
         } else {
             Toast.makeText(this, "로그 저장에 실패했습니다.", Toast.LENGTH_SHORT).show()
         }
     }
 
+    private fun uriToBitmap(uri: Uri): Bitmap {
+        val inputStream: InputStream? = contentResolver.openInputStream(uri)
+        return BitmapFactory.decodeStream(inputStream)!!
+    }
+
     private fun bitmapToByteArray(bitmap: Bitmap): ByteArray {
         val stream = ByteArrayOutputStream()
-        bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream)
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 90, stream)  // 🛠 원래대로 90 유지
         return stream.toByteArray()
     }
 

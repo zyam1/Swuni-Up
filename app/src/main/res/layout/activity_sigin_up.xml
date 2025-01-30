@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="#FFFFFF"
+    tools:context=".SignUpActivity">
+
+    <!-- 상단 파란색 배경 -->
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="63dp"
+        android:background="#25408F"
+        android:padding="10dp">
+
+        <!-- 뒤로가기 버튼 -->
+        <ImageView
+            android:id="@+id/btn_back"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_alignParentStart="true"
+            android:layout_centerVertical="true"
+            android:src="@drawable/ic_back"
+            android:contentDescription="@null" />
+
+        <!-- 타이틀 -->
+        <TextView
+            android:fontFamily="@font/padore"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/signin_button"
+            android:textSize="24sp"
+            android:textColor="#FFFFFF"
+            android:layout_centerInParent="true"/>
+    </RelativeLayout>
+
+    <!-- 프로필 이미지 선택 -->
+    <FrameLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="40dp">
+
+        <ImageView
+            android:id="@+id/img_profile"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:backgroundTint="@color/gray25"
+            android:contentDescription="@null"
+            android:scaleType="centerCrop"
+            android:background="@drawable/profile_img_background"
+            android:layout_gravity="center"
+            android:clipToOutline="true"
+            android:src="@drawable/ic_profile" />
+
+        <ImageView
+            android:id="@+id/btn_upload_image"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:layout_gravity="bottom|end"
+            android:src="@drawable/ic_cameral"
+            android:contentDescription="@null"/>
+
+    </FrameLayout>
+
+    <!-- 입력 폼 컨테이너 -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:padding="24dp">
+
+        <EditText
+            android:fontFamily="@font/scdreamre"
+            android:id="@+id/et_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="이름"
+            android:layout_marginBottom="5dp"
+            android:background="@drawable/shadow_edit_text"
+            android:padding="16dp"
+            android:textSize="16sp"/>
+
+        <!-- 아이디 입력 -->
+        <EditText
+            android:fontFamily="@font/scdreamre"
+            android:id="@+id/et_email"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/signin_email"
+            android:layout_marginBottom="5dp"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/shadow_edit_text"
+            android:padding="16dp"
+            android:textSize="16sp"/>
+
+        <!-- 비밀번호 입력 -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:background="@drawable/shadow_edit_text"
+            android:gravity="center_vertical"
+            android:layout_marginBottom="5dp"
+            android:layout_marginTop="10dp">
+
+            <EditText
+                android:fontFamily="@font/scdreamre"
+                android:id="@+id/et_password"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:hint="@string/signin_password"
+                android:inputType="textPassword"
+                android:padding="16dp"
+                android:textSize="16sp"
+                android:background="@android:color/transparent"/>
+
+            <ImageView
+                android:id="@+id/btn_password_toggle"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:padding="10dp"
+                android:layout_marginRight="5dp"
+                android:src="@drawable/ic_eye"
+                android:contentDescription="@null"/>
+        </LinearLayout>
+
+        <!-- 닉네임 입력 -->
+        <EditText
+            android:id="@+id/et_nickname"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/scdreamre"
+            android:hint="@string/signin_nickname"
+            android:background="@drawable/shadow_edit_text"
+            android:padding="16dp"
+            android:textSize="16sp"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="5dp" />
+
+        <!-- 학과 선택 (스피너) -->
+        <Spinner
+            android:id="@+id/spinner_department"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/shadow_edit_text"
+            android:layout_marginTop="10dp"
+            android:padding="16dp"
+            android:entries="@array/departments"
+            />
+
+        <!-- 가입하기 버튼 -->
+        <android.widget.Button
+            android:fontFamily="@font/padore"
+            android:id="@+id/btn_register"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/signin_do_signup"
+            android:textSize="20sp"
+            android:textColor="#FFFFFF"
+            android:paddingTop="14dp"
+            android:paddingBottom="14dp"
+            android:background="@drawable/rounded_background"
+            android:backgroundTint="@color/navy"
+            android:layout_marginTop="16dp"/>
+    </LinearLayout>
+
+</LinearLayout>

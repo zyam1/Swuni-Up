@@ -10,7 +10,7 @@ import android.util.Log
 class ChallengeDBHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, null, DATABASE_VERSION) {
 
     companion object {
-        const val DATABASE_NAME = "challenge.db"
+        const val DATABASE_NAME = "swuniup.db"
         const val DATABASE_VERSION = 1
         const val TABLE_CHALLENGE = "Challenge"
 
@@ -67,7 +67,6 @@ class ChallengeDBHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_N
         Log.d("ChallengeDBHelper", "Inserting Challenge: $contentValues")
 
         // 데이터베이스에 삽입
-
         return db.insert(TABLE_CHALLENGE, null, contentValues)
     }
 

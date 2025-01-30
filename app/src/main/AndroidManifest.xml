@@ -3,11 +3,9 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.READ_MEDIA_IMAGES"/>
-    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
-    <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_MEDIA_IMAGES" />
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS"/>
 
     <application
         android:allowBackup="true"
@@ -20,9 +18,7 @@
         android:theme="@style/Theme.SWUniUp"
         tools:targetApi="31">
 
-        <!-- Main Activity -->
-        <activity
-            android:name=".MainActivity"
+        <activity android:name=".MainActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -30,32 +26,83 @@
             </intent-filter>
         </activity>
 
-        <!-- NotificationReceiver 등록 -->
-        <receiver android:name=".NotificationReceiver"
-            android:exported="false"
-            android:enabled="true">
-        </receiver>
-
-        <!-- 다른 액티비티들 -->
-        <activity android:name=".ChallengeJoin" android:exported="false" />
-        <activity android:name=".ChallengeCreateDate" android:exported="false" />
-        <activity android:name=".ChallengeCreate" android:exported="false" />
-        <activity android:name=".AddLog" android:exported="true">
+        <activity android:name=".MyChallenge" android:exported="false">
             <intent-filter>
-                <action android:name="android.intent.action.VIEW" />
+                <action android:name="com.yourapp.MY_CHALLENGE" />
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
-        <activity android:name=".ChallengeInfo" android:exported="true">
+
+        <activity android:name=".SignUpActivity" android:exported="false">
             <intent-filter>
-                <action android:name="android.intent.action.VIEW" />
+                <action android:name="com.yourapp.SIGN_UP" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+
+        <activity android:name=".HomeActivity" android:exported="false">
+            <intent-filter>
+                <action android:name="com.yourapp.HOME" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+
+        <activity android:name=".KakaoSigninActivity" android:exported="false">
+            <intent-filter>
+                <action android:name="com.yourapp.KAKAO_SIGNIN" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+
+        <activity android:name=".ChallengeFinish" android:exported="false">
+            <intent-filter>
+                <action android:name="com.yourapp.CHALLENGE_FINISH" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+
+        <activity android:name=".ChallengeJoin" android:exported="false">
+            <intent-filter>
+                <action android:name="com.yourapp.CHALLENGE_JOIN" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+
+        <activity android:name=".ChallengeCreateDate" android:exported="false">
+            <intent-filter>
+                <action android:name="com.yourapp.CHALLENGE_CREATE_DATE" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+
+        <activity android:name=".ChallengeCreate" android:exported="false">
+            <intent-filter>
+                <action android:name="com.yourapp.CHALLENGE_CREATE" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+
+        <activity android:name=".AddLog" android:exported="false">
+            <intent-filter>
+                <action android:name="com.yourapp.ADD_LOG" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+
+        <activity android:name=".ChallengeInfo" android:exported="false">
+            <intent-filter>
+                <action android:name="com.yourapp.CHALLENGE_INFO" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+
+        <activity android:name=".ChallengeInfoFeed" android:exported="false">
+            <intent-filter>
+                <action android:name="com.yourapp.CHALLENGE_INFO_FEED" />
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
 
     </application>
-
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
 </manifest>

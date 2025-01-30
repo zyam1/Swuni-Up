@@ -24,7 +24,7 @@ class PercentAdapter(private val userList: List<UserData>) : RecyclerView.Adapte
 
         holder.itemView.setOnClickListener {
             val intent =
-                Intent(holder.itemView.context, ChallengeInfoLog::class.java).apply {
+                Intent(holder.itemView.context, ChallengeInfoFeed::class.java).apply {
                     putExtra("imageResId", userData.imageResId)
                     putExtra("percent", userData.percent)
                     putExtra("nick", userData.nick)
