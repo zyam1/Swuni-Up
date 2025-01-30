@@ -90,6 +90,7 @@
         android:layout_marginBottom="32dp">
 
         <Button
+            android:id="@+id/saveBtn"
             android:layout_width="match_parent"
             android:layout_height="58dp"
             android:text="인증하기"
