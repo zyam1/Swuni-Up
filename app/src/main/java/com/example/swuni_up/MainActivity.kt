@@ -90,8 +90,8 @@ class MainActivity : AppCompatActivity() {
 
         // 시간 설정(PM 12:00)
         val calendar = java.util.Calendar.getInstance()
-        calendar.set(java.util.Calendar.HOUR_OF_DAY, 6)
-        calendar.set(java.util.Calendar.MINUTE, 30)
+        calendar.set(java.util.Calendar.HOUR_OF_DAY, 14)
+        calendar.set(java.util.Calendar.MINUTE, 46)
         calendar.set(java.util.Calendar.SECOND, 0)
 
         // 반복 설정

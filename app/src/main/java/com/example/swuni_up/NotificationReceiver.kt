@@ -16,6 +16,12 @@ class NotificationReceiver : BroadcastReceiver() {
         val notification: Notification = NotificationCompat.Builder(context, channelId)
             .setContentTitle("슈니업!") // 알림 제목
             .setContentText("챌린지 참여 잊지 않으셨나요?") //알림 내용
+            .setSmallIcon(R.drawable.up)  // 알림 아이콘(현재 이미지 깨져서 수정 필요)
+            .build()
+
+        val notification1: Notification = NotificationCompat.Builder(context, channelId)
+            .setContentTitle("슈니업!") // 알림 제목
+            .setContentText("챌린지 참여 잊지 않으셨나요?") //알림 내용
             .setSmallIcon(R.drawable.up_logo)  // 알림 아이콘(현재 이미지 깨져서 수정 필요)
             .build()
 
