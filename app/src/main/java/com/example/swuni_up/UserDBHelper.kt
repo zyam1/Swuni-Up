@@ -137,6 +137,61 @@ class UserDBHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, 
         return bitmap
     }
 
+    fun getUserProfilePhotoById(userId: Long): Bitmap? {
+        val db = this.readableDatabase
+        val query = "SELECT ${COLUMN_PHOTO} FROM ${TABLE_USER} WHERE ${COLUMN_ID} = ?"
+        val cursor = db.rawQuery(query, arrayOf(userId.toString()))
+
+        var bitmap: Bitmap? = null
+        Log.d("UserDBHelper", "아이디: $userId" +"로 프로필 사진을 조회합니다.")
+        if (cursor.moveToFirst()) {
+            val photoBlob = cursor.getBlob(cursor.getColumnIndexOrThrow(COLUMN_PHOTO))
+            Log.d("UserDBHelper", "프로필 사진 데이터를 성공적으로 가져왔습니다. 데이터 크기: ${photoBlob.size} bytes")
+            if (photoBlob != null) {
+                val options = BitmapFactory.Options()
+                options.inSampleSize = 2  // 이미지 크기 축소 (필요에 따라 조정)
+                bitmap = BitmapFactory.decodeByteArray(photoBlob, 0, photoBlob.size, options)
+                Log.d("UserDBHelper", "Bitmap 변환 완료.")
+            }
+        } else {
+            Log.d("UserDBHelper", "해당 아이디에 대한 프로필 사진이 없습니다.")
+        }
+        cursor.close()
+        db.close()
+
+        return bitmap
+    }
+
+    fun getNicknameById(userId: Long): String? {
+        val db = this.readableDatabase
+        val query = "SELECT $COLUMN_NICKNAME FROM $TABLE_USER WHERE $COLUMN_ID = ?"
+        val cursor = db.rawQuery(query, arrayOf(userId.toString()))
+
+        var nickname: String? = null
+        if (cursor.moveToFirst()) {
+            nickname = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_NICKNAME))
+        }
+        cursor.close()
+        db.close()
+
+        return nickname
+    }
+
+    fun getMajorById(userId: Long): String? {
+        val db = this.readableDatabase
+        val query = "SELECT $COLUMN_MAJOR FROM $TABLE_USER WHERE $COLUMN_ID = ?"
+        val cursor = db.rawQuery(query, arrayOf(userId.toString()))
+
+        var major: String? = null
+        if (cursor.moveToFirst()) {
+            major = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_MAJOR))
+        }
+        cursor.close()
+        db.close()
+
+        return major
+    }
+
 
 
 }

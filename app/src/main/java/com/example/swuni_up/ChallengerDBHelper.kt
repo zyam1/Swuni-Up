@@ -31,7 +31,7 @@ class ChallengerDBHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_
                 "$COLUMN_CHALLENGE_ID INTEGER NOT NULL, " +
                 "$COLUMN_CHALLENGE_ROLE TEXT NOT NULL CHECK($COLUMN_CHALLENGE_ROLE IN ('admin', 'participant')), " + // ENUM 역할 설정
                 "$COLUMN_JOINED_AT DATETIME NOT NULL, " +
-                "$COLUMN_PERCENTAGE INTEGER NOT NULL DEFAULT 0, " +
+                "$COLUMN_PERCENTAGE INTEGER NOT NULL DEFAULT 0 " +
                 ")"
         db.execSQL(createTable)
     }

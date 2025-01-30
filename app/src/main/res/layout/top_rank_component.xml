@@ -1,0 +1,67 @@
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="7dp"
+    android:gravity="bottom">
+
+    <!-- 프로필 이미지 -->
+    <ImageView
+        android:id="@+id/profile_image"
+        android:layout_width="70dp"
+        android:layout_height="70dp"
+        android:background="@drawable/profile_img_background"
+        android:scaleType="centerCrop"
+        android:clipToOutline="true"
+        android:layout_gravity="center" />
+
+    <!-- 닉네임 -->
+    <TextView
+        android:id="@+id/nickname"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:textSize="12sp"
+        android:fontFamily="@font/scdream5"
+        android:layout_marginTop="5dp" />
+
+    <!-- 학과 -->
+    <TextView
+        android:id="@+id/department"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:textSize="10sp"
+        android:fontFamily="@font/scdream3"
+        android:layout_marginTop="5dp" />
+
+    <!-- 그래프 영역 -->
+    <LinearLayout
+        android:id="@+id/graph_layout"
+        android:layout_width="100dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/graph_background"
+        android:backgroundTint="@color/gray40"
+        android:gravity="center"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/rank"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/scdream5"
+            android:textSize="25sp"
+            android:layout_gravity="center" />
+
+        <TextView
+            android:id="@+id/percentage"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="15dp"
+            android:fontFamily="@font/scdream3"
+            android:textSize="18sp"
+            android:layout_gravity="center" />
+    </LinearLayout>
+</LinearLayout>

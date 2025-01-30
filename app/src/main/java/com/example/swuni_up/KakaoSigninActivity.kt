@@ -48,11 +48,13 @@ class KakaoSigninActivity : AppCompatActivity() {
 
                     val sharedPreferences = getSharedPreferences("user_prefs", Context.MODE_PRIVATE)
                     val editor = sharedPreferences.edit()
+
                     editor.putString("user_nick", user.nickname)  // 로그인된 사용자의 닉네임 저장
+                    editor.putLong("user_id", user.id ?: -1L)
                     editor.apply()
 
                     // 홈으로 이동
-                    val intent = Intent(this, ChallengeJoin::class.java)
+                    val intent = Intent(this, HomeActivity::class.java)
                     startActivity(intent)
                     finish()
                 } else {

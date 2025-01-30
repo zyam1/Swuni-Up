@@ -16,7 +16,12 @@ import androidx.appcompat.widget.Toolbar
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import android.Manifest
+import android.content.Context
+import android.database.sqlite.SQLiteDatabase
+import android.graphics.Bitmap
 import android.os.Build
+import android.view.Gravity
+import androidx.core.content.res.ResourcesCompat
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
@@ -31,8 +36,6 @@ class ChallengeJoin : AppCompatActivity() {
 
     private lateinit var horizontalScrollView: HorizontalScrollView
     private lateinit var circleContainer: LinearLayout
-    private lateinit var scrollButton: Button
-    private val scrollStep = 100 // 한 번에 이동하는 거리 (픽셀 단위)
 
     private var currentChallengeId: Long? = null
 
@@ -69,30 +72,33 @@ class ChallengeJoin : AppCompatActivity() {
         // View 초기화
         horizontalScrollView = findViewById(R.id.horizontalScrollView)
         circleContainer = findViewById(R.id.circleContainer)
-        scrollButton = findViewById(R.id.scrollRightButton)
-
-        // 버튼 클릭 시 동그라미가 하나씩 옆으로 밀리도록
-        scrollButton.setOnClickListener {
-            // 현재 스크롤 위치에서 오른쪽으로 이동
-            horizontalScrollView.smoothScrollBy(scrollStep, 0)
-
-            // Toast로 확인
-            Toast.makeText(this, "밀기 클릭됨!", Toast.LENGTH_SHORT).show()
-        }
-
-        loadRandomChallenge()
 
         val joinButton = findViewById<Button>(R.id.joinButton)
         joinButton.setOnClickListener {
             joinChallenge()
         }
+
+        val challengeId = intent.getLongExtra("challenge_id", -1)
+        Log.d("ChallengeJoin", "챌린지 ID: $challengeId")
+        if (challengeId != -1L) {
+            loadChallengeById(challengeId)
+
+        } else {
+            Toast.makeText(this, "챌린지 정보를 찾을 수 없습니다.", Toast.LENGTH_SHORT).show()
+        }
+
+        // 로그인 성공 후 SharedPreferences에 저장한 후, 값 확인
+        val sharedPreferences = getSharedPreferences("user_prefs", Context.MODE_PRIVATE)
+        val userId = sharedPreferences.getLong("user_id", -1L)
+        Log.d("userInfo", "저장된 user_id: $userId")  // 저장된 user_id 로그 찍어보기
+
     }
 
     private fun joinChallenge() {
         val dbHelper = ChallengerDBHelper(this)
 
-        // 예시 데이터 (실제 사용자와 챌린지 ID는 적절히 설정해야 함)
-        val userId: Long = 1 // 로그인된 사용자 ID
+        val sharedPreferences = getSharedPreferences("user_prefs", Context.MODE_PRIVATE)
+        val userId = sharedPreferences.getLong("user_id", -1L)
 
         val challengeId = currentChallengeId // 현재 불러온 챌린지 ID 사용
         if (challengeId == null) {
@@ -102,7 +108,7 @@ class ChallengeJoin : AppCompatActivity() {
 
         val challengeRole = "participant" // 역할: 참가자
         val joinedAt = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault()).format(Date()) // 현재 시간
-        val percentage = 0 // 초기 참여율\
+        val percentage = 0 // 초기 참여율
 
         // Challenger 객체 생성
         val challenger = ChallengerDBHelper.Challenger(
@@ -139,80 +145,112 @@ class ChallengeJoin : AppCompatActivity() {
 
 
 
-    private fun loadRandomChallenge() {
+    private fun loadChallengeById(challengeId: Long) {
         val dbHelper = ChallengeDBHelper(this)
         val db = dbHelper.readableDatabase
 
-        val query = "SELECT * FROM ${ChallengeDBHelper.TABLE_CHALLENGE} ORDER BY RANDOM() LIMIT 1"
-        val cursor = db.rawQuery(query, null)
+        val query = "SELECT * FROM ${ChallengeDBHelper.TABLE_CHALLENGE} WHERE ${ChallengeDBHelper.COLUMN_ID} = ?"
+        val cursor = db.rawQuery(query, arrayOf(challengeId.toString()))
 
         if (cursor.moveToFirst()) {
-            val challengeId = cursor.getLong(cursor.getColumnIndexOrThrow(ChallengeDBHelper.COLUMN_ID)) // ID 가져오기
             val title = cursor.getString(cursor.getColumnIndexOrThrow(ChallengeDBHelper.COLUMN_TITLE))
             val description = cursor.getString(cursor.getColumnIndexOrThrow(ChallengeDBHelper.COLUMN_DESCRIPTION))
-            val photoBlob = cursor.getBlob(cursor.getColumnIndexOrThrow(ChallengeDBHelper.COLUMN_PHOTO)) // BLOB 데이터 가져오기
+            val photoBlob = cursor.getBlob(cursor.getColumnIndexOrThrow(ChallengeDBHelper.COLUMN_PHOTO))
             val startDay = cursor.getString(cursor.getColumnIndexOrThrow(ChallengeDBHelper.COLUMN_START_DAY))
             val endDay = cursor.getString(cursor.getColumnIndexOrThrow(ChallengeDBHelper.COLUMN_END_DAY))
             val maxParticipants = cursor.getInt(cursor.getColumnIndexOrThrow(ChallengeDBHelper.COLUMN_MAX_PARTICIPANT))
 
             currentChallengeId = challengeId
 
-            // 텍스트 설정
             titleTextView.text = title
             descriptionTextView1.text = description
 
-            // 날짜 포맷 변경 및 설정
             val formattedStartDay = formatDate(startDay)
             val formattedEndDay = formatDate(endDay)
 
-            val dayTextView = findViewById<TextView>(R.id.dayTextView)
-            dayTextView.text = "$formattedStartDay ~ $formattedEndDay"
+            findViewById<TextView>(R.id.dayTextView).text = "$formattedStartDay ~ $formattedEndDay"
+            findViewById<TextView>(R.id.dateTextView).text = "${calculateDaysDifference(startDay, endDay) + 1}일 챌린지"
 
-            val daysDifference = calculateDaysDifference(startDay, endDay) + 1
-            val dateTextView = findViewById<TextView>(R.id.dateTextView)
-            dateTextView.text = "$daysDifference" + "일 챌린지"
-
-            val countTextView = findViewById<TextView>(R.id.countTextView)
             val joinedParticipants = countParticipants(challengeId)
-            countTextView.text = "$joinedParticipants / $maxParticipants 명"
+            findViewById<TextView>(R.id.countTextView).text = "$joinedParticipants / $maxParticipants 명"
 
-            val dDayTextView = findViewById<TextView>(R.id.dDayTextView)
             val daysRemaining = calculateDaysRemaining(startDay)
+            findViewById<TextView>(R.id.dDayTextView).text = if (daysRemaining == 0) "오늘 마감!" else "마감 D - $daysRemaining"
 
-            if (daysRemaining == 0) {
-                dDayTextView.text = "오늘 마감!"
-            } else {
-                dDayTextView.text = "마감 D - $daysRemaining"
-            }
-
-            // BLOB 데이터를 Bitmap으로 변환 후 ImageView에 설정
             if (photoBlob != null) {
                 val bitmap = BitmapFactory.decodeByteArray(photoBlob, 0, photoBlob.size)
-                imageView.setImageBitmap(bitmap) // ImageView에 Bitmap 설정
+                imageView.setImageBitmap(bitmap)
             } else {
                 Toast.makeText(this, "이미지를 찾을 수 없습니다.", Toast.LENGTH_SHORT).show()
             }
 
             val joinButton = findViewById<Button>(R.id.joinButton)
-
             if (joinedParticipants >= maxParticipants) {
-                joinButton.isEnabled = false // 버튼 비활성화
+                joinButton.isEnabled = false
                 joinButton.setOnClickListener {
                     Toast.makeText(this, "참여 가능 인원이 모두 모집되었습니다!", Toast.LENGTH_SHORT).show()
                 }
             } else {
-                joinButton.isEnabled = true // 버튼 활성화
-                joinButton.setOnClickListener {
-                    // 참여 로직 추가
-                    Toast.makeText(this, "참여 완료!", Toast.LENGTH_SHORT).show()
+                joinButton.isEnabled = true
+            }
+
+            // 참가자들의 프로필을 추가하는 코드
+            val participants = getParticipantsForChallenge(challengeId)
+            Log.d("Participants", "Participants for challenge $challengeId: $participants")
+            val circleContainer = findViewById<LinearLayout>(R.id.circleContainer)
+
+            // 기존에 있는 동그라미들을 초기화하고 새로 추가
+            circleContainer.removeAllViews()
+
+            for (participant in participants) {
+                val profileLayout = LinearLayout(this).apply {
+                    orientation = LinearLayout.VERTICAL
+                    layoutParams = LinearLayout.LayoutParams(
+                        LinearLayout.LayoutParams.WRAP_CONTENT,
+                        LinearLayout.LayoutParams.WRAP_CONTENT
+                    ).apply {
+                        setMargins(32, 25, 32, 0) // 간격 설정
+                    }
                 }
+
+                val userProfileBitmap = loadUserProfilePhoto(participant.userId)
+
+                // 프로필 이미지뷰 생성
+                val imageView = ImageView(this).apply {
+                    layoutParams = LinearLayout.LayoutParams(270, 270)
+                    background = getDrawable(R.drawable.circle_background) // 배경을 원형으로 설정
+                    clipToOutline = true
+                    scaleType = ImageView.ScaleType.CENTER_CROP
+                    setImageBitmap(userProfileBitmap ?: BitmapFactory.decodeResource(resources, R.drawable.ic_profile))
+                }
+
+                // 닉네임 텍스트뷰 생성
+                val textView = TextView(this).apply {
+                    text = participant.userNick
+                    textSize = 12f
+                    typeface = ResourcesCompat.getFont(this@ChallengeJoin, R.font.scdream5)
+                    gravity = Gravity.CENTER
+                    setPadding(0, 25, 0, 0)
+                }
+
+                // 레이아웃에 추가
+                profileLayout.addView(imageView)
+                profileLayout.addView(textView)
+
+                // circleContainer에 추가
+                circleContainer.addView(profileLayout)
             }
         } else {
-            Toast.makeText(this, "데이터가 없습니다!", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, "챌린지를 찾을 수 없습니다.", Toast.LENGTH_SHORT).show()
         }
 
         cursor.close()
         db.close()
+    }
+
+    private fun loadUserProfilePhoto(userId: Long): Bitmap? {
+        val dbHelper = UserDBHelper(this) // 사용자 DB 헬퍼 클래스
+        return dbHelper.getUserProfilePhotoById(userId) // userId를 기반으로 프로필 사진을 로드
     }
 
     private fun countParticipants(challengeId: Long): Int {
@@ -274,5 +312,45 @@ class ChallengeJoin : AppCompatActivity() {
 
         return diffInDays
     }
+
+    // 참가자 목록을 가져오는 함수
+    private fun getParticipantsForChallenge(challengeId: Long): List<Participant> {
+        val dbHelper = ChallengerDBHelper(this)
+        val db = dbHelper.readableDatabase
+        val userDbHelper = UserDBHelper(this)
+        val userDb = userDbHelper.readableDatabase
+        val query = "SELECT * FROM ${ChallengerDBHelper.TABLE_CHALLENGER} WHERE ${ChallengerDBHelper.COLUMN_CHALLENGE_ID} = ?"
+        val cursor = db.rawQuery(query, arrayOf(challengeId.toString()))
+
+        val participants = mutableListOf<Participant>()
+        while (cursor.moveToNext()) {
+            val userId = cursor.getLong(cursor.getColumnIndexOrThrow(ChallengerDBHelper.COLUMN_USER_ID))
+
+            // userId를 이용해 user 테이블에서 userNick을 가져옵니다.
+            val userNick = getUserNick(userId, userDb)
+            participants.add(Participant(userId, userNick))
+        }
+
+        cursor.close()
+        db.close()
+        return participants
+    }
+
+    private fun getUserNick(userId: Long, db: SQLiteDatabase): String {
+        val query = "SELECT ${UserDBHelper.COLUMN_NICKNAME} FROM ${UserDBHelper.TABLE_USER} WHERE ${UserDBHelper.COLUMN_ID} = ?"
+        val cursor = db.rawQuery(query, arrayOf(userId.toString()))
+
+        var userNick = ""
+        if (cursor.moveToFirst()) {
+            userNick = cursor.getString(cursor.getColumnIndexOrThrow(UserDBHelper.COLUMN_NICKNAME))
+        }
+
+        cursor.close()
+        return userNick
+    }
+
+    // 참가자 데이터 클래스
+    data class Participant(val userId: Long, val userNick: String)
+
 
 }
