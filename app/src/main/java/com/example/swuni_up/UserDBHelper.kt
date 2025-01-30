@@ -4,6 +4,8 @@ import android.content.ContentValues
 import android.content.Context
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.util.Log
 
 class UserDBHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, null, DATABASE_VERSION) {
@@ -78,17 +80,20 @@ class UserDBHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, 
     )
 
     // 로그인
-    fun getUserById(userId: String): User? {
+    fun getUserByEmail(email: String): User? {
         val db = readableDatabase
+        Log.d("UserDBHelper", "Searching for user with Email: $email")
+
         val cursor = db.query(
             TABLE_USER,
-            arrayOf(COLUMN_ID, COLUMN_NAME, COLUMN_EMAIL, COLUMN_PASSWORD, COLUMN_KAKAO_ID, COLUMN_NICKNAME, COLUMN_MAJOR, COLUMN_PHOTO),
-            "$COLUMN_NAME = ?",  // user_name 기준으로 검색
-            arrayOf(userId),
+            arrayOf(COLUMN_ID, COLUMN_NAME, COLUMN_EMAIL, COLUMN_PASSWORD, COLUMN_KAKAO_ID, COLUMN_NICKNAME, COLUMN_MAJOR),
+            "$COLUMN_EMAIL = ?",
+            arrayOf(email),
             null, null, null
         )
 
         if (cursor.moveToFirst()) {
+            Log.d("UserDBHelper", "User found: Email = $email")
             val user = User(
                 id = cursor.getLong(0),
                 name = cursor.getString(1),
@@ -97,13 +102,41 @@ class UserDBHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, 
                 kakaoId = cursor.getString(4),
                 nickname = cursor.getString(5),
                 major = cursor.getString(6),
-                photo = cursor.getBlob(7)
+                photo = null
             )
             cursor.close()
             return user
         }
         cursor.close()
+        Log.d("UserDBHelper", "No user found with Email: $email")
         return null
     }
+
+    fun getUserProfilePhotoByNick(nickname: String): Bitmap? {
+        val db = this.readableDatabase
+        val query = "SELECT ${COLUMN_PHOTO} FROM ${TABLE_USER} WHERE ${COLUMN_NICKNAME} = ?"
+        val cursor = db.rawQuery(query, arrayOf(nickname))
+
+        var bitmap: Bitmap? = null
+        Log.d("UserDBHelper", "닉네임: $nickname"+"로 프로필 사진을 조회합니다.")
+        if (cursor.moveToFirst()) {
+            val photoBlob = cursor.getBlob(cursor.getColumnIndexOrThrow(COLUMN_PHOTO))
+            Log.d("UserDBHelper", "프로필 사진 데이터를 성공적으로 가져왔습니다. 데이터 크기: ${photoBlob.size} bytes")
+            if (photoBlob != null) {
+                val options = BitmapFactory.Options()
+                options.inSampleSize = 2  // 이미지 크기 축소 (필요에 따라 조정)
+                bitmap = BitmapFactory.decodeByteArray(photoBlob, 0, photoBlob.size, options)
+                Log.d("UserDBHelper", "Bitmap 변환 완료.")
+            }
+        } else {
+            Log.d("UserDBHelper", "해당 닉네임에 대한 프로필 사진이 없습니다.")
+        }
+        cursor.close()
+        db.close()
+
+        return bitmap
+    }
+
+
 
 }

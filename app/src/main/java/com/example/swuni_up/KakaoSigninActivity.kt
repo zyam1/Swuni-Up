@@ -1,7 +1,9 @@
 package com.example.swuni_up
 
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
@@ -18,42 +20,58 @@ class KakaoSigninActivity : AppCompatActivity() {
 
         dbHelper = UserDBHelper(this)
 
-        val etId = findViewById<EditText>(R.id.et_id)
+        val etEmail = findViewById<EditText>(R.id.et_email)
         val etPassword = findViewById<EditText>(R.id.et_password)
         val btnLogin = findViewById<Button>(R.id.btn_login)
         val tvRegister = findViewById<TextView>(R.id.tv_register)
 
         // 로그인 버튼 클릭
         btnLogin.setOnClickListener {
-            val id = etId.text.toString()
+            val email = etEmail.text.toString()
             val password = etPassword.text.toString()
 
-            if (id.isEmpty() || password.isEmpty()) {
+            if (email.isEmpty() || password.isEmpty()) {
                 Toast.makeText(this, "아이디와 비밀번호를 입력하세요", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
 
+            Log.d("Login", "Attempting to login with Email: $email and Password: $password")
+
             // DB에서 유저 정보 확인
-            val user = dbHelper.getUserById(id)
+            val user = dbHelper.getUserByEmail(email)
 
-            if (user != null && user.password == password) {
-                //성공
-                Toast.makeText(this, "로그인 성공, ${user.name}", Toast.LENGTH_SHORT).show()
+            if (user != null) {
+                Log.d("Login", "User found: ${user.name}, Email: ${user.email}")
+                if (user.password == password) {
+                    // 로그인 성공
+                    Toast.makeText(this, "로그인 성공, ${user.name}", Toast.LENGTH_SHORT).show()
 
-                // 홈으로 이동
-                val intent = Intent(this, HomeActivity::class.java)
-                startActivity(intent)
-                finish()
+                    val sharedPreferences = getSharedPreferences("user_prefs", Context.MODE_PRIVATE)
+                    val editor = sharedPreferences.edit()
+                    editor.putString("user_nick", user.nickname)  // 로그인된 사용자의 닉네임 저장
+                    editor.apply()
+
+                    // 홈으로 이동
+                    val intent = Intent(this, ChallengeJoin::class.java)
+                    startActivity(intent)
+                    finish()
+                } else {
+                    // 비밀번호 불일치
+                    Log.d("Login", "Password mismatch for user: $email")
+                    Toast.makeText(this, "로그인 실패: 비밀번호 불일치", Toast.LENGTH_SHORT).show()
+                }
             } else {
-                // 로그인 실패
-                Toast.makeText(this, "로그인 실패", Toast.LENGTH_SHORT).show()
+                // 이메일에 해당하는 유저가 없음
+                Log.d("Login", "No user found with Email: $email")
+                Toast.makeText(this, "로그인 실패: 유저가 존재하지 않음", Toast.LENGTH_SHORT).show()
             }
         }
+
 
         // 회원가입 버튼 클릭
         tvRegister.setOnClickListener {
             // 회원가입 화면으로 이동
-            val intent = Intent(this, SiginUpActivity::class.java)
+            val intent = Intent(this, SignUpActivity::class.java)
             startActivity(intent)
         }
     }
