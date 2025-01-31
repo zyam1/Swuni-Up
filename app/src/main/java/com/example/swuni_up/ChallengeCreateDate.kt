@@ -74,7 +74,7 @@ class ChallengeCreateDate : AppCompatActivity() {
             }
 
             // Challenge 객체 생성 (필요시, 서버에 보낼 데이터 포맷에 맞추어 구성)
-            val challenge = ChallengeDBHelper.Challenge(
+            val challenge = DBHelper.Challenge(
                 title = title ?: "Untitled",
                 description = description,
                 photo = photoByteArray,
@@ -83,16 +83,17 @@ class ChallengeCreateDate : AppCompatActivity() {
                 endDay = endDay,
                 status = status,
                 maxParticipant = maxParticipant,
-                category = category
+                category = category,
+                isOfficial = 0
             )
 
             // 데이터베이스 저장
-            val dbHelper = ChallengeDBHelper(this)
+            val dbHelper = DBHelper(this)
             val challengeId = dbHelper.insertChallenge(challenge)
 
             // 삽입 결과에 따라 처리
             if (challengeId != -1L) {
-                val dbHelper = ChallengerDBHelper(this)
+                val dbHelper = DBHelper(this)
 
                 // SharedPreferences에서 로그인된 사용자의 ID 가져오기
                 val sharedPreferences = getSharedPreferences("user_prefs", Context.MODE_PRIVATE)
@@ -112,7 +113,7 @@ class ChallengeCreateDate : AppCompatActivity() {
                 val percentage = 0 // 초기 참여율
 
                 // Challenger 객체 생성
-                val challenger = ChallengerDBHelper.Challenger(
+                val challenger = DBHelper.Challenger(
                     userId = userId,
                     challengeId = challengeId,
                     challengeRole = challengeRole,

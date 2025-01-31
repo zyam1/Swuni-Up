@@ -10,6 +10,12 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 
 class ChallengeInfo : AppCompatActivity() {
+
+    private lateinit var dbHelper: DBHelper
+    private lateinit var adapter: PercentAdapter
+    private lateinit var recyclerView: RecyclerView
+    private var challengeId: Long = 1
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.challenge_info)
@@ -17,7 +23,6 @@ class ChallengeInfo : AppCompatActivity() {
         // 툴바 설정
         val toolbar: Toolbar = findViewById(R.id.toolbar)
         setSupportActionBar(toolbar)
-
         supportActionBar?.setDisplayShowTitleEnabled(false)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.setHomeAsUpIndicator(R.drawable.arrow_left)
@@ -40,20 +45,23 @@ class ChallengeInfo : AppCompatActivity() {
         findViewById<TextView>(R.id.max_participant).text = title
         findViewById<TextView>(R.id.date).text = title
 
-
-        // 임시 데이터 리스트(유저 정보 받으면 변경)
-        val userList = listOf(
-            UserData(R.drawable.arrow_left, "80%", "밥만잘먹더라"),
-            UserData(R.drawable.arrow_right, "90%", "식사왕"),
-            UserData(R.drawable.up, "70%", "야근러"),
-        )
-
         // RecyclerView 설정
+        dbHelper = DBHelper(this)
         val recyclerView: RecyclerView = findViewById(R.id.recyclerView)
-        val percentAdapter = PercentAdapter(userList)
+        adapter = PercentAdapter(mutableListOf())
+
+        recyclerView.layoutManager = GridLayoutManager(this, 3)
+        recyclerView.adapter = adapter
+
+        loadChallengers()
 
         // GridLayoutManager, 1줄에 3개의 아이템
         recyclerView.layoutManager = GridLayoutManager(this, 3)
         recyclerView.adapter = percentAdapter
+    }
+
+    private fun loadChallengers() {
+        val challengers = dbHelper.getChallengersByChallenge(challengeId)
+        adapter.updateChallengers(challengers)
     }
 }

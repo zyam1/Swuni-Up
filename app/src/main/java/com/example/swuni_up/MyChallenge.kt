@@ -50,19 +50,19 @@ class MyChallenge : AppCompatActivity() {
     }
 
     private fun loadRandomChallenge() {
-        val dbHelper = ChallengeDBHelper(this)
+        val dbHelper = DBHelper(this)
         val db = dbHelper.readableDatabase
 
-        val query = "SELECT * FROM ${ChallengeDBHelper.TABLE_CHALLENGE} ORDER BY RANDOM() LIMIT 1"
+        val query = "SELECT * FROM ${DBHelper.TABLE_CHALLENGE} ORDER BY RANDOM() LIMIT 1"
         val cursor = db.rawQuery(query, null)
 
         if (cursor.moveToFirst()) {
-            val challengeId = cursor.getLong(cursor.getColumnIndexOrThrow(ChallengeDBHelper.COLUMN_ID)) // ID 가져오기
-            val title = cursor.getString(cursor.getColumnIndexOrThrow(ChallengeDBHelper.COLUMN_TITLE))
-            var description = cursor.getString(cursor.getColumnIndexOrThrow(ChallengeDBHelper.COLUMN_DESCRIPTION))
-            val photoBlob = cursor.getBlob(cursor.getColumnIndexOrThrow(ChallengeDBHelper.COLUMN_PHOTO)) // BLOB 데이터 가져오기
-            val startDay = cursor.getString(cursor.getColumnIndexOrThrow(ChallengeDBHelper.COLUMN_START_DAY))
-            val endDay = cursor.getString(cursor.getColumnIndexOrThrow(ChallengeDBHelper.COLUMN_END_DAY))
+            val challengeId = cursor.getLong(cursor.getColumnIndexOrThrow(DBHelper.COLUMN_CHALLENGE_ID)) // ID 가져오기
+            val title = cursor.getString(cursor.getColumnIndexOrThrow(DBHelper.COLUMN_CHALLENGE_TITLE))
+            var description = cursor.getString(cursor.getColumnIndexOrThrow(DBHelper.COLUMN_DESCRIPTION))
+            val photoBlob = cursor.getBlob(cursor.getColumnIndexOrThrow(DBHelper.COLUMN_PHOTO)) // BLOB 데이터 가져오기
+            val startDay = cursor.getString(cursor.getColumnIndexOrThrow(DBHelper.COLUMN_START_DAY))
+            val endDay = cursor.getString(cursor.getColumnIndexOrThrow(DBHelper.COLUMN_END_DAY))
 
             currentChallengeId = challengeId
 
@@ -99,10 +99,10 @@ class MyChallenge : AppCompatActivity() {
     }
 
     private fun countParticipants(challengeId: Long): Int {
-        val dbHelper = ChallengerDBHelper(this)
+        val dbHelper = DBHelper(this)
         val db = dbHelper.readableDatabase
 
-        val query = "SELECT COUNT(*) FROM ${ChallengerDBHelper.TABLE_CHALLENGER} WHERE ${ChallengerDBHelper.COLUMN_CHALLENGE_ID} = ?"
+        val query = "SELECT COUNT(*) FROM ${DBHelper.TABLE_CHALLENGER} WHERE ${DBHelper.COLUMN_CHALLENGE_ID} = ?"
         val cursor = db.rawQuery(query, arrayOf(challengeId.toString()))
 
         var count = 0

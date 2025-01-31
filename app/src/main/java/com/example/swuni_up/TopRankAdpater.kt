@@ -12,7 +12,7 @@ import androidx.recyclerview.widget.RecyclerView
 
 class TopRankAdapter(
     private val context: Context,
-    private val topChallengers: List<ChallengerDBHelper.Challenger>
+    private val topChallengers: List<DBHelper.Challenger>
 ) : RecyclerView.Adapter<TopRankAdapter.ViewHolder>() {
 
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
@@ -32,7 +32,7 @@ class TopRankAdapter(
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val challenger = topChallengers[position]
 
-        val dbHelper = UserDBHelper(holder.itemView.context)
+        val dbHelper = DBHelper(holder.itemView.context)
         val nickname = dbHelper.getNicknameById(challenger.userId)
         val major = dbHelper.getMajorById(challenger.userId)
         val bitmap = dbHelper.getUserProfilePhotoById(challenger.userId)

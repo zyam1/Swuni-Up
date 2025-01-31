@@ -95,7 +95,7 @@ class ChallengeJoin : AppCompatActivity() {
     }
 
     private fun joinChallenge() {
-        val dbHelper = ChallengerDBHelper(this)
+        val dbHelper = DBHelper(this)
 
         val sharedPreferences = getSharedPreferences("user_prefs", Context.MODE_PRIVATE)
         val userId = sharedPreferences.getLong("user_id", -1L)
@@ -111,7 +111,7 @@ class ChallengeJoin : AppCompatActivity() {
         val percentage = 0 // 초기 참여율
 
         // Challenger 객체 생성
-        val challenger = ChallengerDBHelper.Challenger(
+        val challenger = DBHelper.Challenger(
             userId = userId,
             challengeId = challengeId,
             challengeRole = challengeRole,
@@ -146,19 +146,19 @@ class ChallengeJoin : AppCompatActivity() {
 
 
     private fun loadChallengeById(challengeId: Long) {
-        val dbHelper = ChallengeDBHelper(this)
+        val dbHelper = DBHelper(this)
         val db = dbHelper.readableDatabase
 
-        val query = "SELECT * FROM ${ChallengeDBHelper.TABLE_CHALLENGE} WHERE ${ChallengeDBHelper.COLUMN_ID} = ?"
+        val query = "SELECT * FROM ${DBHelper.TABLE_CHALLENGE} WHERE ${DBHelper.COLUMN_CHALLENGE_ID} = ?"
         val cursor = db.rawQuery(query, arrayOf(challengeId.toString()))
 
         if (cursor.moveToFirst()) {
-            val title = cursor.getString(cursor.getColumnIndexOrThrow(ChallengeDBHelper.COLUMN_TITLE))
-            val description = cursor.getString(cursor.getColumnIndexOrThrow(ChallengeDBHelper.COLUMN_DESCRIPTION))
-            val photoBlob = cursor.getBlob(cursor.getColumnIndexOrThrow(ChallengeDBHelper.COLUMN_PHOTO))
-            val startDay = cursor.getString(cursor.getColumnIndexOrThrow(ChallengeDBHelper.COLUMN_START_DAY))
-            val endDay = cursor.getString(cursor.getColumnIndexOrThrow(ChallengeDBHelper.COLUMN_END_DAY))
-            val maxParticipants = cursor.getInt(cursor.getColumnIndexOrThrow(ChallengeDBHelper.COLUMN_MAX_PARTICIPANT))
+            val title = cursor.getString(cursor.getColumnIndexOrThrow(DBHelper.COLUMN_CHALLENGE_TITLE))
+            val description = cursor.getString(cursor.getColumnIndexOrThrow(DBHelper.COLUMN_DESCRIPTION))
+            val photoBlob = cursor.getBlob(cursor.getColumnIndexOrThrow(DBHelper.COLUMN_PHOTO))
+            val startDay = cursor.getString(cursor.getColumnIndexOrThrow(DBHelper.COLUMN_START_DAY))
+            val endDay = cursor.getString(cursor.getColumnIndexOrThrow(DBHelper.COLUMN_END_DAY))
+            val maxParticipants = cursor.getInt(cursor.getColumnIndexOrThrow(DBHelper.COLUMN_MAX_PARTICIPANT))
 
             currentChallengeId = challengeId
 
@@ -249,15 +249,15 @@ class ChallengeJoin : AppCompatActivity() {
     }
 
     private fun loadUserProfilePhoto(userId: Long): Bitmap? {
-        val dbHelper = UserDBHelper(this) // 사용자 DB 헬퍼 클래스
+        val dbHelper = DBHelper(this) // 사용자 DB 헬퍼 클래스
         return dbHelper.getUserProfilePhotoById(userId) // userId를 기반으로 프로필 사진을 로드
     }
 
     private fun countParticipants(challengeId: Long): Int {
-        val dbHelper = ChallengerDBHelper(this)
+        val dbHelper = DBHelper(this)
         val db = dbHelper.readableDatabase
 
-        val query = "SELECT COUNT(*) FROM ${ChallengerDBHelper.TABLE_CHALLENGER} WHERE ${ChallengerDBHelper.COLUMN_CHALLENGE_ID} = ?"
+        val query = "SELECT COUNT(*) FROM ${DBHelper.TABLE_CHALLENGER} WHERE ${DBHelper.COLUMN_CHALLENGE_ID} = ?"
         val cursor = db.rawQuery(query, arrayOf(challengeId.toString()))
 
         var count = 0
@@ -315,19 +315,17 @@ class ChallengeJoin : AppCompatActivity() {
 
     // 참가자 목록을 가져오는 함수
     private fun getParticipantsForChallenge(challengeId: Long): List<Participant> {
-        val dbHelper = ChallengerDBHelper(this)
+        val dbHelper = DBHelper(this)
         val db = dbHelper.readableDatabase
-        val userDbHelper = UserDBHelper(this)
-        val userDb = userDbHelper.readableDatabase
-        val query = "SELECT * FROM ${ChallengerDBHelper.TABLE_CHALLENGER} WHERE ${ChallengerDBHelper.COLUMN_CHALLENGE_ID} = ?"
+        val query = "SELECT * FROM ${DBHelper.TABLE_CHALLENGER} WHERE ${DBHelper.COLUMN_CHALLENGE_ID} = ?"
         val cursor = db.rawQuery(query, arrayOf(challengeId.toString()))
 
         val participants = mutableListOf<Participant>()
         while (cursor.moveToNext()) {
-            val userId = cursor.getLong(cursor.getColumnIndexOrThrow(ChallengerDBHelper.COLUMN_USER_ID))
+            val userId = cursor.getLong(cursor.getColumnIndexOrThrow(DBHelper.COLUMN_USER_ID))
 
             // userId를 이용해 user 테이블에서 userNick을 가져옵니다.
-            val userNick = getUserNick(userId, userDb)
+            val userNick = getUserNick(userId, db)
             participants.add(Participant(userId, userNick))
         }
 
@@ -337,12 +335,12 @@ class ChallengeJoin : AppCompatActivity() {
     }
 
     private fun getUserNick(userId: Long, db: SQLiteDatabase): String {
-        val query = "SELECT ${UserDBHelper.COLUMN_NICKNAME} FROM ${UserDBHelper.TABLE_USER} WHERE ${UserDBHelper.COLUMN_ID} = ?"
+        val query = "SELECT ${DBHelper.COLUMN_NICKNAME} FROM ${DBHelper.TABLE_USER} WHERE ${DBHelper.COLUMN_USER_ID} = ?"
         val cursor = db.rawQuery(query, arrayOf(userId.toString()))
 
         var userNick = ""
         if (cursor.moveToFirst()) {
-            userNick = cursor.getString(cursor.getColumnIndexOrThrow(UserDBHelper.COLUMN_NICKNAME))
+            userNick = cursor.getString(cursor.getColumnIndexOrThrow(DBHelper.COLUMN_NICKNAME))
         }
 
         cursor.close()

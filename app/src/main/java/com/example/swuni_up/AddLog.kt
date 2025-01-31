@@ -23,13 +23,13 @@ class AddLog : AppCompatActivity() {
     private lateinit var logImage: ImageView
     private val PICK_IMAGE_REQUEST = 1
     private var selectedImageUri: Uri? = null
-    private lateinit var dbHelper: ADDLogDBHelper
+    private lateinit var dbHelper: DBHelper
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.add_log)
 
-        dbHelper = ADDLogDBHelper(this)
+        dbHelper = DBHelper(this)
         logImage = findViewById(R.id.logImage)
 
         logImage.setOnClickListener {
@@ -71,32 +71,57 @@ class AddLog : AppCompatActivity() {
     }
 
     private fun getChallengerIdByUserId(userId: Long): Long? {
-        val dbHelper = ChallengerDBHelper(this)
         val db = dbHelper.readableDatabase
         var challengerId: Long? = null
 
         val cursor = db.query(
-            ChallengerDBHelper.TABLE_CHALLENGER,
-            arrayOf(ChallengerDBHelper.COLUMN_ID),
-            "${ChallengerDBHelper.COLUMN_USER_ID} = ?",
+            DBHelper.TABLE_CHALLENGER,
+            arrayOf(DBHelper.COLUMN_LOG_CHALLENGER_ID),
+            "${DBHelper.COLUMN_USER_ID} = ?",
             arrayOf(userId.toString()),
             null, null, null
         )
 
         if (cursor.moveToFirst()) {
-            val columnIndex = cursor.getColumnIndex(ChallengerDBHelper.COLUMN_ID)
-            challengerId = cursor.getLong(columnIndex)
+            challengerId = cursor.getLong(cursor.getColumnIndexOrThrow(DBHelper.COLUMN_LOG_CHALLENGER_ID))
         }
 
         cursor.close()
-        db.close()  // 🛠 개선점 1: db.close() 추가
+        db.close()
 
         return challengerId
+    }
+
+    private fun getChallengeIdByChallengerId(challengerId: Long): Long? {
+        val db = dbHelper.readableDatabase
+        var challengeId: Long? = null
+
+        val cursor = db.query(
+            DBHelper.TABLE_CHALLENGER,
+            arrayOf(DBHelper.COLUMN_CHALLENGE_ID_FK),
+            "${DBHelper.COLUMN_CHALLENGER_ID} = ?",
+            arrayOf(challengerId.toString()),
+            null, null, null
+        )
+
+        if (cursor.moveToFirst()) {
+            challengeId = cursor.getLong(cursor.getColumnIndexOrThrow(DBHelper.COLUMN_CHALLENGE_ID_FK))
+        }
+
+        cursor.close()
+        db.close()
+        return challengeId
     }
 
     private fun saveLog(challengerId: Long) {
         if (selectedImageUri == null) {
             Toast.makeText(this, "이미지를 선택해야 합니다.", Toast.LENGTH_SHORT).show()
+            return
+        }
+
+        val challengeId = getChallengeIdByChallengerId(challengerId)
+        if (challengeId == null) {
+            Toast.makeText(this, "챌린지 ID를 찾을 수 없습니다.", Toast.LENGTH_SHORT).show()
             return
         }
 
@@ -107,9 +132,10 @@ class AddLog : AppCompatActivity() {
 
         val db = dbHelper.writableDatabase
         val values = ContentValues().apply {
+            put("challenge_id", challengeId)
             put("challenger_id", challengerId)
             put("log_date", certifiedAt)
-            put("log_image", byteArray)
+            put("log_photo", byteArray)
         }
 
         val newRowId = db.insert("Log", null, values)
@@ -117,7 +143,7 @@ class AddLog : AppCompatActivity() {
 
         if (newRowId != -1L) {
             Toast.makeText(this, "로그가 저장되었습니다.", Toast.LENGTH_SHORT).show()
-            selectedImageUri = null // 🛠 개선점 2: 저장 후 selectedImageUri 초기화
+            selectedImageUri = null
         } else {
             Toast.makeText(this, "로그 저장에 실패했습니다.", Toast.LENGTH_SHORT).show()
         }
@@ -130,7 +156,7 @@ class AddLog : AppCompatActivity() {
 
     private fun bitmapToByteArray(bitmap: Bitmap): ByteArray {
         val stream = ByteArrayOutputStream()
-        bitmap.compress(Bitmap.CompressFormat.JPEG, 90, stream)  // 🛠 원래대로 90 유지
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 90, stream)
         return stream.toByteArray()
     }
 
