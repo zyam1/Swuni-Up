@@ -132,6 +132,8 @@ class ChallengeCreateDate : AppCompatActivity() {
                 }
 
                 Toast.makeText(this, "챌린지가 성공적으로 생성되었습니다.", Toast.LENGTH_SHORT).show()
+                val intent = Intent(this, ChallengeExplore::class.java)
+                startActivity(intent)
                 finish()  // 예시: 현재 액티비티 종료
             } else {
                 Toast.makeText(this, "챌린지 생성에 실패했습니다.", Toast.LENGTH_SHORT).show()

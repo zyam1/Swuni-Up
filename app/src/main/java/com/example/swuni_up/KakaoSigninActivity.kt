@@ -54,7 +54,7 @@ class KakaoSigninActivity : AppCompatActivity() {
                     editor.apply()
 
                     // 홈으로 이동
-                    val intent = Intent(this, HomeActivity::class.java)
+                    val intent = Intent(this, ChallengeExplore::class.java)
                     startActivity(intent)
                     finish()
                 } else {
