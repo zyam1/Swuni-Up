@@ -3,6 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main"
+    android:background="@color/white"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".MyChallenge">
@@ -25,49 +26,303 @@
 
     </androidx.appcompat.widget.Toolbar>
 
-    <android.widget.ScrollView
+    <androidx.core.widget.NestedScrollView
+        android:id="@+id/nestedScrollView"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
+        android:layout_height="wrap_content"
+        android:paddingBottom="155dp"
         app:layout_constraintTop_toBottomOf="@+id/toolbar">
 
-        <HorizontalScrollView
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="20dp">
+            android:orientation="vertical">
 
-            <LinearLayout
+            <HorizontalScrollView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:paddingHorizontal="15dp"
-                android:paddingVertical="8dp"
-                android:background="@drawable/category_background"
-                android:backgroundTint="@color/gray25"
-                android:orientation="horizontal" >
-                
-                <ImageView
-                    android:layout_width="20dp"
-                    android:layout_height="20dp"
-                    android:src="@drawable/ic_heart_gray" />
+                android:paddingVertical="20dp"
+                android:scrollbars="none">
 
-                <TextView
-                    android:layout_marginLeft="10dp"
+                <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="건강"
-                    android:textColor="@color/gray70"
-                    android:fontFamily="@font/scdream5"
-                    android:textSize="16sp" />
-            </LinearLayout>
-        </HorizontalScrollView>
+                    android:orientation="horizontal">
+
+                    <LinearLayout
+                        android:id="@+id/cate_health"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="20dp"
+                        android:background="@drawable/category_background"
+                        android:backgroundTint="@color/gray25"
+                        android:orientation="horizontal"
+                        android:paddingHorizontal="15dp"
+                        android:paddingVertical="8dp">
+
+                        <ImageView
+                            android:id="@+id/cate_health_image"
+                            android:layout_width="20dp"
+                            android:layout_height="20dp"
+                            android:src="@drawable/ic_heart_gray" />
+
+                        <TextView
+                            android:id="@+id/cate_health_text"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="10dp"
+                            android:fontFamily="@font/scdream5"
+                            android:text="건강"
+                            android:textColor="@color/gray70"
+                            android:textSize="16sp" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/cate_study"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="15dp"
+                        android:background="@drawable/category_background"
+                        android:backgroundTint="@color/gray25"
+                        android:orientation="horizontal"
+                        android:paddingHorizontal="15dp"
+                        android:paddingVertical="8dp">
+
+                        <ImageView
+                            android:id="@+id/cate_study_image"
+                            android:layout_width="20dp"
+                            android:layout_height="20dp"
+                            android:src="@drawable/ic_pencil_gray" />
+
+                        <TextView
+                            android:id="@+id/cate_study_text"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="10dp"
+                            android:fontFamily="@font/scdream5"
+                            android:text="학습"
+                            android:textColor="@color/gray70"
+                            android:textSize="16sp" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/cate_habit"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="15dp"
+                        android:background="@drawable/category_background"
+                        android:backgroundTint="@color/gray25"
+                        android:orientation="horizontal"
+                        android:paddingHorizontal="15dp"
+                        android:paddingVertical="8dp">
+
+                        <ImageView
+                            android:id="@+id/cate_habit_image"
+                            android:layout_width="20dp"
+                            android:layout_height="20dp"
+                            android:src="@drawable/ic_habit_gray" />
+
+                        <TextView
+                            android:id="@+id/cate_habit_text"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="10dp"
+                            android:fontFamily="@font/scdream5"
+                            android:text="습관"
+                            android:textColor="@color/gray70"
+                            android:textSize="16sp" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/cate_hobby"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="15dp"
+                        android:background="@drawable/category_background"
+                        android:backgroundTint="@color/gray25"
+                        android:orientation="horizontal"
+                        android:paddingHorizontal="15dp"
+                        android:paddingVertical="8dp">
+
+                        <ImageView
+                            android:id="@+id/cate_hobby_image"
+                            android:layout_width="20dp"
+                            android:layout_height="20dp"
+                            android:src="@drawable/ic_hobby_gray" />
+
+                        <TextView
+                            android:id="@+id/cate_hobby_text"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="10dp"
+                            android:fontFamily="@font/scdream5"
+                            android:text="취미"
+                            android:textColor="@color/gray70"
+                            android:textSize="16sp" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/cate_money"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="15dp"
+                        android:background="@drawable/category_background"
+                        android:backgroundTint="@color/gray25"
+                        android:orientation="horizontal"
+                        android:paddingHorizontal="15dp"
+                        android:paddingVertical="8dp">
+
+                        <ImageView
+                            android:id="@+id/cate_money_image"
+                            android:layout_width="20dp"
+                            android:layout_height="20dp"
+                            android:src="@drawable/ic_money_gray" />
+
+                        <TextView
+                            android:id="@+id/cate_money_text"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="10dp"
+                            android:fontFamily="@font/scdream5"
+                            android:text="자산 관리"
+                            android:textColor="@color/gray70"
+                            android:textSize="16sp" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/cate_etc"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="15dp"
+                        android:layout_marginRight="20dp"
+                        android:background="@drawable/category_background"
+                        android:backgroundTint="@color/gray25"
+                        android:orientation="horizontal"
+                        android:paddingHorizontal="15dp"
+                        android:paddingVertical="8dp">
+
+                        <ImageView
+                            android:id="@+id/cate_etc_image"
+                            android:layout_width="20dp"
+                            android:layout_height="20dp"
+                            android:src="@drawable/ic_etc_gray" />
+
+                        <TextView
+                            android:id="@+id/cate_etc_text"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="10dp"
+                            android:fontFamily="@font/scdream5"
+                            android:text="기타"
+                            android:textColor="@color/gray70"
+                            android:textSize="16sp" />
+                    </LinearLayout>
+                </LinearLayout>
+            </HorizontalScrollView>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="24dp"
+                android:fontFamily="@font/wavve_pado"
+                android:text="슌.만.슌.하 챌린지"
+                android:textSize="24sp" />
+
+            <HorizontalScrollView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingVertical="10dp"
+                android:scrollbars="none">
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/recyclerViewBigChallenge"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="10dp"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginEnd="10dp"
+                        android:orientation="horizontal" />
+
+                </LinearLayout>
 
 
+            </HorizontalScrollView>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="24dp"
+                android:layout_marginTop="10dp"
+                android:fontFamily="@font/wavve_pado"
+                android:text="슈니업 공식 챌린지"
+                android:textSize="24sp" />
 
 
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recyclerViewLongChallenge"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginEnd="10dp"
+                android:nestedScrollingEnabled="false"
+                android:scrollbars="vertical" />
 
-    </android.widget.ScrollView>
+
+        </LinearLayout>
+
+
+    </androidx.core.widget.NestedScrollView>
+
+
+    <ImageView
+        android:id="@+id/create_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:src="@drawable/ic_create_button"
+        app:layout_constraintBottom_toTopOf="@+id/bottom_nav"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.953"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <FrameLayout
+        android:id="@+id/bottom_nav"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/bottom_nav_shadow"
+            android:src="@drawable/bottom_nav_1"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <ImageView
+            android:id="@+id/nav_home"
+            android:layout_width="50dp"
+            android:layout_gravity="center"
+            android:layout_height="60dp" />
+
+        <ImageView
+            android:id="@+id/nav_my_challenge"
+            android:layout_width="50dp"
+            android:layout_marginRight="70dp"
+            android:layout_gravity="end|center_vertical"
+            android:layout_height="60dp" />
+    </FrameLayout>
+
+
 
 
 

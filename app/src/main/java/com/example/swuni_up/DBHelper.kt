@@ -219,6 +219,7 @@ class DBHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, null
 
     // Challenge 데이터 클래스
     data class Challenge(
+        val challengeId: Long? = null,
         val title: String,
         val description: String?,
         val photo: ByteArray,
