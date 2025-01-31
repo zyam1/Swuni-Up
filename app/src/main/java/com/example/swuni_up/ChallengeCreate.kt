@@ -29,7 +29,7 @@ class ChallengeCreate : AppCompatActivity() {
 
         // 뒤로가기 버튼 동작 설정
         toolbar.setNavigationOnClickListener {
-            val intent = Intent(this, MyChallenge::class.java) // ChallengeCreateActivity로 이동
+            val intent = Intent(this, ChallengeExplore::class.java) // ChallengeCreateActivity로 이동
             startActivity(intent)
             finish() // 현재 액티비티 종료
         }
