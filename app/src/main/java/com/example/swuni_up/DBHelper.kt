@@ -7,8 +7,6 @@ import android.database.sqlite.SQLiteOpenHelper
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.util.Log
-import com.example.swuni_up.ADDLogDBHelper.Companion
-import com.example.swuni_up.ADDLogDBHelper.LogEntry
 
 class DBHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, null, DATABASE_VERSION) {
 
@@ -389,37 +387,4 @@ class DBHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, null
 
         return major
     }
-
-    fun getChallengersByChallenge(challengeId: Long): List<Challenger> {
-        val db = this.readableDatabase
-        val challengers = mutableListOf<Challenger>()
-
-        val query = """
-        SELECT C.$COLUMN_USER_ID, C.$COLUMN_PERCENTAGE, 
-               U.$COLUMN_NICKNAME, U.$COLUMN_PHOTO_USER
-        FROM $TABLE_CHALLENGER AS C
-        JOIN $TABLE_USER AS U ON C.$COLUMN_USER_ID = U.$COLUMN_USER_ID
-        WHERE C.$COLUMN_CHALLENGE_ID_FK = ?
-    """.trimIndent()
-
-        val cursor = db.rawQuery(query, arrayOf(challengeId.toString()))
-
-        while (cursor.moveToNext()) {
-            val userId = cursor.getLong(cursor.getColumnIndexOrThrow(COLUMN_USER_ID))
-            val percentage = cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_PERCENTAGE))
-            val nickname = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_NICKNAME))
-            val photoBlob = cursor.getBlob(cursor.getColumnIndexOrThrow(COLUMN_PHOTO_USER))
-
-            val bitmap = photoBlob?.let {
-                BitmapFactory.decodeByteArray(photoBlob, 0, it.size)
-            }
-
-            challengers.add(Challenger(userId, challengeId, "participant", "", percentage, nickname, bitmap))
-        }
-
-        cursor.close()
-        db.close()
-        return challengers
-    }
-
 }
