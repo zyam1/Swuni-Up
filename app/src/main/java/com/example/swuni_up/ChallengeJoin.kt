@@ -124,6 +124,11 @@ class ChallengeJoin : AppCompatActivity() {
         if (result != -1L) {
             Toast.makeText(this, "참여가 완료되었습니다!", Toast.LENGTH_SHORT).show()
             Log.d("ChallengeJoin", "참여 완료: ID = $result")
+
+            val intent = Intent(this, ChallengeInfo::class.java)
+            intent.putExtra("challenge_id", challengeId)
+            startActivity(intent)
+
         } else {
             Toast.makeText(this, "참여 중 오류가 발생했습니다.", Toast.LENGTH_SHORT).show()
             Log.e("ChallengeJoin", "참여 실패")

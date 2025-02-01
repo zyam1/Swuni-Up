@@ -36,8 +36,8 @@
             android:orientation="horizontal"
             android:gravity="center">
 
-            <!--id 추가 필요-->
             <TextView
+                android:id="@+id/challenge_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="아침 9시 기상"
@@ -46,6 +46,7 @@
                 android:layout_weight="1"/>
 
             <TextView
+                android:id="@+id/day"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:background="@drawable/radius"

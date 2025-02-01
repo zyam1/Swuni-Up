@@ -103,6 +103,13 @@
             </intent-filter>
         </activity>
 
+        <activity android:name=".ChallengeExplore" android:exported="false">
+            <intent-filter>
+                <action android:name="com.yourapp.CHALLENGE_EXPLORE" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+
     </application>
 
 </manifest>
