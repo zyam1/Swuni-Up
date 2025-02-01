@@ -35,6 +35,17 @@ class SignUpActivity : AppCompatActivity() {
         val btnUploadImage = findViewById<ImageView>(R.id.btn_upload_image)
         val btnBack = findViewById<ImageView>(R.id.btn_back)
 
+        val name = intent.getStringExtra("name")
+        val email = intent.getStringExtra("email")
+
+        if (name != null) {
+            etName.setText(name)
+        }
+
+        if (email != null) {
+            etEmail.setText(email)
+        }
+
         btnBack.setOnClickListener {
             finish()  // 이전 화면으로 돌아감
         }
@@ -85,7 +96,9 @@ class SignUpActivity : AppCompatActivity() {
             // 결과에 따른 메시지 출력
             if (result > 0) {
                 Toast.makeText(this, "회원가입 성공!", Toast.LENGTH_SHORT).show()
-                finish()  // 회원가입 성공 후 화면 종료
+                val intent = Intent(this, KakaoSigninActivity::class.java)
+                startActivity(intent)
+                finish() // 회원가입 성공 후 화면 종료
             } else {
                 Toast.makeText(this, "회원가입 실패", Toast.LENGTH_SHORT).show()
             }

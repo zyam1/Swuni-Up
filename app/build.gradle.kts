@@ -50,8 +50,8 @@ dependencies {
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
-
-
+    implementation("com.kakao.sdk:v2-user:2.14.0")
+    implementation(libs.kakao.user)
     implementation ("com.jakewharton.threetenabp:threetenabp:1.3.1")
 
 }
