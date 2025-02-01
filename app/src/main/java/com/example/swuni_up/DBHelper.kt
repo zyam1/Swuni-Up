@@ -307,4 +307,112 @@ class DBHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, null
 
         return major
     }
+
+    fun getChallengeProgress(challengeId: Long): Int {
+        val db = this.readableDatabase
+        var progress = 0
+
+        val cursor = db.rawQuery(
+            "SELECT AVG($COLUMN_PERCENTAGE) FROM $TABLE_CHALLENGER WHERE $COLUMN_CHALLENGE_ID_FK = ?",
+            arrayOf(challengeId.toString())
+        )
+
+        if (cursor.moveToFirst()) {
+            progress = if (cursor.isNull(0)) 0 else cursor.getInt(0) // NULL 체크
+        }
+
+        cursor.close()
+        db.close()
+
+        return progress
+    }
+
+
+
+    fun getOngoingChallenges(): List<Challenge> {
+        val db = this.readableDatabase
+        val challengeList = mutableListOf<Challenge>()
+
+        val cursor = db.rawQuery(
+            """
+        SELECT c.*, 
+            (julianday(c.end_day) - julianday(c.start_day)) AS challenge_days, 
+            (SELECT COUNT(*) FROM $TABLE_CHALLENGER ch WHERE ch.$COLUMN_CHALLENGE_ID_FK = c.$COLUMN_CHALLENGE_ID) AS participants
+        FROM $TABLE_CHALLENGE c
+        WHERE c.$COLUMN_STATUS = 1
+        ORDER BY c.$COLUMN_END_DAY ASC
+        """, null
+        )
+
+        if (cursor.moveToFirst()) {
+            do {
+                val challengeDays = cursor.getInt(cursor.getColumnIndexOrThrow("challenge_days"))
+                val participants = cursor.getInt(cursor.getColumnIndexOrThrow("participants"))
+
+                val challenge = Challenge(
+                    challengeId = cursor.getLong(cursor.getColumnIndexOrThrow(COLUMN_CHALLENGE_ID)),
+                    title = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_CHALLENGE_TITLE)),
+                    description = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_DESCRIPTION)),
+                    photo = cursor.getBlob(cursor.getColumnIndexOrThrow(COLUMN_PHOTO)),
+                    createdAt = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_CREATED_AT)),
+                    startDay = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_START_DAY)),
+                    endDay = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_END_DAY)),
+                    status = cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_STATUS)),
+                    maxParticipant = participants,
+                    category = cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_CATEGORY)),
+                    isOfficial = cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_IS_OFFICIAL))
+                )
+                challengeList.add(challenge)
+            } while (cursor.moveToNext())
+        }
+        cursor.close()
+        db.close()
+
+        return challengeList
+    }
+
+    fun getCompleteChallenges(): List<Challenge> {
+        val db = this.readableDatabase
+        val challengeList = mutableListOf<Challenge>()
+
+        val cursor = db.rawQuery(
+            """
+        SELECT c.*, 
+            (julianday(c.end_day) - julianday(c.start_day)) AS challenge_days, 
+            (SELECT COUNT(*) FROM $TABLE_CHALLENGER ch WHERE ch.$COLUMN_CHALLENGE_ID_FK = c.$COLUMN_CHALLENGE_ID) AS participants
+        FROM $TABLE_CHALLENGE c
+        WHERE c.$COLUMN_STATUS = 2
+        ORDER BY c.$COLUMN_END_DAY DESC
+        """, null
+        )
+
+        if (cursor.moveToFirst()) {
+            do {
+                val challengeDays = cursor.getInt(cursor.getColumnIndexOrThrow("challenge_days"))
+                val participants = cursor.getInt(cursor.getColumnIndexOrThrow("participants"))
+
+                val challenge = Challenge(
+                    challengeId = cursor.getLong(cursor.getColumnIndexOrThrow(COLUMN_CHALLENGE_ID)),
+                    title = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_CHALLENGE_TITLE)),
+                    description = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_DESCRIPTION)),
+                    photo = cursor.getBlob(cursor.getColumnIndexOrThrow(COLUMN_PHOTO)),
+                    createdAt = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_CREATED_AT)),
+                    startDay = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_START_DAY)),
+                    endDay = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_END_DAY)),
+                    status = cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_STATUS)),
+                    maxParticipant = participants,
+                    category = cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_CATEGORY)),
+                    isOfficial = cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_IS_OFFICIAL))
+                )
+                challengeList.add(challenge)
+            } while (cursor.moveToNext())
+        }
+        cursor.close()
+        db.close()
+
+        return challengeList
+    }
+
+
+
 }
