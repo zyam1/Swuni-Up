@@ -5,11 +5,8 @@ import android.os.Bundle
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
-import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.swuni_up.DBHelper.Challenge
@@ -24,7 +21,6 @@ import com.example.swuni_up.DBHelper.Companion.COLUMN_MAX_PARTICIPANT
 import com.example.swuni_up.DBHelper.Companion.COLUMN_PHOTO
 import com.example.swuni_up.DBHelper.Companion.COLUMN_START_DAY
 import com.example.swuni_up.DBHelper.Companion.COLUMN_STATUS
-import com.example.swuni_up.DBHelper.Companion.COLUMN_USER_ID
 
 class ChallengeExplore : AppCompatActivity() {
 
@@ -128,13 +124,6 @@ class ChallengeExplore : AppCompatActivity() {
         filterChallenges(1)
         filterOfficialChallenges(1)
         onCategoryClicked(cateHealth, healthImageView, healthTextView, 1)
-
-        recyclerView.setNestedScrollingEnabled(false);
-        recyclerViewLong.setNestedScrollingEnabled(false);
-
-        recyclerViewLong.setHasFixedSize(false);
-        recyclerViewLong.requestLayout();
-
 
 
     }
