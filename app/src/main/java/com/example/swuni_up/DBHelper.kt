@@ -7,6 +7,7 @@ import android.database.sqlite.SQLiteOpenHelper
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.util.Log
+import java.io.ByteArrayOutputStream
 
 class DBHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, null, DATABASE_VERSION) {
 
@@ -531,6 +532,77 @@ class DBHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, null
         cursor.close()
         db.close()
         return logId
+    }
+
+    fun getCheerCountForChallenger(challengerId: Long, challengeId: Long): Int {
+        val db = this.readableDatabase
+
+        val cursor = db.rawQuery(
+            """
+        SELECT COUNT(*) FROM $TABLE_CHEER 
+        WHERE $COLUMN_CHEER_LOG_ID IN (
+            SELECT $COLUMN_LOG_ID FROM $TABLE_LOG  -- ✅ 테이블 이름 수정
+            WHERE $COLUMN_LOG_CHALLENGER_ID = ? AND $COLUMN_LOG_CHALLENGE_ID = ?
+        )
+        """,
+            arrayOf(challengerId.toString(), challengeId.toString())
+        )
+
+        var cheerCount = 0
+        if (cursor.moveToFirst()) {
+            cheerCount = cursor.getInt(0)
+        }
+
+        cursor.close()
+        db.close()
+        return cheerCount
+    }
+
+    fun getChallengerIdByUserAndChallenge(userId: Long, challengeId: Long): Long? {
+        val db = readableDatabase
+        val query = """
+        SELECT $COLUMN_CHALLENGER_ID FROM $TABLE_CHALLENGER
+        WHERE $COLUMN_USER_ID = ? AND $COLUMN_CHALLENGE_ID = ?
+        ORDER BY $COLUMN_JOINED_AT DESC -- 가장 최근에 참가한 순서대로 정렬
+    """
+        val cursor = db.rawQuery(query, arrayOf(userId.toString(), challengeId.toString()))
+
+        var challengerId: Long? = null
+        if (cursor.moveToFirst()) {
+            challengerId = cursor.getLong(cursor.getColumnIndexOrThrow(COLUMN_CHALLENGER_ID))
+        }
+
+        cursor.close()
+        db.close()
+
+        return challengerId
+    }
+
+    fun getLogsByChallenger(challengerId: Long, challengeId: Long): List<LogEntry> {
+        val db = readableDatabase
+        val logList = mutableListOf<LogEntry>()
+
+        val query = """
+        SELECT * FROM $TABLE_LOG
+        WHERE $COLUMN_LOG_CHALLENGER_ID = ? AND $COLUMN_LOG_CHALLENGE_ID = ?
+        ORDER BY $COLUMN_LOG_DATE DESC
+    """
+
+        val cursor = db.rawQuery(query, arrayOf(challengerId.toString(), challengeId.toString()))
+
+        if (cursor.moveToFirst()) {
+            do {
+                val logId = cursor.getLong(cursor.getColumnIndexOrThrow(COLUMN_LOG_ID))
+                val logDate = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_LOG_DATE))
+                val logImage = cursor.getBlob(cursor.getColumnIndexOrThrow(COLUMN_LOG_PHOTO))
+
+                logList.add(LogEntry(challengeId, challengerId, logDate, logImage))
+            } while (cursor.moveToNext())
+        }
+
+        cursor.close()
+        db.close()
+        return logList
     }
 
 }

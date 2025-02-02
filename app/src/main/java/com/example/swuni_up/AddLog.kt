@@ -4,11 +4,11 @@ import android.app.Activity
 import android.content.ContentValues
 import android.content.Context
 import android.content.Intent
+import android.database.sqlite.SQLiteDatabase
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.net.Uri
 import android.os.Bundle
-import android.database.sqlite.SQLiteDatabase
 import android.provider.MediaStore
 import android.util.Log
 import android.widget.Button
@@ -19,7 +19,8 @@ import androidx.appcompat.app.AppCompatActivity
 import java.io.ByteArrayOutputStream
 import java.io.InputStream
 import java.text.SimpleDateFormat
-import java.util.*
+import java.util.Date
+import java.util.Locale
 
 class AddLog : AppCompatActivity() {
     private lateinit var logImage: ImageView
@@ -108,7 +109,7 @@ class AddLog : AppCompatActivity() {
         val cursor = db.query(
             DBHelper.TABLE_CHALLENGER,
             arrayOf(DBHelper.COLUMN_CHALLENGER_ID),
-            "${DBHelper.COLUMN_USER_ID} = ? AND ${DBHelper.COLUMN_CHALLENGE_ID_FK} = ?",  // ✅ 현재 챌린지의 challenger_id만 가져오기!
+            "${DBHelper.COLUMN_USER_ID} = ? AND ${DBHelper.COLUMN_CHALLENGE_ID_FK} = ?",
             arrayOf(userId.toString(), challengeId.toString()),
             null, null, null
         )
@@ -173,10 +174,10 @@ class AddLog : AppCompatActivity() {
         val certifiedAt = getCurrentDateTime() // 현재 날짜+시간
 
         val logEntry = DBHelper.LogEntry(
-            challengeId = challengeId,   // ✅ 챌린지 ID 저장
-            challengerId = challengerId, // ✅ 챌린저 ID 저장
-            logDate = certifiedAt,       // ✅ 현재 날짜+시간 저장 (YYYY-MM-DD HH:MM:SS)
-            logImage = byteArray         // ✅ 업로드한 이미지 저장
+            challengeId = challengeId,
+            challengerId = challengerId,
+            logDate = certifiedAt,
+            logImage = byteArray
         )
 
         val newRowId = dbHelper.insertLog(logEntry)
@@ -314,14 +315,14 @@ class AddLog : AppCompatActivity() {
         return try {
             val dateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
 
-            // 챌린지 시작일과 현재 날짜 변환
+            // 챌린지 시작일과 현재 날짜
             val start = dateFormat.parse(startDate)
             val today = Date()
 
-            // 날짜 차이 계산 (밀리초 → 일 단위 변환)
+            // 날짜 차이 계산
             val diff = (today.time - start.time) / (1000 * 60 * 60 * 24)
 
-            diff.toInt() + 1 // 첫날이 1일째이므로 +1
+            diff.toInt() + 1
         } catch (e: Exception) {
             e.printStackTrace()
             0

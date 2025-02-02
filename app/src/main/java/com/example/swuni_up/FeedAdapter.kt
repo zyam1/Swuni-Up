@@ -35,7 +35,7 @@ class FeedAdapter(
         val userNick = userInfo?.first ?: "알 수 없음"
         val userMajor = userInfo?.second ?: "알 수 없음"
 
-        // 닉네임 & 전공 설정
+        // 닉네임, 전공 설정
         holder.userNick.text = userNick
         holder.userMajor.text = userMajor
 
@@ -55,7 +55,7 @@ class FeedAdapter(
         // 로그의 logId 가져오기
         val logId = dbHelper.getLogIdByChallenger(logEntry.challengerId, logEntry.challengeId)
 
-        // logId가 없거나, 이미 응원한 경우 버튼 숨기기
+        // 미 응원한 경우 버튼 숨기기
         if (logId == null || dbHelper.hasUserCheered(logId, currentUserId)) {
             holder.cheerButton.visibility = View.GONE
         } else {
@@ -79,7 +79,6 @@ class FeedAdapter(
             }
         }
     }
-
 
     override fun getItemCount(): Int = logList.size
 }

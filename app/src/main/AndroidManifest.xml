@@ -26,89 +26,19 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".MyChallenge" android:exported="false">
-            <intent-filter>
-                <action android:name="com.yourapp.MY_CHALLENGE" />
-                <category android:name="android.intent.category.DEFAULT" />
-            </intent-filter>
-        </activity>
-
-        <activity android:name=".SignUpActivity" android:exported="false">
-            <intent-filter>
-                <action android:name="com.yourapp.SIGN_UP" />
-                <category android:name="android.intent.category.DEFAULT" />
-            </intent-filter>
-        </activity>
-
-        <activity android:name=".HomeActivity" android:exported="false">
-            <intent-filter>
-                <action android:name="com.yourapp.HOME" />
-                <category android:name="android.intent.category.DEFAULT" />
-            </intent-filter>
-        </activity>
-
-        <activity android:name=".KakaoSigninActivity" android:exported="false">
-            <intent-filter>
-                <action android:name="com.yourapp.KAKAO_SIGNIN" />
-                <category android:name="android.intent.category.DEFAULT" />
-            </intent-filter>
-        </activity>
-
-        <activity android:name=".ChallengeFinish" android:exported="false">
-            <intent-filter>
-                <action android:name="com.yourapp.CHALLENGE_FINISH" />
-                <category android:name="android.intent.category.DEFAULT" />
-            </intent-filter>
-        </activity>
-
-        <activity android:name=".ChallengeJoin" android:exported="false">
-            <intent-filter>
-                <action android:name="com.yourapp.CHALLENGE_JOIN" />
-                <category android:name="android.intent.category.DEFAULT" />
-            </intent-filter>
-        </activity>
-
-        <activity android:name=".ChallengeCreateDate" android:exported="false">
-            <intent-filter>
-                <action android:name="com.yourapp.CHALLENGE_CREATE_DATE" />
-                <category android:name="android.intent.category.DEFAULT" />
-            </intent-filter>
-        </activity>
-
-        <activity android:name=".ChallengeCreate" android:exported="false">
-            <intent-filter>
-                <action android:name="com.yourapp.CHALLENGE_CREATE" />
-                <category android:name="android.intent.category.DEFAULT" />
-            </intent-filter>
-        </activity>
-
-        <activity android:name=".AddLog" android:exported="false">
-            <intent-filter>
-                <action android:name="com.yourapp.ADD_LOG" />
-                <category android:name="android.intent.category.DEFAULT" />
-            </intent-filter>
-        </activity>
-
-        <activity android:name=".ChallengeInfo" android:exported="false">
-            <intent-filter>
-                <action android:name="com.yourapp.CHALLENGE_INFO" />
-                <category android:name="android.intent.category.DEFAULT" />
-            </intent-filter>
-        </activity>
-
-        <activity android:name=".ChallengeInfoFeed" android:exported="false">
-            <intent-filter>
-                <action android:name="com.yourapp.CHALLENGE_INFO_FEED" />
-                <category android:name="android.intent.category.DEFAULT" />
-            </intent-filter>
-        </activity>
-
-        <activity android:name=".ChallengeExplore" android:exported="false">
-            <intent-filter>
-                <action android:name="com.yourapp.CHALLENGE_EXPLORE" />
-                <category android:name="android.intent.category.DEFAULT" />
-            </intent-filter>
-        </activity>
+        <activity android:name=".MyChallenge" android:exported="false" />
+        <activity android:name=".SignUpActivity" android:exported="false" />
+        <activity android:name=".HomeActivity" android:exported="false" />
+        <activity android:name=".KakaoSigninActivity" android:exported="false" />
+        <activity android:name=".ChallengeFinish" android:exported="false" />
+        <activity android:name=".ChallengeJoin" android:exported="false" />
+        <activity android:name=".ChallengeCreateDate" android:exported="false" />
+        <activity android:name=".ChallengeCreate" android:exported="false" />
+        <activity android:name=".AddLog" android:exported="false" />
+        <activity android:name=".ChallengeInfo" android:exported="false" />
+        <activity android:name=".ChallengeInfoFeed" android:exported="false" />
+        <activity android:name=".ChallengeExplore" android:exported="false" />
+        <activity android:name=".UserProfileActivity" />
 
     </application>
 

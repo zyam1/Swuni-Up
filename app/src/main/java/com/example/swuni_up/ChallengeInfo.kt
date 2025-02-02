@@ -1,16 +1,16 @@
 package com.example.swuni_up
 
+import android.app.Activity
 import android.content.Context
 import android.content.Intent
-import android.app.Activity
 import android.graphics.BitmapFactory
-import android.media.Image
 import android.os.Bundle
 import android.util.Log
-import androidx.activity.result.contract.ActivityResultContracts
+import android.view.MotionEvent
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.recyclerview.widget.GridLayoutManager
@@ -58,9 +58,38 @@ class ChallengeInfo : AppCompatActivity() {
         // 참여자 리스트를 가져오기
         val participants = getParticipants()
 
-        // 어댑터 설정
-        adapter = InfoChallengerAdapter(this, participants)
+        // RecyclerView 어댑터 설정
+        adapter = InfoChallengerAdapter(this, participants) { selectedChallengerId ->
+            val intent = Intent(this, UserProfileActivity::class.java)
+            intent.putExtra("challenger_id", selectedChallengerId)
+            startActivity(intent)
+        }
         recyclerView.adapter = adapter
+
+        recyclerView.addOnItemTouchListener(object : RecyclerView.SimpleOnItemTouchListener() {
+            override fun onInterceptTouchEvent(rv: RecyclerView, e: MotionEvent): Boolean {
+                val child = rv.findChildViewUnder(e.x, e.y)  // 클릭한 아이템 찾기
+                if (child != null && e.action == MotionEvent.ACTION_UP) {
+                    val position = rv.getChildAdapterPosition(child)
+                    if (position != RecyclerView.NO_POSITION) {
+                        val selectedChallenger = participants[position] // 클릭한 챌린저 정보 가져오기
+                        val selectedChallengerId = selectedChallenger.userId
+                        val selectedProgress = selectedChallenger.percentage // 진행률 가져오기
+
+                        // 챌린저 ID와 진행률을 함께 전달
+                        val intent = Intent(this@ChallengeInfo, UserProfileActivity::class.java).apply {
+                            putExtra("challenger_id", selectedChallengerId)
+                            putExtra("percentage", selectedProgress)
+                            putExtra("challenge_id", challenge?.challengeId ?: -1L)
+                        }
+                        startActivity(intent)
+                    }
+                }
+                return false
+            }
+        })
+
+
 
         // 챌린지 ID 받기
         val challengeId = intent.getLongExtra("challenge_id", -1)
@@ -173,7 +202,7 @@ class ChallengeInfo : AppCompatActivity() {
 
             // 시작일과 종료일의 날짜 차이 계산
             val diffInMillis = endDate?.time?.minus(startDate?.time ?: 0) ?: 0
-            TimeUnit.MILLISECONDS.toDays(diffInMillis) // 밀리초를 일수로 변환
+            TimeUnit.MILLISECONDS.toDays(diffInMillis) + 1
         } catch (e: Exception) {
             Log.e("DateDiffError", "Error calculating date difference", e)
             0L // 오류 발생 시 0일로 반환

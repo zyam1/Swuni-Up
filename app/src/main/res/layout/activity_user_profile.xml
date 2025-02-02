@@ -11,7 +11,8 @@
         android:layout_width="match_parent"
         android:layout_height="63dp"
         android:background="?attr/colorPrimary"
-        app:navigationIcon="@drawable/arrow_left"/>
+        app:navigationIcon="@drawable/arrow_left">
+    </androidx.appcompat.widget.Toolbar>
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -28,6 +29,7 @@
             app:cardElevation="0dp">
 
             <ImageView
+                android:id="@+id/profile_image"
                 android:layout_width="100dp"
                 android:layout_height="100dp"
                 android:src="@color/gray25"
