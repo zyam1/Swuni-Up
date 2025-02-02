@@ -109,7 +109,7 @@ class ChallengeInfo : AppCompatActivity() {
                 ImageView.setImageBitmap(bitmap)
 
                 // 진행일 표시
-                day.text = "${calculateDaysDifference(it.startDay, it.endDay)}일"
+                day.text = "${calculateDaysDifference(it.startDay, it.endDay)}일 챌린지"
 
                 // 참여 중인 인원수 표시
                 val joinedParticipants = countParticipants(this, it.challengeId)
