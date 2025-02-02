@@ -194,9 +194,6 @@ class AddLog : AppCompatActivity() {
         }
     }
 
-
-
-
     private fun uriToBitmap(uri: Uri): Bitmap {
         val inputStream: InputStream? = contentResolver.openInputStream(uri)
         return BitmapFactory.decodeStream(inputStream)!!
@@ -234,7 +231,7 @@ class AddLog : AppCompatActivity() {
         cursor.close()
 
         Log.d("AddLog", "오늘 해당 챌린지에서 인증한 로그 개수: $count")
-        return count == 0  // ✅ 0이면 인증 가능, 1 이상이면 이미 인증한 상태
+        return count == 0  // 0이면 인증 가능, 1 이상이면 이미 인증한 상태
     }
 
 

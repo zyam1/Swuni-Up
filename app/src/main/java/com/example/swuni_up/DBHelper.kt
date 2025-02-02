@@ -7,7 +7,6 @@ import android.database.sqlite.SQLiteOpenHelper
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.util.Log
-import java.io.ByteArrayOutputStream
 
 class DBHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, null, DATABASE_VERSION) {
 
@@ -541,7 +540,7 @@ class DBHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, null
             """
         SELECT COUNT(*) FROM $TABLE_CHEER 
         WHERE $COLUMN_CHEER_LOG_ID IN (
-            SELECT $COLUMN_LOG_ID FROM $TABLE_LOG  -- ✅ 테이블 이름 수정
+            SELECT $COLUMN_LOG_ID FROM $TABLE_LOG 
             WHERE $COLUMN_LOG_CHALLENGER_ID = ? AND $COLUMN_LOG_CHALLENGE_ID = ?
         )
         """,
