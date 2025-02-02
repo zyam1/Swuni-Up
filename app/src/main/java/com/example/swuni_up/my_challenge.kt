@@ -18,6 +18,7 @@ class my_challenge : AppCompatActivity() {
     private lateinit var tvOngoingTitle: TextView
     private lateinit var tvCompletedTitle: TextView
     private lateinit var navChallengeExplore: ImageView
+    private lateinit var navChallengeHome: ImageView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -52,9 +53,16 @@ class my_challenge : AppCompatActivity() {
         loadChallenges()
 
         navChallengeExplore = findViewById(R.id.nav_challenge_explore)
+        navChallengeHome = findViewById(R.id.nav_home)
+
 
         navChallengeExplore.setOnClickListener {
             val intent = Intent(this, ChallengeExplore::class.java)
+            startActivity(intent)
+        }
+
+        navChallengeHome.setOnClickListener {
+            val intent = Intent(this, ChallengeHome::class.java)
             startActivity(intent)
         }
 

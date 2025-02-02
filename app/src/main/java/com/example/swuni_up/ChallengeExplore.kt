@@ -47,6 +47,7 @@ class ChallengeExplore : AppCompatActivity() {
     private lateinit var etcTextView: TextView
 
     private lateinit var navMyChallenge: ImageView
+    private lateinit var navChallengeHome: ImageView
 
     // 선택된 상태를 추적할 변수
     private var selectedCategory: LinearLayout? = null
@@ -92,6 +93,7 @@ class ChallengeExplore : AppCompatActivity() {
         etcTextView = cateEtc.findViewById(R.id.cate_etc_text)
 
         navMyChallenge = findViewById(R.id.nav_my_challenge)
+        navChallengeHome = findViewById(R.id.nav_home)
 
         // 클릭 리스너 설정
         cateHealth.setOnClickListener { onCategoryClicked(cateHealth, healthImageView, healthTextView, 1) }
@@ -137,6 +139,11 @@ class ChallengeExplore : AppCompatActivity() {
 
         navMyChallenge.setOnClickListener {
             val intent = Intent(this, my_challenge::class.java)
+            startActivity(intent)
+        }
+
+        navChallengeHome.setOnClickListener {
+            val intent = Intent(this, ChallengeHome::class.java)
             startActivity(intent)
         }
 
