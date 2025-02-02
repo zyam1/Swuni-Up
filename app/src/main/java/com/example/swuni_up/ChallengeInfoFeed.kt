@@ -1,7 +1,6 @@
 package com.example.swuni_up
 
 import android.os.Bundle
-import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.recyclerview.widget.GridLayoutManager
@@ -35,7 +34,6 @@ class ChallengeInfoFeed : AppCompatActivity() {
 
         // 특정 챌린지의 로그만 가져와서 어댑터 연결
         val logList = dbHelper.getLogEntriesByChallenge(challengeId)
-        Log.d("ChallengeInfoFeed", "피드에 표시될 로그 개수: ${logList.size}")
 
         adapter = FeedAdapter(this, logList)
         recyclerView.adapter = adapter
