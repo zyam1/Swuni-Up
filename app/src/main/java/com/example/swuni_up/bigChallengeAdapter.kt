@@ -43,7 +43,7 @@ class BigChallengeAdapter(private val context: Context, private var challenges: 
         holder.descriptionTextView.text = challenge.description
 
         // 날짜 계산
-        holder.dDayTextView.text = getDDayText(challenge.endDay)
+        holder.dDayTextView.text = getDDayText(challenge.startDay)
         holder.dayTextView.text = "${formatDate(challenge.startDay)} ~ ${formatDate(challenge.endDay)}"
 
         holder.dateTextView.text = "${calculateDaysDifference(challenge.startDay, challenge.endDay) + 1}일 챌린지"

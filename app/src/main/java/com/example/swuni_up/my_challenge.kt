@@ -1,11 +1,13 @@
 package com.example.swuni_up
 
+import android.content.Intent
 import android.os.Bundle
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import android.util.Log
+import android.widget.ImageView
 
 class my_challenge : AppCompatActivity() {
     private lateinit var dbHelper: DBHelper
@@ -15,6 +17,7 @@ class my_challenge : AppCompatActivity() {
     private lateinit var completedAdapter: CompletedChallengeAdapter
     private lateinit var tvOngoingTitle: TextView
     private lateinit var tvCompletedTitle: TextView
+    private lateinit var navChallengeExplore: ImageView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -47,6 +50,14 @@ class my_challenge : AppCompatActivity() {
 
         // 데이터 불러오기
         loadChallenges()
+
+        navChallengeExplore = findViewById(R.id.nav_challenge_explore)
+
+        navChallengeExplore.setOnClickListener {
+            val intent = Intent(this, ChallengeExplore::class.java)
+            startActivity(intent)
+        }
+
     }
 
     private fun loadChallenges() {

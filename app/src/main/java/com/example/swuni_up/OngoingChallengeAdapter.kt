@@ -21,7 +21,7 @@ class OngoingChallengeAdapter(
         val challengePhoto: ImageView = view.findViewById(R.id.my_challenge_photo)
         val challengeTitle: TextView = view.findViewById(R.id.my_title)
         val challengeDescription: TextView = view.findViewById(R.id.my_description)
-        val challengeDDay: TextView = view.findViewById(R.id.my_dDay)
+        val challengeDuration: TextView = view.findViewById(R.id.my_dDay)
         val challengeParticipants: TextView = view.findViewById(R.id.my_participants)
         val progressText: TextView = view.findViewById(R.id.tv_progress)
     }
@@ -38,8 +38,11 @@ class OngoingChallengeAdapter(
         holder.challengeTitle.text = challenge.title
         holder.challengeDescription.text = challenge.description ?: "챌린지 설명 없음"
 
-        // 챌린지 진행 기간 (D-Day 대신 챌린지 기간 표시)
-        holder.challengeDDay.text = "${challenge.startDay} ~ ${challenge.endDay}"
+        val startDate = challenge.startDay
+        val endDate = challenge.endDay
+
+        val challengeDurationText = calculateDuration(startDate, endDate)
+        holder.challengeDuration.text = "${challengeDurationText + 1}일 챌린지"
 
         // 참여 인원 표시
         holder.challengeParticipants.text = "참여인원 ${challenge.maxParticipant}"
@@ -62,6 +65,16 @@ class OngoingChallengeAdapter(
     // ByteArray를 Bitmap으로 변환
     private fun byteArrayToBitmap(byteArray: ByteArray): Bitmap {
         return BitmapFactory.decodeByteArray(byteArray, 0, byteArray.size)
+    }
+
+    private fun calculateDuration(startDate: String, endDate: String): Long {
+        val dateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
+
+        val start: Date = dateFormat.parse(startDate)
+        val end: Date = dateFormat.parse(endDate)
+
+        val diffInMillis = end.time - start.time
+        return diffInMillis / (1000 * 60 * 60 * 24) // 밀리초 -> 일수로 변환
     }
 
     // 실제 진행 퍼센트 계산 (DB에서 가져오기)

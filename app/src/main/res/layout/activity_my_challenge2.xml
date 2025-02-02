@@ -35,7 +35,7 @@
         app:layout_constraintTop_toBottomOf="@+id/toolbar">
 
         <LinearLayout
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
@@ -43,8 +43,9 @@
                 android:id="@+id/tvOngoingChallengeTitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
+                android:layout_marginStart="24dp"
                 android:layout_marginTop="25dp"
+                android:layout_marginBottom="5dp"
                 android:fontFamily="@font/wavve_pado"
                 android:text="OO 슈니 ing 챌린지"
                 android:textSize="24sp"
@@ -55,17 +56,18 @@
                 android:id="@+id/challengeContainer"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp" />
+                android:paddingHorizontal="10dp" />
 
 
             <TextView
                 android:id="@+id/tvCompletedChallengeTitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
+                android:layout_marginStart="24dp"
                 android:layout_marginTop="25dp"
                 android:fontFamily="@font/wavve_pado"
                 android:text="OO 슈니 완료 챌린지"
+                android:layout_marginBottom="5dp"
                 android:textSize="24sp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/toolbar" />
@@ -74,7 +76,7 @@
                 android:id="@+id/completeChallengeContainer"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp" />
+                android:paddingHorizontal="10dp" />
 
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>
@@ -91,7 +93,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="@drawable/bottom_nav_shadow"
-            android:src="@drawable/bottom_nav_1"
+            android:src="@drawable/bottom_nav_3"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent" />
@@ -103,11 +105,11 @@
             android:layout_gravity="center" />
 
         <ImageView
-            android:id="@+id/nav_my_challenge"
+            android:id="@+id/nav_challenge_explore"
             android:layout_width="50dp"
             android:layout_height="60dp"
-            android:layout_gravity="end|center_vertical"
-            android:layout_marginRight="70dp" />
+            android:layout_gravity="start|center_vertical"
+            android:layout_marginLeft="70dp" />
     </FrameLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

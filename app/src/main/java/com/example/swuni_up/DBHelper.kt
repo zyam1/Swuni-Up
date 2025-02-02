@@ -7,6 +7,7 @@ import android.database.sqlite.SQLiteOpenHelper
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.util.Log
+import java.time.LocalDate
 
 class DBHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, null, DATABASE_VERSION) {
 
@@ -339,7 +340,7 @@ class DBHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, null
             (julianday(c.end_day) - julianday(c.start_day)) AS challenge_days, 
             (SELECT COUNT(*) FROM $TABLE_CHALLENGER ch WHERE ch.$COLUMN_CHALLENGE_ID_FK = c.$COLUMN_CHALLENGE_ID) AS participants
         FROM $TABLE_CHALLENGE c
-        WHERE c.$COLUMN_STATUS = 1
+        WHERE c.$COLUMN_STATUS = 2
         ORDER BY c.$COLUMN_END_DAY ASC
         """, null
         )
@@ -381,7 +382,7 @@ class DBHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, null
             (julianday(c.end_day) - julianday(c.start_day)) AS challenge_days, 
             (SELECT COUNT(*) FROM $TABLE_CHALLENGER ch WHERE ch.$COLUMN_CHALLENGE_ID_FK = c.$COLUMN_CHALLENGE_ID) AS participants
         FROM $TABLE_CHALLENGE c
-        WHERE c.$COLUMN_STATUS = 2
+        WHERE c.$COLUMN_STATUS = 3
         ORDER BY c.$COLUMN_END_DAY DESC
         """, null
         )
@@ -411,6 +412,29 @@ class DBHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, null
         db.close()
 
         return challengeList
+    }
+
+    fun updateChallengeStatus() {
+        val today = LocalDate.now()
+
+        val db = this.writableDatabase
+
+        // 현재 날짜에 따라 상태 업데이트
+        val query = "UPDATE Challenge SET status = CASE " +
+                "WHEN ? < created_at THEN 0 " + // 생성 전
+                "WHEN ? < start_day THEN 1 " +   // 모집 중
+                "WHEN ? < end_day THEN 2 " +     // 진행 중
+                "WHEN ? > end_day THEN 3 " +     // 마감됨
+                "ELSE 5 END"
+
+        val statement = db.compileStatement(query)
+        statement.bindString(1, today.toString())
+        statement.bindString(2, today.toString())
+        statement.bindString(3, today.toString())
+        statement.bindString(4, today.toString())
+        statement.executeUpdateDelete()
+
+        db.close()
     }
 
 
