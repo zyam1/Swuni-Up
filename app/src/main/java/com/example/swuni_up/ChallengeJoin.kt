@@ -100,17 +100,30 @@ class ChallengeJoin : AppCompatActivity() {
         val sharedPreferences = getSharedPreferences("user_prefs", Context.MODE_PRIVATE)
         val userId = sharedPreferences.getLong("user_id", -1L)
 
-        val challengeId = currentChallengeId // 현재 불러온 챌린지 ID 사용
+        val challengeId = currentChallengeId
         if (challengeId == null) {
             Toast.makeText(this, "참여할 챌린지가 선택되지 않았습니다.", Toast.LENGTH_SHORT).show()
             return
         }
 
-        val challengeRole = "participant" // 역할: 참가자
-        val joinedAt = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault()).format(Date()) // 현재 시간
-        val percentage = 0 // 초기 참여율
+        // 중복 참여 확인
+        val existingChallengerId = dbHelper.getChallengerIdByUserAndChallenge(userId, challengeId)
 
-        // Challenger 객체 생성
+        if (existingChallengerId != null) {
+            Toast.makeText(this, "이미 이 챌린지에 참여 중입니다. \n상세페이지로 이동합니다!", Toast.LENGTH_SHORT).show()
+
+            val intent = Intent(this, ChallengeInfo::class.java).apply {
+                putExtra("challenge_id", challengeId)
+                putExtra("challenger_id", existingChallengerId) // ✅ 기존 challengerId 전달
+            }
+            startActivity(intent)
+            return
+        }
+
+        val challengeRole = "participant"
+        val joinedAt = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault()).format(Date())
+        val percentage = 0
+
         val challenger = DBHelper.Challenger(
             userId = userId,
             challengeId = challengeId,
@@ -119,11 +132,17 @@ class ChallengeJoin : AppCompatActivity() {
             percentage = percentage
         )
 
-        // 데이터베이스에 삽입
         val result = dbHelper.insertChallenger(challenger)
         if (result != -1L) {
             Toast.makeText(this, "참여가 완료되었습니다!", Toast.LENGTH_SHORT).show()
             Log.d("ChallengeJoin", "참여 완료: ID = $result")
+
+            val intent = Intent(this, ChallengeInfo::class.java).apply {
+                putExtra("challenge_id", challengeId)
+                putExtra("challenger_id", result) //
+            }
+            startActivity(intent)
+
         } else {
             Toast.makeText(this, "참여 중 오류가 발생했습니다.", Toast.LENGTH_SHORT).show()
             Log.e("ChallengeJoin", "참여 실패")

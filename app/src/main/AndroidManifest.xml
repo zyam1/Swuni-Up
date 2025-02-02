@@ -52,6 +52,19 @@
             android:name=".ChallengeCreate"
             android:exported="false" />
         <activity
+            android:name=".AddLog"
+            android:exported="false" />
+        <activity
+            android:name=".ChallengeInfo"
+            android:exported="false" />
+        <activity
+            android:name=".ChallengeInfoFeed"
+            android:exported="false" />
+        <activity
+            android:name=".UserProfileActivity"
+            android:exported="false" />
+
+        <activity
             android:name=".MainActivity"
             android:exported="true">
             <intent-filter>
@@ -65,7 +78,6 @@
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
-
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
 
@@ -75,7 +87,6 @@
                     android:scheme="kakao085bb0c535d430a74371a1010be54ac7" />
             </intent-filter>
         </activity>
-
         <meta-data
             android:name="com.kakao.sdk.AppKey"
             android:value="@string/kakao_key" />

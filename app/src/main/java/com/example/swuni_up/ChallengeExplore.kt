@@ -1,7 +1,9 @@
 package com.example.swuni_up
 
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
@@ -115,7 +117,9 @@ class ChallengeExplore : AppCompatActivity() {
         adapter = BigChallengeAdapter(this, challengeList)
         recyclerView.adapter = adapter
 
-
+        val sharedPreferences = getSharedPreferences("user_prefs", Context.MODE_PRIVATE)
+        val userId = sharedPreferences.getLong("user_id", -1L)
+        Log.d("userInfo", "저장된 user_id: $userId")
 
         val createButton = findViewById<ImageView>(R.id.create_button)
 

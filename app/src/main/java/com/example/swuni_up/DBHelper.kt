@@ -47,6 +47,21 @@ class DBHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, null
         const val COLUMN_NICKNAME = "user_nick"
         const val COLUMN_MAJOR = "user_major"
         const val COLUMN_PHOTO_USER = "user_photo"
+
+        // Log 테이블
+        const val TABLE_LOG = "Log"
+        const val COLUMN_LOG_ID = "log_id"
+        const val COLUMN_LOG_CHALLENGE_ID = "challenge_id"
+        const val COLUMN_LOG_CHALLENGER_ID = "challenger_id"
+        const val COLUMN_LOG_DATE = "log_date"
+        const val COLUMN_LOG_PHOTO = "log_image"
+
+        // 응원 테이블
+        const val TABLE_CHEER = "Cheer"
+        const val COLUMN_CHEER_ID = "cheer_id"
+        const val COLUMN_CHEER_LOG_ID = "log_id"
+        const val COLUMN_CHEER_USER_ID = "user_id"
+        const val COLUMN_CHEER_AT = "cheer_at"
     }
 
     override fun onCreate(db: SQLiteDatabase) {
@@ -94,9 +109,36 @@ class DBHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, null
             )
         """.trimIndent()
 
+        // Log 테이블 생성
+        val createLogTable = """
+            CREATE TABLE $TABLE_LOG (
+                $COLUMN_LOG_ID INTEGER PRIMARY KEY AUTOINCREMENT,
+                $COLUMN_LOG_CHALLENGE_ID INTEGER NOT NULL,
+                $COLUMN_LOG_CHALLENGER_ID INTEGER NOT NULL,
+                $COLUMN_LOG_DATE DATETIME NOT NULL,
+                $COLUMN_LOG_PHOTO BLOB NOT NULL,
+                FOREIGN KEY ($COLUMN_LOG_CHALLENGER_ID) REFERENCES $TABLE_CHALLENGER($COLUMN_CHALLENGER_ID),
+                FOREIGN KEY ($COLUMN_LOG_CHALLENGE_ID) REFERENCES $TABLE_CHALLENGE($COLUMN_CHALLENGE_ID)
+            )
+        """.trimIndent()
+
+        // Cheer 테이블 생성
+        val createCheerTable = """
+            CREATE TABLE $TABLE_CHEER (
+                $COLUMN_CHEER_ID INTEGER PRIMARY KEY AUTOINCREMENT,
+                $COLUMN_CHEER_LOG_ID INTEGER NOT NULL,
+                $COLUMN_CHEER_AT DATETIME NOT NULL,
+                $COLUMN_CHEER_USER_ID INTEGER NOT NULL,
+                FOREIGN KEY ($COLUMN_CHEER_LOG_ID) REFERENCES $TABLE_LOG($COLUMN_LOG_ID),
+                FOREIGN KEY ($COLUMN_CHEER_USER_ID) REFERENCES $TABLE_USER($COLUMN_USER_ID)
+            )
+        """.trimIndent()
+
         db.execSQL(createChallengeTable)
         db.execSQL(createChallengerTable)
         db.execSQL(createUserTable)
+        db.execSQL(createLogTable)
+        db.execSQL(createCheerTable)
     }
 
     override fun onUpgrade(db: SQLiteDatabase, oldVersion: Int, newVersion: Int) {
@@ -151,6 +193,29 @@ class DBHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, null
         return db.insert(TABLE_USER, null, contentValues)
     }
 
+    // Log 추가
+    fun insertLog(logEntry: LogEntry): Long {
+        val db = writableDatabase
+        val values = ContentValues().apply {
+            put(COLUMN_LOG_CHALLENGE_ID, logEntry.challengeId)
+            put(COLUMN_LOG_CHALLENGER_ID, logEntry.challengerId)
+            put(COLUMN_LOG_DATE, logEntry.logDate)
+            put(COLUMN_LOG_PHOTO, logEntry.logImage)
+        }
+        return db.insert(TABLE_LOG, null, values)
+    }
+
+    // Cheer 추가
+    fun insertCheer(cheer: Cheer): Long {
+        val db = writableDatabase
+        val values = ContentValues().apply {
+            put(COLUMN_CHEER_LOG_ID, cheer.LogId)
+            put(COLUMN_CHEER_USER_ID, cheer.UserId)
+            put(COLUMN_CHEER_AT, cheer.CheerAt)
+        }
+        return db.insert(TABLE_CHEER, null, values)
+    }
+
     // Challenge 데이터 클래스
     data class Challenge(
         val challengeId: Long? = null,
@@ -185,6 +250,21 @@ class DBHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, null
         val nickname: String,
         val major: String?,
         val photo: ByteArray?
+    )
+
+    // Log 데이터 클래스
+    data class LogEntry(
+        val challengeId: Long,
+        val challengerId: Long,
+        val logDate: String,
+        val logImage: ByteArray
+    )
+
+    // Cheer 데이터 클래스
+    data class Cheer(
+        val LogId: Long,
+        val UserId: Long,
+        val CheerAt: String
     )
 
     // 로그인
@@ -291,6 +371,12 @@ class DBHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, null
         cursor.close()
         db.close()
 
+        if (nickname == null) {
+            Log.e("DBHelper", "❌ 닉네임이 존재하지 않습니다. userId: $userId")
+        } else {
+            Log.d("DBHelper", "✅ 닉네임 가져옴: $nickname (userId: $userId)")
+        }
+
         return nickname
     }
 
@@ -307,6 +393,216 @@ class DBHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, null
         db.close()
 
         return major
+    }
+
+    fun getParticipantsByChallengeId(challengeId: Long): List<Challenger> {
+        val participants = mutableListOf<Challenger>()
+        val db = readableDatabase
+
+        val cursor = db.rawQuery(
+            "SELECT * FROM $TABLE_CHALLENGER WHERE $COLUMN_CHALLENGE_ID_FK = ?",
+            arrayOf(challengeId.toString())
+        )
+
+        while (cursor.moveToNext()) {
+            val participant = Challenger(
+                userId = cursor.getLong(cursor.getColumnIndexOrThrow(COLUMN_USER_ID)),
+                challengeId = cursor.getLong(cursor.getColumnIndexOrThrow(COLUMN_CHALLENGE_ID_FK)), // 수정됨
+                challengeRole = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_CHALLENGE_ROLE)), // 추가됨
+                joinedAt = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_JOINED_AT)), // 추가됨
+                percentage = cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_PERCENTAGE))
+            )
+            participants.add(participant)
+        }
+
+        cursor.close()
+        db.close()
+        return participants
+    }
+
+    fun getLogEntriesByChallenge(challengeId: Long): List<LogEntry> {
+        val db = readableDatabase
+        val logList = mutableListOf<LogEntry>()
+
+        val query = """
+        SELECT log.${COLUMN_LOG_ID}, log.${COLUMN_LOG_CHALLENGE_ID}, log.${COLUMN_LOG_CHALLENGER_ID}, 
+               log.${COLUMN_LOG_DATE}, log.${COLUMN_LOG_PHOTO}
+        FROM $TABLE_LOG log
+        WHERE log.${COLUMN_LOG_CHALLENGE_ID} = ?
+        ORDER BY log.${COLUMN_LOG_DATE} DESC
+    """
+
+        val cursor = db.rawQuery(query, arrayOf(challengeId.toString()))
+
+        if (cursor.moveToFirst()) {
+            do {
+                val logId = cursor.getLong(cursor.getColumnIndexOrThrow(COLUMN_LOG_ID))
+                val challengeId = cursor.getLong(cursor.getColumnIndexOrThrow(COLUMN_LOG_CHALLENGE_ID))
+                val challengerId = cursor.getLong(cursor.getColumnIndexOrThrow(COLUMN_LOG_CHALLENGER_ID))
+                val logDate = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_LOG_DATE))
+                val logImage = cursor.getBlob(cursor.getColumnIndexOrThrow(COLUMN_LOG_PHOTO))
+
+                val userInfo = getUserInfoByChallengerId(challengerId)
+                val userNick = userInfo?.first ?: "알 수 없음"
+                val userMajor = userInfo?.second ?: "알 수 없음"
+
+                Log.d("DBHelper", "로그 ID: $logId, 닉네임: $userNick, 학과: $userMajor")
+
+                logList.add(LogEntry(challengeId, challengerId, logDate, logImage))
+
+            } while (cursor.moveToNext())
+        }
+
+        cursor.close()
+        db.close()
+        return logList
+    }
+
+    fun getUserInfoByChallengerId(challengerId: Long): Pair<String, String>? {
+        val db = readableDatabase
+        val query = """
+        SELECT user.${COLUMN_NICKNAME}, user.${COLUMN_MAJOR}
+        FROM $TABLE_USER user
+        INNER JOIN $TABLE_CHALLENGER ch ON user.${COLUMN_USER_ID} = ch.${COLUMN_USER_ID}
+        WHERE ch.${COLUMN_CHALLENGER_ID} = ?
+    """
+
+        val cursor = db.rawQuery(query, arrayOf(challengerId.toString()))
+        var result: Pair<String, String>? = null
+
+        if (cursor.moveToFirst()) {
+            val userNick = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_NICKNAME))
+            val userMajor = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_MAJOR))
+            result = Pair(userNick, userMajor)
+        }
+
+        cursor.close()
+        db.close()
+        return result
+    }
+
+    // 특정 유저가 특정 로그를 이미 응원했는지 확인
+    fun hasUserCheered(logId: Long, userId: Long): Boolean {
+        val db = readableDatabase
+        val query = "SELECT COUNT(*) FROM $TABLE_CHEER WHERE $COLUMN_CHEER_LOG_ID = ? AND $COLUMN_CHEER_USER_ID = ?"
+        val cursor = db.rawQuery(query, arrayOf(logId.toString(), userId.toString()))
+
+        var hasCheered = false
+        if (cursor.moveToFirst()) {
+            hasCheered = cursor.getInt(0) > 0
+        }
+
+        cursor.close()
+        db.close()
+        return hasCheered
+    }
+
+    // 응원 데이터 추가
+    fun addCheer(logId: Long, userId: Long): Boolean {
+        if (hasUserCheered(logId, userId)) {
+            return false // 이미 응원한 경우 추가하지 않음
+        }
+
+        val db = writableDatabase
+        val values = ContentValues().apply {
+            put(COLUMN_CHEER_LOG_ID, logId)  // ✔ logId 사용
+            put(COLUMN_CHEER_USER_ID, userId)
+            put(COLUMN_CHEER_AT, System.currentTimeMillis()) // 현재 시간 저장
+        }
+
+        val result = db.insert(TABLE_CHEER, null, values)
+        db.close()
+        return result != -1L
+    }
+
+    fun getLogIdByChallenger(challengerId: Long, challengeId: Long): Long? {
+        val db = readableDatabase
+        val query = """
+        SELECT $COLUMN_LOG_ID FROM $TABLE_LOG 
+        WHERE $COLUMN_LOG_CHALLENGER_ID = ? AND $COLUMN_LOG_CHALLENGE_ID = ?
+        ORDER BY $COLUMN_LOG_DATE DESC LIMIT 1
+    """
+        val cursor = db.rawQuery(query, arrayOf(challengerId.toString(), challengeId.toString()))
+
+        var logId: Long? = null
+        if (cursor.moveToFirst()) {
+            logId = cursor.getLong(cursor.getColumnIndexOrThrow(COLUMN_LOG_ID))
+        }
+
+        cursor.close()
+        db.close()
+        return logId
+    }
+
+    fun getCheerCountForChallenger(challengerId: Long, challengeId: Long): Int {
+        val db = this.readableDatabase
+
+        val cursor = db.rawQuery(
+            """
+        SELECT COUNT(*) FROM $TABLE_CHEER 
+        WHERE $COLUMN_CHEER_LOG_ID IN (
+            SELECT $COLUMN_LOG_ID FROM $TABLE_LOG 
+            WHERE $COLUMN_LOG_CHALLENGER_ID = ? AND $COLUMN_LOG_CHALLENGE_ID = ?
+        )
+        """,
+            arrayOf(challengerId.toString(), challengeId.toString())
+        )
+
+        var cheerCount = 0
+        if (cursor.moveToFirst()) {
+            cheerCount = cursor.getInt(0)
+        }
+
+        cursor.close()
+        db.close()
+        return cheerCount
+    }
+
+    fun getChallengerIdByUserAndChallenge(userId: Long, challengeId: Long): Long? {
+        val db = readableDatabase
+        val query = """
+        SELECT $COLUMN_CHALLENGER_ID FROM $TABLE_CHALLENGER
+        WHERE $COLUMN_USER_ID = ? AND $COLUMN_CHALLENGE_ID = ?
+        ORDER BY $COLUMN_JOINED_AT DESC -- 가장 최근에 참가한 순서대로 정렬
+    """
+        val cursor = db.rawQuery(query, arrayOf(userId.toString(), challengeId.toString()))
+
+        var challengerId: Long? = null
+        if (cursor.moveToFirst()) {
+            challengerId = cursor.getLong(cursor.getColumnIndexOrThrow(COLUMN_CHALLENGER_ID))
+        }
+
+        cursor.close()
+        db.close()
+
+        return challengerId
+    }
+
+    fun getLogsByChallenger(challengerId: Long, challengeId: Long): List<LogEntry> {
+        val db = readableDatabase
+        val logList = mutableListOf<LogEntry>()
+
+        val query = """
+        SELECT * FROM $TABLE_LOG
+        WHERE $COLUMN_LOG_CHALLENGER_ID = ? AND $COLUMN_LOG_CHALLENGE_ID = ?
+        ORDER BY $COLUMN_LOG_DATE DESC
+    """
+
+        val cursor = db.rawQuery(query, arrayOf(challengerId.toString(), challengeId.toString()))
+
+        if (cursor.moveToFirst()) {
+            do {
+                val logId = cursor.getLong(cursor.getColumnIndexOrThrow(COLUMN_LOG_ID))
+                val logDate = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_LOG_DATE))
+                val logImage = cursor.getBlob(cursor.getColumnIndexOrThrow(COLUMN_LOG_PHOTO))
+
+                logList.add(LogEntry(challengeId, challengerId, logDate, logImage))
+            } while (cursor.moveToNext())
+        }
+
+        cursor.close()
+        db.close()
+        return logList
     }
 
     fun getChallengeProgress(challengeId: Long): Int {
@@ -327,8 +623,6 @@ class DBHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, null
 
         return progress
     }
-
-
 
     fun getOngoingChallenges(): List<Challenge> {
         val db = this.readableDatabase
