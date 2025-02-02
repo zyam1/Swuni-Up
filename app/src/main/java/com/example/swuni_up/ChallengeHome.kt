@@ -16,6 +16,9 @@ class ChallengeHome : AppCompatActivity() {
     private lateinit var tvOngoingTitle: TextView
     private lateinit var tvCompletedTitle: TextView
     private lateinit var navChallengeExplore: ImageView
+    private lateinit var popularChallengeAdapter: PopularChallengeAdapter
+    private lateinit var popularChallengeRecyclerView: RecyclerView
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -28,6 +31,12 @@ class ChallengeHome : AppCompatActivity() {
         myChallengeRecyclerView.layoutManager = LinearLayoutManager(this)
         myChallengeAdapter = MyChallengeAdapter(this, emptyList())
         myChallengeRecyclerView.adapter = myChallengeAdapter
+
+        //인기 챌린지 관련
+        popularChallengeRecyclerView = findViewById(R.id.popularChallengeRecyclerView)
+        popularChallengeRecyclerView.layoutManager = LinearLayoutManager(this)
+        popularChallengeAdapter = PopularChallengeAdapter(this, emptyList())
+        popularChallengeRecyclerView.adapter = popularChallengeAdapter
 
 
         // "OO 슈니 ing 챌린지" TextView 연결
@@ -53,12 +62,17 @@ class ChallengeHome : AppCompatActivity() {
 
     private fun loadChallenges() {
         val ongoingList = dbHelper.getOngoingChallenges()
-
+        val popularList = dbHelper.getPopularChallenges()
         if (ongoingList.isNotEmpty()) {
             myChallengeAdapter.updateData(ongoingList)
             Log.d("MyChallengeActivity", "완료된 챌린지 ${ongoingList.size}개 로드 완료")
         } else {
             Log.d("MyChallengeActivity", "완료된 챌린지가 없습니다.")
+        }
+
+
+        if (popularList.isNotEmpty()) {
+            popularChallengeAdapter.updateData(popularList)
         }
     }
 
