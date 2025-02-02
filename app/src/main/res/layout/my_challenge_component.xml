@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_marginBottom="10dp"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <LinearLayout
+        android:id="@+id/my_challenge_component"
+        android:layout_width="364dp"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="14dp"
+        android:background="@drawable/shadow_challenge_list"
+        android:gravity="center_vertical"> <!-- 추가 -->
+
+        <TextView
+            android:id="@+id/my_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="아침 9시 기상"
+            android:layout_marginStart="3dp"
+            android:fontFamily="@font/wavve_pado"
+            android:textSize="20sp"/>
+
+        <!-- 빈 공간을 만들어서 오른쪽 정렬 -->
+        <View
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            android:layout_weight="1"/>
+
+        <TextView
+            android:id="@+id/certification_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="인증하기"
+            android:background="@drawable/text_view_background"
+            android:fontFamily="@font/scdream5"
+            android:textSize="12sp"
+            android:paddingVertical="10dp"
+            android:paddingHorizontal="15dp"/>
+    </LinearLayout>
+
+</LinearLayout>

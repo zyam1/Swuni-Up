@@ -3,7 +3,8 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
-    android:padding="10dp">
+    android:paddingHorizontal="10dp"
+    android:paddingVertical="5dp">
 
     <!-- 챌린지 카드 컨테이너 -->
     <LinearLayout
@@ -45,9 +46,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="80%"
+                android:fontFamily="@font/wavve_pado"
                 android:textColor="#FFFFFF"
-                android:textSize="14sp"
-                android:textStyle="bold"
+                android:textSize="20sp"
                 android:layout_gravity="center"/>
         </FrameLayout>
 
@@ -98,7 +99,7 @@
                     android:paddingLeft="10dp"
                     android:paddingTop="8dp"
                     android:paddingBottom="8dp"
-                    android:background="@drawable/text_view_background"
+                    android:background="@drawable/edit_text_background"
                     android:text="마감 D - 3"
                     android:fontFamily="@font/scdream3"
                     android:textSize="8sp" />
@@ -112,7 +113,7 @@
                     android:paddingTop="8dp"
                     android:paddingBottom="8dp"
                     android:layout_marginLeft="10dp"
-                    android:background="@drawable/edit_text_background"
+                    android:background="@drawable/text_view_background"
                     android:text="참여인원 8"
                     android:fontFamily="@font/scdream3"
                     android:textSize="8sp" />

@@ -25,6 +25,15 @@ class BigChallengeAdapter(private val context: Context, private var challenges: 
     override fun onBindViewHolder(holder: ChallengeViewHolder, position: Int) {
         val challenge = challenges[position]
 
+        // 마지막 아이템인 경우 marginEnd 추가
+        val layoutParams = holder.challengeItem.layoutParams as ViewGroup.MarginLayoutParams
+        if (position == challenges.size - 1) {
+            layoutParams.marginEnd = 50  // 원하는 margin 값 (px 단위)
+        } else {
+            layoutParams.marginEnd = 0  // 나머지 항목에는 marginEnd를 0으로 설정
+        }
+        holder.challengeItem.layoutParams = layoutParams
+
         // 이미지 로딩 (Blob 데이터를 Bitmap으로 변환)
         val bitmap = BitmapFactory.decodeByteArray(challenge.photo, 0, challenge.photo.size)
         holder.imageView.setImageBitmap(bitmap)
@@ -34,7 +43,7 @@ class BigChallengeAdapter(private val context: Context, private var challenges: 
         holder.descriptionTextView.text = challenge.description
 
         // 날짜 계산
-        holder.dDayTextView.text = getDDayText(challenge.endDay)
+        holder.dDayTextView.text = getDDayText(challenge.startDay)
         holder.dayTextView.text = "${formatDate(challenge.startDay)} ~ ${formatDate(challenge.endDay)}"
 
         holder.dateTextView.text = "${calculateDaysDifference(challenge.startDay, challenge.endDay) + 1}일 챌린지"
@@ -131,6 +140,7 @@ class BigChallengeAdapter(private val context: Context, private var challenges: 
     }
 
     fun updateChallenges(newChallenges: List<DBHelper.Challenge>) {
+        Log.d("BigChallengeAdapter", "Received challenges count: ${newChallenges.size}")
         challenges = newChallenges
         notifyDataSetChanged()
     }

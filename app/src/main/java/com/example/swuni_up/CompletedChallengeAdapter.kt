@@ -9,6 +9,9 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
 
 class CompletedChallengeAdapter(
     private val context: Context,
@@ -21,11 +24,12 @@ class CompletedChallengeAdapter(
         val challengeDescription: TextView = view.findViewById(R.id.my_description)
         val challengeDuration: TextView = view.findViewById(R.id.my_dDay)
         val challengeParticipants: TextView = view.findViewById(R.id.my_participants)
+        val progressText: TextView = view.findViewById(R.id.tv_progress)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val view = LayoutInflater.from(parent.context)
-            .inflate(R.layout.overlay_long_challenge_component, parent, false)
+            .inflate(R.layout.complete_challenge_component, parent, false)
         return ViewHolder(view)
     }
 
@@ -35,14 +39,24 @@ class CompletedChallengeAdapter(
         holder.challengeTitle.text = challenge.title
         holder.challengeDescription.text = challenge.description ?: "챌린지 설명 없음"
 
-        // 챌린지 기간 표시
-        holder.challengeDuration.text = "${challenge.startDay} ~ ${challenge.endDay}"
+        val startDate = challenge.startDay
+        val endDate = challenge.endDay
+
+        val challengeDurationText = calculateDuration(startDate, endDate)
+        holder.challengeDuration.text = "${challengeDurationText + 1}일 챌린지"
+
 
         // 참여 인원 표시
         holder.challengeParticipants.text = "참여 인원 ${challenge.maxParticipant}"
 
         // 이미지 변환
         holder.challengePhoto.setImageBitmap(byteArrayToBitmap(challenge.photo))
+
+        challenge.challengeId?.let {
+            holder.progressText.text = "${calculateProgress(it).toInt()}%"
+        } ?: run {
+            holder.progressText.text = "0%"  // challengeId가 없으면 0%라고 표현
+        }
     }
 
     override fun getItemCount(): Int = challengeList.size
@@ -50,6 +64,21 @@ class CompletedChallengeAdapter(
     // ByteArray를 Bitmap으로 변환
     private fun byteArrayToBitmap(byteArray: ByteArray): Bitmap {
         return BitmapFactory.decodeByteArray(byteArray, 0, byteArray.size)
+    }
+
+    private fun calculateDuration(startDate: String, endDate: String): Long {
+        val dateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
+
+        val start: Date = dateFormat.parse(startDate)
+        val end: Date = dateFormat.parse(endDate)
+
+        val diffInMillis = end.time - start.time
+        return diffInMillis / (1000 * 60 * 60 * 24) // 밀리초 -> 일수로 변환
+    }
+
+    private fun calculateProgress(challengeId: Long): Int {
+        val dbHelper = DBHelper(context)
+        return dbHelper.getChallengeProgress(challengeId)
     }
 
     fun updateData(newList: List<DBHelper.Challenge>) {

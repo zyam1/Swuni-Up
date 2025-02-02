@@ -7,11 +7,8 @@ import android.util.Log
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
-import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.swuni_up.DBHelper.Challenge
@@ -26,7 +23,6 @@ import com.example.swuni_up.DBHelper.Companion.COLUMN_MAX_PARTICIPANT
 import com.example.swuni_up.DBHelper.Companion.COLUMN_PHOTO
 import com.example.swuni_up.DBHelper.Companion.COLUMN_START_DAY
 import com.example.swuni_up.DBHelper.Companion.COLUMN_STATUS
-import com.example.swuni_up.DBHelper.Companion.COLUMN_USER_ID
 
 class ChallengeExplore : AppCompatActivity() {
 
@@ -52,6 +48,9 @@ class ChallengeExplore : AppCompatActivity() {
     private lateinit var moneyTextView: TextView
     private lateinit var etcTextView: TextView
 
+    private lateinit var navMyChallenge: ImageView
+    private lateinit var navChallengeHome: ImageView
+
     // 선택된 상태를 추적할 변수
     private var selectedCategory: LinearLayout? = null
 
@@ -63,9 +62,15 @@ class ChallengeExplore : AppCompatActivity() {
     private var filteredList = mutableListOf<DBHelper.Challenge>() // 필터된 리스트
     private var filteredOfficailList = mutableListOf<DBHelper.Challenge>()
 
+    private lateinit var dbHelper: DBHelper
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_challenge_explore)
+
+        dbHelper = DBHelper(this)
+
+        dbHelper.updateChallengeStatus()
 
         // UI 요소들 초기화
         cateHealth = findViewById(R.id.cate_health)
@@ -88,6 +93,9 @@ class ChallengeExplore : AppCompatActivity() {
         hobbyTextView = cateHobby.findViewById(R.id.cate_hobby_text)
         moneyTextView = cateMoney.findViewById(R.id.cate_money_text)
         etcTextView = cateEtc.findViewById(R.id.cate_etc_text)
+
+        navMyChallenge = findViewById(R.id.nav_my_challenge)
+        navChallengeHome = findViewById(R.id.nav_home)
 
         // 클릭 리스너 설정
         cateHealth.setOnClickListener { onCategoryClicked(cateHealth, healthImageView, healthTextView, 1) }
@@ -133,13 +141,15 @@ class ChallengeExplore : AppCompatActivity() {
         filterOfficialChallenges(1)
         onCategoryClicked(cateHealth, healthImageView, healthTextView, 1)
 
-        recyclerView.setNestedScrollingEnabled(false);
-        recyclerViewLong.setNestedScrollingEnabled(false);
+        navMyChallenge.setOnClickListener {
+            val intent = Intent(this, my_challenge::class.java)
+            startActivity(intent)
+        }
 
-        recyclerViewLong.setHasFixedSize(false);
-        recyclerViewLong.requestLayout();
-
-
+        navChallengeHome.setOnClickListener {
+            val intent = Intent(this, ChallengeHome::class.java)
+            startActivity(intent)
+        }
 
     }
 
@@ -222,15 +232,16 @@ class ChallengeExplore : AppCompatActivity() {
     }
 
     private fun filterChallenges(categoryId: Int) {
-        filteredList = challengeList.filter { it.category == categoryId }.toMutableList()
+        filteredList = challengeList.filter { it.category == categoryId && it.status == 1 }.toMutableList()  // 상태가 1인 챌린지만 필터링
         adapter.updateChallenges(filteredList)
     }
 
     private fun filterOfficialChallenges(categoryId: Int) {
-        // 해당 카테고리와 is_official이 1인 챌린지만 필터링
-        filteredOfficailList = challengeList.filter { it.category == categoryId && it.isOfficial == 1 }.toMutableList()
+        // 해당 카테고리와 is_official이 1인 챌린지, 그리고 상태가 1인 챌린지만 필터링
+        filteredOfficailList = challengeList.filter { it.category == categoryId && it.isOfficial == 1 && it.status == 1 }.toMutableList()
         adapterLong.updateChallenges(filteredOfficailList)
     }
+
 
 
     // DB에서 챌린지 목록 가져오기 (예제 코드)
