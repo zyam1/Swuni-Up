@@ -733,4 +733,46 @@ class DBHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, null
 
 
 
+    //인기 챌린지 관련 함수 두개 표시
+    fun getPopularChallenges(): List<Challenge> {
+        val db = this.readableDatabase
+        val challengeList = mutableListOf<Challenge>()
+
+        val cursor = db.rawQuery(
+            """
+        SELECT c.*, 
+               (SELECT COUNT(*) FROM $TABLE_CHALLENGER ch WHERE ch.$COLUMN_CHALLENGE_ID_FK = c.$COLUMN_CHALLENGE_ID) AS participants
+        FROM $TABLE_CHALLENGE c
+        ORDER BY participants DESC
+        LIMIT 2
+        """, null
+        )
+
+        if (cursor.moveToFirst()) {
+            do {
+                val participants = cursor.getInt(cursor.getColumnIndexOrThrow("participants"))
+
+                val challenge = Challenge(
+                    challengeId = cursor.getLong(cursor.getColumnIndexOrThrow(COLUMN_CHALLENGE_ID)),
+                    title = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_CHALLENGE_TITLE)),
+                    description = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_DESCRIPTION)),
+                    photo = cursor.getBlob(cursor.getColumnIndexOrThrow(COLUMN_PHOTO)),
+                    createdAt = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_CREATED_AT)),
+                    startDay = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_START_DAY)),
+                    endDay = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_END_DAY)),
+                    status = cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_STATUS)),
+                    maxParticipant = participants,
+                    category = cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_CATEGORY)),
+                    isOfficial = cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_IS_OFFICIAL))
+                )
+                challengeList.add(challenge)
+            } while (cursor.moveToNext())
+        }
+        cursor.close()
+        db.close()
+
+        return challengeList
+    }
+
+
 }
