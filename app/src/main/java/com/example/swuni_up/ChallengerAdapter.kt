@@ -20,7 +20,6 @@ class ChallengerAdapter(private val context: Context, private val challengers: L
         val view = LayoutInflater.from(parent.context)
             .inflate(R.layout.rank_component, parent, false)
         return ViewHolder(view)
-
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {

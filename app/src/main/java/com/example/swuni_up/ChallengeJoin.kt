@@ -53,7 +53,6 @@ class ChallengeJoin : AppCompatActivity() {
             }
         }
 
-
         val toolbar = findViewById<Toolbar>(R.id.toolbar)
         setSupportActionBar(toolbar)
         supportActionBar?.setDisplayShowTitleEnabled(false)
@@ -137,18 +136,12 @@ class ChallengeJoin : AppCompatActivity() {
             Toast.makeText(this, "참여가 완료되었습니다!", Toast.LENGTH_SHORT).show()
             Log.d("ChallengeJoin", "참여 완료: ID = $result")
 
-            val intent = Intent(this, ChallengeInfo::class.java).apply {
-                putExtra("challenge_id", challengeId)
-                putExtra("challenger_id", result) //
-            }
-            startActivity(intent)
-
+            recreate()
         } else {
             Toast.makeText(this, "참여 중 오류가 발생했습니다.", Toast.LENGTH_SHORT).show()
             Log.e("ChallengeJoin", "참여 실패")
         }
     }
-
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
@@ -161,8 +154,6 @@ class ChallengeJoin : AppCompatActivity() {
             }
         }
     }
-
-
 
     private fun loadChallengeById(challengeId: Long) {
         val dbHelper = DBHelper(this)
@@ -368,6 +359,5 @@ class ChallengeJoin : AppCompatActivity() {
 
     // 참가자 데이터 클래스
     data class Participant(val userId: Long, val userNick: String)
-
 
 }

@@ -8,6 +8,7 @@ import android.graphics.BitmapFactory
 import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
+import android.text.InputType
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import java.io.ByteArrayOutputStream
@@ -37,6 +38,22 @@ class SignUpActivity : AppCompatActivity() {
 
         val name = intent.getStringExtra("name")
         val email = intent.getStringExtra("email")
+
+        val eye = findViewById<ImageView>(R.id.btn_password_toggle)
+
+        var isPasswordVisible = false
+
+        eye.setOnClickListener {
+            isPasswordVisible = !isPasswordVisible
+            if (isPasswordVisible) {
+                etPassword.inputType = InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD
+                eye.setImageResource(R.drawable.ic_eye) // 눈 모양 아이콘 변경
+            } else {
+                etPassword.inputType = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_PASSWORD
+                eye.setImageResource(R.drawable.ic_eye_close) // 눈 감은 아이콘 변경
+            }
+            etPassword.setSelection(etPassword.text.length) // 커서를 유지하기 위해 추가
+        }
 
         if (name != null) {
             etName.setText(name)
@@ -84,7 +101,6 @@ class SignUpActivity : AppCompatActivity() {
                 name = name,
                 email = email,
                 password = password,
-                kakaoId = "kakao_$name",  // 카카오 ID는 임시로 이름으로 생성
                 nickname = nickname,
                 major = major,
                 photo = photoByteArray  // 선택된 프로필 이미지

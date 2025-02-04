@@ -12,7 +12,7 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="63dp"
-        android:background="#25408F"
+        android:background="#0735BA"
         android:padding="10dp">
 
         <!-- 뒤로가기 버튼 -->
@@ -124,7 +124,7 @@
                 android:layout_height="40dp"
                 android:padding="10dp"
                 android:layout_marginRight="5dp"
-                android:src="@drawable/ic_eye"
+                android:src="@drawable/ic_eye_close"
                 android:contentDescription="@null"/>
         </LinearLayout>
 

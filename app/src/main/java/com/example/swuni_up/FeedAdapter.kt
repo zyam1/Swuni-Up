@@ -1,7 +1,9 @@
 package com.example.swuni_up
 
 import android.content.Context
+import android.content.SharedPreferences
 import android.graphics.BitmapFactory
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -9,7 +11,6 @@ import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
-import android.content.SharedPreferences
 
 class FeedAdapter(
     private val context: Context,
@@ -34,6 +35,7 @@ class FeedAdapter(
         val userInfo = dbHelper.getUserInfoByChallengerId(logEntry.challengerId)
         val userNick = userInfo?.first ?: "알 수 없음"
         val userMajor = userInfo?.second ?: "알 수 없음"
+        val userId = userInfo?.third ?: -1L // 챌린저의 user_id 가져오기
 
         // 닉네임, 전공 설정
         holder.userNick.text = userNick
@@ -55,8 +57,10 @@ class FeedAdapter(
         // 로그의 logId 가져오기
         val logId = dbHelper.getLogIdByChallenger(logEntry.challengerId, logEntry.challengeId)
 
-        // 미 응원한 경우 버튼 숨기기
-        if (logId == null || dbHelper.hasUserCheered(logId, currentUserId)) {
+        // 챌린저의 user_id와 로그인한 사용자 user_id 비교
+        if (userId == currentUserId) {
+            holder.cheerButton.visibility = View.GONE
+        } else if (logId == null || dbHelper.hasUserCheered(logId, currentUserId)) {
             holder.cheerButton.visibility = View.GONE
         } else {
             holder.cheerButton.visibility = View.VISIBLE
@@ -64,14 +68,9 @@ class FeedAdapter(
 
         // 응원 버튼 클릭 이벤트
         holder.cheerButton.setOnClickListener {
-            if (logEntry.challengerId == currentUserId) {
-                Toast.makeText(context, "자기 자신의 피드는 추천할 수 없어요.", Toast.LENGTH_SHORT).show()
-                return@setOnClickListener
-            }
-
+            Log.d("FeedAdapter", "현재 피드의 챌린저 ID: ${logEntry.challengerId}")
             if (logId != null && dbHelper.addCheer(logId, currentUserId)) {
                 Toast.makeText(context, "${userNick}님을 응원했어요! ✊", Toast.LENGTH_SHORT).show()
-
                 // 버튼 숨기기
                 holder.cheerButton.visibility = View.GONE
             } else {

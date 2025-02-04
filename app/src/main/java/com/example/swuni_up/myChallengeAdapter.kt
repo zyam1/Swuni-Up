@@ -1,17 +1,17 @@
 package com.example.swuni_up
 
 import android.content.Context
+import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 
-class MyChallengeAdapter(
+class myChallengeAdapter(
     private val context: Context,
     private var challengeList: List<DBHelper.Challenge>
-) : RecyclerView.Adapter<MyChallengeAdapter.ViewHolder>() {
+) : RecyclerView.Adapter<myChallengeAdapter.ViewHolder>() {
 
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val challengeTitle: TextView = view.findViewById(R.id.my_title)
@@ -28,6 +28,13 @@ class MyChallengeAdapter(
         val challenge = challengeList[position]
 
         holder.challengeTitle.text = challenge.title
+
+        holder.button.setOnClickListener {
+            val intent = Intent(context, ChallengeInfo::class.java).apply {
+                putExtra("challenge_id", challenge.challengeId) // 챌린지 ID 전달
+            }
+            context.startActivity(intent)
+        }
 
 
     }

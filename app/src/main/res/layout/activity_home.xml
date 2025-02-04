@@ -5,7 +5,7 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#25408F"
+    android:background="#0735BA"
     tools:context=".HomeActivity">
 
     <!-- 상단 텍스트 -->

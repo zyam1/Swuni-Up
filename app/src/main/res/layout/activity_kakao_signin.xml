@@ -72,7 +72,7 @@
                     android:layout_marginRight="5dp"
                     android:contentDescription="@null"
                     android:padding="10dp"
-                    android:src="@drawable/ic_eye" />
+                    android:src="@drawable/ic_eye_close" />
             </LinearLayout>
 
             <!-- 로그인 버튼 -->
@@ -83,7 +83,7 @@
                 android:layout_marginTop="50dp"
                 android:layout_marginBottom="16dp"
                 android:background="@drawable/button_background"
-                android:backgroundTint="#25408F"
+                android:backgroundTint="#0735BA"
                 android:paddingTop="14dp"
                 android:paddingBottom="14dp"
                 android:text="@string/signin_simple"

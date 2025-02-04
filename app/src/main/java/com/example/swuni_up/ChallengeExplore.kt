@@ -41,6 +41,9 @@ class ChallengeExplore : AppCompatActivity() {
     private lateinit var moneyImageView: ImageView
     private lateinit var etcImageView: ImageView
 
+    private lateinit var navMyChallenge: ImageView
+    private lateinit var navChallengeHome: ImageView
+
     private lateinit var healthTextView: TextView
     private lateinit var studyTextView: TextView
     private lateinit var habitTextView: TextView
@@ -48,16 +51,13 @@ class ChallengeExplore : AppCompatActivity() {
     private lateinit var moneyTextView: TextView
     private lateinit var etcTextView: TextView
 
-    private lateinit var navMyChallenge: ImageView
-    private lateinit var navChallengeHome: ImageView
-
     // 선택된 상태를 추적할 변수
     private var selectedCategory: LinearLayout? = null
 
     private lateinit var recyclerView: RecyclerView
     private lateinit var recyclerViewLong: RecyclerView
-    private lateinit var adapter: BigChallengeAdapter
-    private lateinit var adapterLong: LongChallengeAdapter
+    private lateinit var adapter: bigChallengeAdapter
+    private lateinit var adapterLong: longChallengeAdapter
     private var challengeList = mutableListOf<DBHelper.Challenge>()  // 전체 챌린지 리스트
     private var filteredList = mutableListOf<DBHelper.Challenge>() // 필터된 리스트
     private var filteredOfficailList = mutableListOf<DBHelper.Challenge>()
@@ -94,9 +94,6 @@ class ChallengeExplore : AppCompatActivity() {
         moneyTextView = cateMoney.findViewById(R.id.cate_money_text)
         etcTextView = cateEtc.findViewById(R.id.cate_etc_text)
 
-        navMyChallenge = findViewById(R.id.nav_my_challenge)
-        navChallengeHome = findViewById(R.id.nav_home)
-
         // 클릭 리스너 설정
         cateHealth.setOnClickListener { onCategoryClicked(cateHealth, healthImageView, healthTextView, 1) }
         cateStudy.setOnClickListener { onCategoryClicked(cateStudy, studyImageView, studyTextView, 2) }
@@ -105,7 +102,8 @@ class ChallengeExplore : AppCompatActivity() {
         cateMoney.setOnClickListener { onCategoryClicked(cateMoney, moneyImageView, moneyTextView, 5) }
         cateEtc.setOnClickListener { onCategoryClicked(cateEtc, etcImageView, etcTextView, 6) }
 
-
+        navMyChallenge = findViewById(R.id.nav_my_challenge)
+        navChallengeHome = findViewById(R.id.nav_home)
 
         recyclerView = findViewById(R.id.recyclerViewBigChallenge)
         recyclerView.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
@@ -114,7 +112,7 @@ class ChallengeExplore : AppCompatActivity() {
         challengeList = getChallengesFromDB()
 
         // 어댑터 초기화 시 데이터 전달
-        adapter = BigChallengeAdapter(this, challengeList)
+        adapter = bigChallengeAdapter(this, challengeList)
         recyclerView.adapter = adapter
 
         val sharedPreferences = getSharedPreferences("user_prefs", Context.MODE_PRIVATE)
@@ -132,14 +130,20 @@ class ChallengeExplore : AppCompatActivity() {
         recyclerViewLong = findViewById(R.id.recyclerViewLongChallenge)
         recyclerViewLong.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
 
-
         // 어댑터 초기화 시 데이터 전달
-        adapterLong = LongChallengeAdapter(this, challengeList)
+        adapterLong = longChallengeAdapter(this, challengeList)
         recyclerViewLong.adapter = adapterLong
 
+        // 챌린지 필터를 건강으로 초기화
         filterChallenges(1)
         filterOfficialChallenges(1)
         onCategoryClicked(cateHealth, healthImageView, healthTextView, 1)
+
+        recyclerView.setNestedScrollingEnabled(false);
+        recyclerViewLong.setNestedScrollingEnabled(false);
+
+        recyclerViewLong.setHasFixedSize(false);
+        recyclerViewLong.requestLayout();
 
         navMyChallenge.setOnClickListener {
             val intent = Intent(this, my_challenge::class.java)
@@ -232,7 +236,7 @@ class ChallengeExplore : AppCompatActivity() {
     }
 
     private fun filterChallenges(categoryId: Int) {
-        filteredList = challengeList.filter { it.category == categoryId && it.status == 1 }.toMutableList()  // 상태가 1인 챌린지만 필터링
+        filteredList = challengeList.filter { it.category == categoryId && it.isOfficial == 0 && it.status == 1 }.toMutableList()  // 상태가 1인 챌린지만 필터링
         adapter.updateChallenges(filteredList)
     }
 
@@ -241,7 +245,6 @@ class ChallengeExplore : AppCompatActivity() {
         filteredOfficailList = challengeList.filter { it.category == categoryId && it.isOfficial == 1 && it.status == 1 }.toMutableList()
         adapterLong.updateChallenges(filteredOfficailList)
     }
-
 
 
     // DB에서 챌린지 목록 가져오기 (예제 코드)
@@ -271,6 +274,5 @@ class ChallengeExplore : AppCompatActivity() {
         db.close()
         return challengeList
     }
-
 
 }

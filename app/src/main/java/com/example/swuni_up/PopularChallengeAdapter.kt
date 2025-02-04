@@ -9,6 +9,8 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import java.text.SimpleDateFormat
+import java.util.Locale
 
 class PopularChallengeAdapter(
     private val context: Context,
@@ -33,11 +35,17 @@ class PopularChallengeAdapter(
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val challenge = challengeList[position]
 
-        holder.challengeTitle.text = challenge.title
-        holder.challengeDescription.text = challenge.description ?: "챌린지 설명 없음"
+        holder.challengeTitle.text = challenge.title?.let {
+            if (it.length > 12) it.substring(0, 12) + "..." else it
+        } ?: ""
+        holder.challengeDescription.text = challenge.description?.let {
+            if (it.length > 18) it.substring(0, 18) + "..." else it
+        } ?: ""
+
         holder.challengeDday.text = "마감 D - ${calculateDDay(challenge.endDay)}"
         holder.challengeCount.text = "${challenge.maxParticipant}명 참가"
-        holder.challengeDuration.text = "${challenge.startDay} ~ ${challenge.endDay}"
+
+        holder.challengeDuration.text = "${formatDate(challenge.startDay)} ~ ${formatDate(challenge.endDay)}"
 
         // 이미지 변환
         holder.challengeImage.setImageBitmap(byteArrayToBitmap(challenge.photo))
@@ -56,5 +64,16 @@ class PopularChallengeAdapter(
     fun updateData(newList: List<DBHelper.Challenge>) {
         challengeList = newList
         notifyDataSetChanged()
+    }
+
+    private fun formatDate(dateString: String): String {
+        return try {
+            val inputFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
+            val outputFormat = SimpleDateFormat("M/d", Locale.getDefault())
+            val date = inputFormat.parse(dateString)
+            outputFormat.format(date ?: "")
+        } catch (e: Exception) {
+            ""
+        }
     }
 }

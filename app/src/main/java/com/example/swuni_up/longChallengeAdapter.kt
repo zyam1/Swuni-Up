@@ -15,7 +15,7 @@ import java.text.SimpleDateFormat
 import java.util.*
 import java.util.concurrent.TimeUnit
 
-class LongChallengeAdapter(private val context: Context, private var challenges: List<DBHelper.Challenge>) : RecyclerView.Adapter<LongChallengeAdapter.ChallengeViewHolder>() {
+class longChallengeAdapter(private val context: Context, private var challenges: List<DBHelper.Challenge>) : RecyclerView.Adapter<longChallengeAdapter.ChallengeViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ChallengeViewHolder {
         val view = LayoutInflater.from(context).inflate(R.layout.long_challenge_component, parent, false)
@@ -34,7 +34,7 @@ class LongChallengeAdapter(private val context: Context, private var challenges:
         holder.descriptionTextView.text = challenge.description
 
         // 날짜 계산
-        holder.dDayTextView.text = getDDayText(challenge.endDay)
+        holder.dDayTextView.text = getDDayText(challenge.startDay)
 
         // 참여 인원 계산
         val joinedParticipants = countParticipants(context, challenge.challengeId  ?: 0L)
