@@ -10,10 +10,10 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 
-class TopRankAdapter(
+class topRankAdapter(
     private val context: Context,
     private val topChallengers: List<DBHelper.Challenger>
-) : RecyclerView.Adapter<TopRankAdapter.ViewHolder>() {
+) : RecyclerView.Adapter<topRankAdapter.ViewHolder>() {
 
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val profileImage: ImageView = view.findViewById(R.id.profile_image)

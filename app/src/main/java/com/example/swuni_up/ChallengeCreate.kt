@@ -17,7 +17,7 @@ class ChallengeCreate : AppCompatActivity() {
     private lateinit var imageView: ImageView
     private lateinit var nextButton: Button
     private val PICK_IMAGE_REQUEST = 1
-    private var selectedImageUri: Uri?= null
+    private var selectedImageUri: Uri? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -40,6 +40,10 @@ class ChallengeCreate : AppCompatActivity() {
             openGallery()
         }
 
+        val titleEditText = findViewById<EditText>(R.id.titleEditText)
+        val descriptionEditText = findViewById<EditText>(R.id.descriptionEditText)
+        val maxEditText = findViewById<EditText>(R.id.maxEditText)
+
         val checkBoxes = listOf<CheckBox>(
             findViewById(R.id.checkBox1),
             findViewById(R.id.checkBox2),
@@ -49,49 +53,62 @@ class ChallengeCreate : AppCompatActivity() {
             findViewById(R.id.checkBox6)
         )
 
-        checkBoxes.forEach { checkBox ->
-            checkBox.setOnCheckedChangeListener { _, isChecked ->
-                if (isChecked) {
-                    checkBoxes.forEach { other ->
-                        if (other != checkBox) {
-                            other.isChecked = false
-                        }
-                    }
-                }
-            }
-        }
-
         nextButton = findViewById(R.id.button)
+        nextButton.isEnabled = false // 초기에는 비활성화
 
+        // "다음" 버튼 클릭 시 입력값 확인
         nextButton.setOnClickListener {
-            // 데이터베이스에 데이터 삽입
-            val challengeTitle = findViewById<EditText>(R.id.titleEditText).text.toString()
-            val description = findViewById<EditText>(R.id.descriptionEditText).text.toString()
-            val maxParticipants = findViewById<EditText>(R.id.maxEditText).text.toString().toIntOrNull()
+            val challengeTitle = titleEditText.text.toString()
+            val description = descriptionEditText.text.toString()
+            val maxParticipants = maxEditText.text.toString().toIntOrNull()
             val category = getSelectedCategory()
             val challengePhoto = selectedImageUri?.toString() ?: ""
 
-            Log.d("ChallengeCreate", "challenge_title: $challengeTitle, description: $description, max_participants: $maxParticipants, category: $category, challenge_photo: $challengePhoto")
+            if (challengeTitle.isNotEmpty() && description.isNotEmpty() && maxParticipants != null && category != 0) {
+                // 데이터베이스에 데이터 삽입
+                Log.d("ChallengeCreate", "challenge_title: $challengeTitle, description: $description, max_participants: $maxParticipants, category: $category, challenge_photo: $challengePhoto")
 
-            // 데이터를 다음 액티비티로 넘기기
-            val intent = Intent(this, ChallengeCreateDate::class.java).apply {
-                putExtra("challengeTitle", challengeTitle)
-                putExtra("description", description)
-                putExtra("maxParticipant", maxParticipants)
-                putExtra("category", category)
-                putExtra("challengePhoto", challengePhoto)
+                // 데이터를 다음 액티비티로 넘기기
+                val intent = Intent(this, ChallengeCreateDate::class.java).apply {
+                    putExtra("challengeTitle", challengeTitle)
+                    putExtra("description", description)
+                    putExtra("maxParticipant", maxParticipants)
+                    putExtra("category", category)
+                    putExtra("challengePhoto", challengePhoto)
+                }
+                startActivity(intent)
+            } else {
+                Log.d("ChallengeCreate", "입력 값이 부족합니다.")
             }
-            startActivity(intent)
         }
 
+        checkBoxes.forEach { checkBox ->
+            checkBox.setOnCheckedChangeListener { _, _ ->
+                checkButtonState(descriptionEditText, maxEditText, checkBoxes)
+            }
+        }
     }
 
+    private fun checkButtonState(
+        descriptionEditText: EditText,
+        maxEditText: EditText,
+        checkBoxes: List<CheckBox>
+    ) {
+        val description = descriptionEditText.text.toString().trim()
+        val maxParticipants = maxEditText.text.toString().trim()
+        val isCategorySelected = checkBoxes.any { it.isChecked }
+
+        nextButton.isEnabled = description.isNotEmpty() && maxParticipants.isNotEmpty() && isCategorySelected
+    }
+
+    // 갤러리 여는 함수
     private fun openGallery() {
         val intent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
         intent.type = "image/*"
         startActivityForResult(intent, PICK_IMAGE_REQUEST)
     }
 
+    // 이미지 선택 함수
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == PICK_IMAGE_REQUEST && resultCode == Activity.RESULT_OK && data != null) {
@@ -120,5 +137,5 @@ class ChallengeCreate : AppCompatActivity() {
             else -> 0
         }
     }
-
 }
+

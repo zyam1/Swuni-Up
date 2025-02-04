@@ -1,13 +1,13 @@
 package com.example.swuni_up
 
 import android.content.Context
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import android.util.Log
 
 class InfoChallengerAdapter(
     private val context: Context,
@@ -47,7 +47,9 @@ class InfoChallengerAdapter(
 
         // 클릭 이벤트 처리
         holder.itemView.setOnClickListener {
-            onItemClick(participant.userId)
+            val challengerId = participant.challengerId ?: -1L
+            Log.d("InfoChallengerAdapter", "Challenger ID: $challengerId")  // 로그 출력
+            onItemClick(challengerId)
         }
     }
 

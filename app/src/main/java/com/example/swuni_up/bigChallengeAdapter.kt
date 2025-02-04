@@ -15,7 +15,7 @@ import java.text.SimpleDateFormat
 import java.util.*
 import java.util.concurrent.TimeUnit
 
-class BigChallengeAdapter(private val context: Context, private var challenges: List<DBHelper.Challenge>) : RecyclerView.Adapter<BigChallengeAdapter.ChallengeViewHolder>() {
+class bigChallengeAdapter(private val context: Context, private var challenges: List<DBHelper.Challenge>) : RecyclerView.Adapter<bigChallengeAdapter.ChallengeViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ChallengeViewHolder {
         val view = LayoutInflater.from(context).inflate(R.layout.big_challenge_component, parent, false)
@@ -40,7 +40,10 @@ class BigChallengeAdapter(private val context: Context, private var challenges: 
 
         // 텍스트 설정
         holder.titleTextView.text = challenge.title
-        holder.descriptionTextView.text = challenge.description
+        holder.descriptionTextView.text = challenge.description?.let {
+            if (it.length > 18) it.substring(0, 18) + "..." else it
+        } ?: ""
+
 
         // 날짜 계산
         holder.dDayTextView.text = getDDayText(challenge.startDay)
@@ -73,6 +76,7 @@ class BigChallengeAdapter(private val context: Context, private var challenges: 
         val countTextView: TextView = itemView.findViewById(R.id.countTextView)
     }
 
+    // 참여인원 카운트 함수
     private fun countParticipants(context: Context, challengeId: Long): Int {
         val dbHelper = DBHelper(context)
         val db = dbHelper.readableDatabase
@@ -90,6 +94,7 @@ class BigChallengeAdapter(private val context: Context, private var challenges: 
         return count
     }
 
+    // 2022-11-30 -> 11/30로 변경
     private fun formatDate(dateString: String): String {
         return try {
             val inputFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())

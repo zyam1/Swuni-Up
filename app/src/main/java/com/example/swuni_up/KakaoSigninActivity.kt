@@ -46,7 +46,7 @@ class KakaoSigninActivity : AppCompatActivity() {
                 Log.d("Login", "User found: ${user.name}, Email: ${user.email}")
                 if (user.password == password) {
                     // 로그인 성공
-                    Toast.makeText(this, "로그인 성공, ${user.name}", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this, "로그인 성공", Toast.LENGTH_SHORT).show()
 
                     val sharedPreferences = getSharedPreferences("user_prefs", Context.MODE_PRIVATE)
                     val editor = sharedPreferences.edit()
@@ -55,8 +55,16 @@ class KakaoSigninActivity : AppCompatActivity() {
                     editor.putLong("user_id", user.id ?: -1L)
                     editor.apply()
 
-                    // 홈으로 이동
-                    val intent = Intent(this, ChallengeExplore::class.java)
+                    val isChallenger = dbHelper.isUserInChallenger(user.id ?: -1L)
+
+                    val intent = if (isChallenger) {
+                        Log.d("Login", "User ${user.id} is a challenger. Redirecting to ChallengeHome")
+                        Intent(this, ChallengeHome::class.java)  // 챌린저 DB에 있음 → ChallengeHome
+                    } else {
+                        Log.d("Login", "User ${user.id} is NOT a challenger. Redirecting to HomeActivity")
+                        Intent(this, HomeActivity::class.java)  // 챌린저 DB에 없음 → HomeActivity
+                    }
+
                     startActivity(intent)
                     finish()
                 } else {
@@ -92,10 +100,6 @@ class KakaoSigninActivity : AppCompatActivity() {
             }
         }
 
-        val keyHash = Utility.getKeyHash(this)
-        Log.d("Hash", keyHash)
-
-
         // 회원가입 버튼 클릭
         tvRegister.setOnClickListener {
             // 회원가입 화면으로 이동
@@ -130,18 +134,27 @@ class KakaoSigninActivity : AppCompatActivity() {
 
                 if (existingUser != null) {
                     Log.d("KakaoLogin", "기존 회원 확인됨: ${existingUser.name}")
+                    val userId = existingUser.id ?: -1L
 
                     // 로그인 성공 처리
                     val sharedPreferences = getSharedPreferences("user_prefs", Context.MODE_PRIVATE)
                     val editor = sharedPreferences.edit()
                     editor.putString("user_nick", existingUser.nickname)  // 닉네임 저장
-                    editor.putLong("user_id", existingUser.id ?: -1L)
+                    editor.putLong("user_id", userId)
                     editor.apply()
 
-                    Toast.makeText(this, "카카오 로그인 성공, ${existingUser.name}", Toast.LENGTH_SHORT).show()
 
-                    // 홈 화면(ChallengeExplore)으로 이동
-                    val intent = Intent(this, ChallengeExplore::class.java)
+                    // ✅ challenger 테이블에서 user_id 확인
+                    val isChallenger = dbHelper.isUserInChallenger(userId)
+
+                    // 🔀 이동할 화면 결정
+                    val intent = if (isChallenger) {
+                        Intent(this, ChallengeHome::class.java) // 챌린지 참여 O
+                    } else {
+                        Intent(this, HomeActivity::class.java) // 챌린지 참여 X
+                    }
+
+                    Log.d("Navigation", "이동할 화면: ${if (isChallenger) "ChallengeHomeActivity" else "HomeActivity"}")
                     startActivity(intent)
                     finish()
                 } else {
@@ -155,6 +168,7 @@ class KakaoSigninActivity : AppCompatActivity() {
             }
         }
     }
+
 
 
 }

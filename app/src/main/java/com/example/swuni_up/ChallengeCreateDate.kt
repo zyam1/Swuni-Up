@@ -1,5 +1,6 @@
 package com.example.swuni_up
 
+import PastDayDisableDecorator
 import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
@@ -35,9 +36,26 @@ class ChallengeCreateDate : AppCompatActivity() {
         binding = ActivityChallengeCreateDateBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        // 오늘 포함 이전 날짜 선택 불가능하게 설정
+        binding.calendarView.state().edit()
+            .setMinimumDate(CalendarDay.from(LocalDate.now().plusDays(1))) // 오늘도 선택 불가
+            .commit()
+
+        // 데코레이터 적용
+        binding.calendarView.addDecorators(PastDayDisableDecorator())
+
         // makeButton 클릭 리스너 추가
         binding.makeButton.setOnClickListener {
+
+            if (selectedStartSchedule == null || selectedEndSchedule == null) {
+                // 날짜가 선택되지 않은 경우 Toast 메시지 표시
+                Toast.makeText(this, "시작일과 종료일을 선택해 주세요.", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
+
             // 버튼 클릭 시에 실행할 로직
+            val sharedPreferences = getSharedPreferences("user_prefs", Context.MODE_PRIVATE)
+            val userId: Long = sharedPreferences.getLong("user_id", -1L)
 
             // 입력된 데이터 추출
             val title = intent.getStringExtra("challengeTitle")
@@ -73,6 +91,8 @@ class ChallengeCreateDate : AppCompatActivity() {
                 return@setOnClickListener
             }
 
+            val isOfficial = if (userId == 1L) 1 else 0
+
             // Challenge 객체 생성 (필요시, 서버에 보낼 데이터 포맷에 맞추어 구성)
             val challenge = DBHelper.Challenge(
                 title = title ?: "Untitled",
@@ -84,7 +104,7 @@ class ChallengeCreateDate : AppCompatActivity() {
                 status = status,
                 maxParticipant = maxParticipant,
                 category = category,
-                isOfficial = 0
+                isOfficial = isOfficial
             )
 
             // 데이터베이스 저장
@@ -139,8 +159,6 @@ class ChallengeCreateDate : AppCompatActivity() {
                 Toast.makeText(this, "챌린지 생성에 실패했습니다.", Toast.LENGTH_SHORT).show()
             }
         }
-
-
 
         val toolbar = findViewById<Toolbar>(R.id.toolbar)
         setSupportActionBar(toolbar)
@@ -305,13 +323,10 @@ class ChallengeCreateDate : AppCompatActivity() {
         }
     }
 
-
     // 날짜 차이를 계산하고 TextView에 표시하는 함수
     private fun updateDayDifferenceTextView(startDate: LocalDate, endDate: LocalDate) {
         val dayDifference = org.threeten.bp.temporal.ChronoUnit.DAYS.between(startDate, endDate) + 1
         binding.dayTextViewLeft.text = dayDifference.toString()
     }
-
-
 
 }

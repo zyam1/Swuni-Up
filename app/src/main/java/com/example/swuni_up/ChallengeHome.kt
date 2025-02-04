@@ -1,6 +1,8 @@
 package com.example.swuni_up
 
+import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
@@ -12,10 +14,10 @@ import android.widget.ImageView
 class ChallengeHome : AppCompatActivity() {
     private lateinit var dbHelper: DBHelper
     private lateinit var myChallengeRecyclerView: RecyclerView
-    private lateinit var myChallengeAdapter: MyChallengeAdapter
+    private lateinit var myChallengeAdapter: myChallengeAdapter
     private lateinit var tvOngoingTitle: TextView
-    private lateinit var tvCompletedTitle: TextView
     private lateinit var navChallengeExplore: ImageView
+    private lateinit var navMyChallenge: ImageView
     private lateinit var popularChallengeAdapter: PopularChallengeAdapter
     private lateinit var popularChallengeRecyclerView: RecyclerView
 
@@ -26,15 +28,17 @@ class ChallengeHome : AppCompatActivity() {
 
         dbHelper = DBHelper(this)
 
+        dbHelper.updateChallengeStatus()
+
         // 진행 중인 챌린지 RecyclerView 설정
         myChallengeRecyclerView = findViewById(R.id.recyclerViewMyChallenge)
         myChallengeRecyclerView.layoutManager = LinearLayoutManager(this)
-        myChallengeAdapter = MyChallengeAdapter(this, emptyList())
+        myChallengeAdapter = myChallengeAdapter(this, emptyList())
         myChallengeRecyclerView.adapter = myChallengeAdapter
 
         //인기 챌린지 관련
         popularChallengeRecyclerView = findViewById(R.id.popularChallengeRecyclerView)
-        popularChallengeRecyclerView.layoutManager = LinearLayoutManager(this)
+        popularChallengeRecyclerView.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
         popularChallengeAdapter = PopularChallengeAdapter(this, emptyList())
         popularChallengeRecyclerView.adapter = popularChallengeAdapter
 
@@ -52,16 +56,25 @@ class ChallengeHome : AppCompatActivity() {
         loadChallenges()
 
         navChallengeExplore = findViewById(R.id.nav_challenge_explore)
+        navMyChallenge = findViewById(R.id.nav_my_challenge)
 
         navChallengeExplore.setOnClickListener {
             val intent = Intent(this, ChallengeExplore::class.java)
             startActivity(intent)
         }
 
+        navMyChallenge.setOnClickListener {
+            val intent = Intent(this, my_challenge::class.java)
+            startActivity(intent)
+        }
+
     }
 
     private fun loadChallenges() {
-        val ongoingList = dbHelper.getOngoingChallenges()
+        val sharedPreferences: SharedPreferences = getSharedPreferences("user_prefs", Context.MODE_PRIVATE)
+        val userId = sharedPreferences.getLong("user_id", -1L)
+
+        val ongoingList = dbHelper.getOngoingChallenges(userId)
         val popularList = dbHelper.getPopularChallenges()
         if (ongoingList.isNotEmpty()) {
             myChallengeAdapter.updateData(ongoingList)
@@ -78,7 +91,8 @@ class ChallengeHome : AppCompatActivity() {
 
     // ✅ 사용자 닉네임 가져오기
     private fun getUserNickname(): String {
-        val userId = 1L // 현재 로그인한 사용자 ID (예제 값, 실제 ID를 가져오는 로직 필요)
+        val sharedPreferences: SharedPreferences = getSharedPreferences("user_prefs", Context.MODE_PRIVATE)
+        val userId = sharedPreferences.getLong("user_id", -1L)
         return dbHelper.getNicknameById(userId) ?: "OO"
     }
 }

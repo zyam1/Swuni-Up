@@ -1,6 +1,7 @@
 package com.example.swuni_up
 
 import android.content.Context
+import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.view.LayoutInflater
@@ -47,17 +48,25 @@ class OngoingChallengeAdapter(
         // 참여 인원 표시
         holder.challengeParticipants.text = "참여인원 ${challenge.maxParticipant}"
 
+        val sharedPreferences = context.getSharedPreferences("user_prefs", Context.MODE_PRIVATE)
+        val userId = sharedPreferences.getLong("user_id", -1L) // 기본값 -1L
+
         // 진행 퍼센트 가져오기
-        challenge.challengeId?.let {
-            holder.progressText.text = "${calculateProgress(it).toInt()}%"
-        } ?: run {
-            holder.progressText.text = "0%"  // challengeId가 없으면 0%라고 표현
+        if (challenge.challengeId != null && userId != -1L) {
+            holder.progressText.text = "${calculateProgress(challenge.challengeId, userId)}%"
+        } else {
+            holder.progressText.text = "0%"  // challengeId가 없거나 userId가 없으면 0%라고 표현
         }
-
-
 
         // 이미지 변환
         holder.challengePhoto.setImageBitmap(byteArrayToBitmap(challenge.photo))
+
+        holder.itemView.setOnClickListener {
+            val intent = Intent(context, ChallengeInfo::class.java).apply {
+                putExtra("challenge_id", challenge.challengeId) // 챌린지 ID 전달
+            }
+            context.startActivity(intent)
+        }
     }
 
     override fun getItemCount(): Int = challengeList.size
@@ -78,10 +87,11 @@ class OngoingChallengeAdapter(
     }
 
     // 실제 진행 퍼센트 계산 (DB에서 가져오기)
-    private fun calculateProgress(challengeId: Long): Int {
+    private fun calculateProgress(challengeId: Long, userId: Long): Int {
         val dbHelper = DBHelper(context)
-        return dbHelper.getChallengeProgress(challengeId)
+        return dbHelper.getChallengeProgress(challengeId, userId) // userId 추가
     }
+
 
     fun updateData(newList: List<DBHelper.Challenge>) {
         challengeList = newList

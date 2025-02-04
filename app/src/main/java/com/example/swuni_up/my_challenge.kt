@@ -1,6 +1,8 @@
 package com.example.swuni_up
 
+import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
@@ -25,6 +27,8 @@ class my_challenge : AppCompatActivity() {
         setContentView(R.layout.activity_my_challenge2)
 
         dbHelper = DBHelper(this)
+
+        dbHelper.updateChallengeStatus()
 
         // 진행 중인 챌린지 RecyclerView 설정
         ongoingRecyclerView = findViewById(R.id.challengeContainer)
@@ -69,8 +73,11 @@ class my_challenge : AppCompatActivity() {
     }
 
     private fun loadChallenges() {
-        val ongoingList = dbHelper.getOngoingChallenges()
-        val completedList = dbHelper.getCompleteChallenges()
+        val sharedPreferences: SharedPreferences = getSharedPreferences("user_prefs", Context.MODE_PRIVATE)
+        val userId = sharedPreferences.getLong("user_id", -1L)
+
+        val ongoingList = dbHelper.getOngoingChallenges(userId)
+        val completedList = dbHelper.getCompleteChallenges(userId)
 
         if (ongoingList.isNotEmpty()) {
             ongoingAdapter.updateData(ongoingList)
@@ -89,7 +96,8 @@ class my_challenge : AppCompatActivity() {
 
     // ✅ 사용자 닉네임 가져오기
     private fun getUserNickname(): String {
-        val userId = 1L // 현재 로그인한 사용자 ID (예제 값, 실제 ID를 가져오는 로직 필요)
+        val sharedPreferences: SharedPreferences = getSharedPreferences("user_prefs", Context.MODE_PRIVATE)
+        val userId = sharedPreferences.getLong("user_id", -1L)
         return dbHelper.getNicknameById(userId) ?: "OO"
     }
 }

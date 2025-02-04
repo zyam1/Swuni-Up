@@ -88,11 +88,15 @@
                     android:src="@drawable/ic_up_mvp"/>
 
                 <ImageView
+                    android:id="@+id/profile1"
                     android:layout_width="60dp"
                     android:layout_height="60dp"
                     android:layout_marginLeft="15dp"
                     android:layout_gravity="center"
-                    android:src="@drawable/profile_img_background" />
+                    android:background="@drawable/profile_img_background"
+                    android:src="@drawable/img1"
+                    android:scaleType="centerCrop"
+                    android:clipToOutline="true"/>
 
                 <LinearLayout
                     android:layout_width="70dp"
@@ -129,10 +133,14 @@
                 </LinearLayout>
 
                 <ImageView
+                    android:id="@+id/profile2"
                     android:layout_width="60dp"
                     android:layout_height="60dp"
                     android:layout_gravity="center"
-                    android:src="@drawable/profile_img_background" />
+                    android:background="@drawable/profile_img_background"
+                    android:src="@drawable/puju"
+                    android:scaleType="centerCrop"
+                    android:clipToOutline="true" />
 
                 <LinearLayout
                     android:layout_width="70dp"
@@ -148,7 +156,7 @@
                         android:fontFamily="@font/scdream5"
                         android:textSize="12sp"
                         android:layout_marginBottom="6dp"
-                        android:text="이채원똥" />
+                        android:text="푸주" />
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -164,7 +172,7 @@
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/scdream5"
                         android:textSize="12sp"
-                        android:text="55" />
+                        android:text="48" />
 
                 </LinearLayout>
 
